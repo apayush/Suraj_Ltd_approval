@@ -1,10 +1,18 @@
 # Project-level configuration.
 cmake_minimum_required(VERSION 3.14)
+<<<<<<< HEAD
 project(suraj_approval LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "suraj_approval")
+=======
+project(suraj_ltd_approval LANGUAGES CXX)
+
+# The name of the executable created for the application. Change this to change
+# the on-disk name of your application.
+set(BINARY_NAME "suraj_ltd_approval")
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

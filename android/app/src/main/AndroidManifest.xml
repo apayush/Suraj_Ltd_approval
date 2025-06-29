@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
+<<<<<<< HEAD
         android:label="suraj_approval"
+=======
+        android:label="suraj_ltd_approval"
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

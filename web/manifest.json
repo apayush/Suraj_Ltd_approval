@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "suraj_approval",
     "short_name": "suraj_approval",
+=======
+    "name": "suraj_ltd_approval",
+    "short_name": "suraj_ltd_approval",
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

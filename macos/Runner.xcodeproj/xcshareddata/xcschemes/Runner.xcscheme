@@ -15,7 +15,11 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+<<<<<<< HEAD
                BuildableName = "suraj_approval.app"
+=======
+               BuildableName = "suraj_ltd_approval.app"
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
                BlueprintName = "Runner"
                ReferencedContainer = "container:Runner.xcodeproj">
             </BuildableReference>
@@ -31,7 +35,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+<<<<<<< HEAD
             BuildableName = "suraj_approval.app"
+=======
+            BuildableName = "suraj_ltd_approval.app"
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
@@ -66,7 +74,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+<<<<<<< HEAD
             BuildableName = "suraj_approval.app"
+=======
+            BuildableName = "suraj_ltd_approval.app"
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
@@ -83,7 +95,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+<<<<<<< HEAD
             BuildableName = "suraj_approval.app"
+=======
+            BuildableName = "suraj_ltd_approval.app"
+>>>>>>> f772f8103b5a646c82881509b27274af2a448dea
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
