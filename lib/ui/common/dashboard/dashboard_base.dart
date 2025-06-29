@@ -14,7 +14,7 @@ abstract class DashboardBase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Sraj')),
+        appBar: AppBar(title: Text('Suraj Pvt Ltd')),
         // drawer: isMobile ? const () : null,
         body: AppModuleContainer(items: controller.appModules)
     );

@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
-// import 'package:shared_component/auth_middleware/auth_middleware.dart';
-import 'package:suraj_approval/bindings/dashboard_bindings.dart';
-
+import '../../../bindings/dashboard_bindings.dart';
 import 'app_drawer.dart';
 
 class AppRoutes {

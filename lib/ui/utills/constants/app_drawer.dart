@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sidebarx/src/models/sidebarx_item.dart';
-import 'package:suraj_approval/ui/utills/constants/app_routes.dart';
 import '../../../controllers/app_drawer_controller.dart';
 import '../../mobile/dashboard_mobile.dart';
 import '../../web/dashboard_web.dart';
 import 'package:get/get.dart';
 import 'package:sidebarx/sidebarx.dart';
-
+import 'app_routes.dart';
 import 'common_widgets.dart';
 
 
@@ -22,9 +21,10 @@ class AppDrawer extends Drawer {
       controller: drawerController.sideBarXController,
       items: [
         _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Dashboard', route: AppRoutes.dashboardScreen),
-        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Dashboard', route: AppRoutes.dashboardScreen),
-        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Dashboard', route: AppRoutes.dashboardScreen),
-        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Dashboard', route: AppRoutes.dashboardScreen),
+        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Finance', route: AppRoutes.financeScreen),
+        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Production', route: AppRoutes.productionScreen),
+        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Purchase', route: AppRoutes.purchaseScreen),
+        _buildListTile(false, context: context, icon: FontAwesomeIcons.gauge, title: 'Sales', route: AppRoutes.salesScreen),
         ],
     );
   }
