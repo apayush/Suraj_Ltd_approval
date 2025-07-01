@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Helvetica&display=swap');
+
+html {
+  min-height: 100%;
+}
+
+body {
+  background-image: radial-gradient(circle, #212c39, #0c1014 40%);
+}
+
+.element-wrapper {
+  position: fixed;
+  perspective: 300px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.element {
+  width: 50px;
+  height: 50px;
+  background: white;
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  top: 50%;
+  margin-top: -25px;
+  opacity: 0;
+}
+
+.loading {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: grey; /* Set text color to white */
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+  z-index: 9999; /* Ensure it's on top of other elements */
+  width: 100%;
+  text-align: center;
+}
+
+@keyframes translateIn {
+  30% {
+    transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg) translateZ(20px) scale(0.95);
+    opacity: 0.25;
+  }
+  100% {
+    transform: rotateX(65deg) rotateY(0deg) rotateZ(45deg) translateZ(0px) scale(0.85);
+    opacity: 0;
+  }
+}
+
+.element:nth-of-type(1) {
+  transform: rotateX(70deg) rotateY(0deg) rotateZ(45deg) translateZ(30px);
+  animation: translateIn 1.5s ease-in infinite 500ms;
+}
+
+.element:nth-of-type(2) {
+  transform: rotateX(70deg) rotateY(0deg) rotateZ(45deg) translateZ(60px);
+  animation: translateIn 1.5s ease-in infinite 700ms;
+}
+
+.element:nth-of-type(3) {
+  transform: rotateX(70deg) rotateY(0deg) rotateZ(45deg) translateZ(90px);
+  animation: translateIn 1.5s ease-in infinite 800ms;
+}
+
+@keyframes scaleIn {
+  80% {
+    transform: rotateX(65deg) rotateY(0deg) rotateZ(45deg) scale(1.25);
+    opacity: 0.1;
+  }
+  100% {
+    transform: rotateX(65deg) rotateY(0deg) rotateZ(45deg) scale(1);
+    opacity: 0;
+  }
+}
+
+.large-square {
+  width: 70px;
+  height: 70px;
+  background: white;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  top: 50%;
+  margin-top: -35px;
+  transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg) scale(0);
+  opacity: 0;
+  animation: scaleIn 3s linear infinite 500ms;
+}
