@@ -22,7 +22,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
-    final appBarTheme = Theme.of(context).appBarTheme;
+    // final appBarTheme = Theme.of(context).appBarTheme;
 
     return AppBar(
       // elevation: appBarTheme.elevation ?? 2.0, // Use theme value

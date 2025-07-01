@@ -5,6 +5,8 @@ import '../../core/widgets/common_widgets.dart';
 import '../utills/app_module_container.dart';
 
 class PageNotfound extends StatelessWidget {
+  const PageNotfound({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Using LayoutBuilder to make the screen responsive
