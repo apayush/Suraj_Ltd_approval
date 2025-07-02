@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:suraj_approval/feature/controller/sales_controllers/sales_controller.dart';
 import 'package:suraj_approval/ui/common/sales_module/sales_screen.dart';
+import '../../feature/controller/dashboard_controllers/app_drawer_controller.dart';
 import '../../feature/controller/dashboard_controllers/dashboard_controller.dart';
+import '../../feature/controller/dashboard_controllers/sidebarx_controller.dart';
 import '../../feature/controller/finance_controllers/finance_controller.dart';
 import '../../feature/controller/production_controllers/production_controller.dart';
 import '../../feature/controller/purchase_controllers/purchase_controller.dart';
@@ -35,6 +37,8 @@ class AppRouter {
       name: dashboardScreen,
       page: () => DashboardScreen(),
       binding: BindingsBuilder(() {
+        Get.lazyPut<SidebarController>(() => SidebarController());
+        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
         Get.lazyPut<DashboardController>(() => DashboardController());
       }),
     ),
@@ -42,6 +46,8 @@ class AppRouter {
       name: financeScreen,
       page: () => FinanceScreen(),
       binding: BindingsBuilder(() {
+        Get.lazyPut<SidebarController>(() => SidebarController());
+        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
         Get.lazyPut<FinanceController>(() => FinanceController());
       }),
     ),
@@ -49,6 +55,8 @@ class AppRouter {
       name: productionScreen,
       page: () => ProductionScreen(),
       binding: BindingsBuilder(() {
+        Get.lazyPut<SidebarController>(() => SidebarController());
+        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
         Get.lazyPut<ProductionController>(() => ProductionController());
       }),
     ),
@@ -56,6 +64,8 @@ class AppRouter {
       name: purchaseScreen,
       page: () => PurchaseScreen(),
       binding: BindingsBuilder(() {
+        Get.lazyPut<SidebarController>(() => SidebarController());
+        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
         Get.lazyPut<PurchaseController>(() => PurchaseController());
       }),
     ),
@@ -63,6 +73,8 @@ class AppRouter {
       name: salesScreen,
       page: () => SalesScreen(),
       binding: BindingsBuilder(() {
+        Get.lazyPut<SidebarController>(() => SidebarController());
+        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
         Get.lazyPut<SalesController>(() => SalesController());
       }),
     ),

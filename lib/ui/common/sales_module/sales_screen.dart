@@ -4,15 +4,25 @@ import 'package:suraj_approval/ui/common/sales_module/widgets/sales_mobile.dart'
 import 'package:suraj_approval/ui/common/sales_module/widgets/sales_tablet.dart';
 import 'package:suraj_approval/ui/common/sales_module/widgets/saless_web.dart';
 
+import '../../../core/widgets/loading_widget.dart';
+import '../../../feature/controller/sales_controllers/sales_controller.dart';
+
 class SalesScreen extends StatelessWidget {
-  const SalesScreen({super.key});
+  SalesScreen({super.key});
+
+  final controller = SalesController.instance;
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTypeLayout.builder(
-      mobile: (context) => SalesMobile(),
-      tablet: (context) => SalesTablet(),
-      desktop: (context) => SalesWeb(),
+    return Stack(
+      children: [
+        ScreenTypeLayout.builder(
+          mobile: (context) => SalesMobile(),
+          tablet: (context) => SalesTablet(),
+          desktop: (context) => SalesWeb(),
+        ),
+        LoaderWidget(controller: controller)
+      ]
     );
   }
 }

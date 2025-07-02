@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../ui/utills/app_module_container.dart';
-import '../theme/app_colors.dart';
+import 'app_module_container.dart';
+import '../../core/theme/app_colors.dart';
 
 class AppUtils {
   // Show a simple Snackbar

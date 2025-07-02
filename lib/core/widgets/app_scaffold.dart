@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../../feature/controller/dashboard_controllers/app_drawer_controller.dart';
 import '../router/app_router.dart';
@@ -22,47 +23,80 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenType = getDeviceType(MediaQuery.of(context).size);
+    final headerHeight = CustomHeader(bottom: bottom).preferredSize.height;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
+      drawer: screenType == DeviceScreenType.mobile ? SidebarXDrawer(
+        controller: drawerController.sideBarXController,
+        items: [
+          _buildListTile(
+            context: context,
+            icon: FontAwesomeIcons.gaugeHigh,
+            title: 'Dashboard',
+            route: AppRouter.dashboardScreen,
+          ),
+          _buildListTile(
+            context: context,
+            icon: FontAwesomeIcons.moneyBillTrendUp,
+            title: 'Finance',
+            route: AppRouter.financeScreen,
+          ),
+          _buildListTile(
+            context: context,
+            icon: FontAwesomeIcons.industry,
+            title: 'Production',
+            route: AppRouter.productionScreen,
+          ),
+          _buildListTile(
+            context: context,
+            icon: FontAwesomeIcons.cartShopping,
+            title: 'Purchase',
+            route: AppRouter.purchaseScreen,
+          ),
+          _buildListTile(
+            context: context,
+            icon: FontAwesomeIcons.bagShopping,
+            title: 'Sales',
+            route: AppRouter.salesScreen,
+          ),
+        ],
+      ) : null,
       body: AnimatedBuilder(
           animation: drawerController,
           builder: (context, _) {
             return Row(
               children: [
-                SidebarXDrawer(
+                if (screenType != DeviceScreenType.mobile)
+                  SidebarXDrawer  (
                   controller: drawerController.sideBarXController,
                   items: [
                     _buildListTile(
-                      false,
                       context: context,
                       icon: FontAwesomeIcons.gaugeHigh,
                       title: 'Dashboard',
                       route: AppRouter.dashboardScreen,
                     ),
                     _buildListTile(
-                      false,
                       context: context,
                       icon: FontAwesomeIcons.moneyBillTrendUp,
                       title: 'Finance',
                       route: AppRouter.financeScreen,
                     ),
                     _buildListTile(
-                      false,
                       context: context,
                       icon: FontAwesomeIcons.industry,
                       title: 'Production',
                       route: AppRouter.productionScreen,
                     ),
                     _buildListTile(
-                      false,
                       context: context,
                       icon: FontAwesomeIcons.cartShopping,
                       title: 'Purchase',
                       route: AppRouter.purchaseScreen,
                     ),
                     _buildListTile(
-                      false,
                       context: context,
                       icon: FontAwesomeIcons.bagShopping,
                       title: 'Sales',
@@ -73,8 +107,12 @@ class AppScaffold extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      CustomHeader(),
-                      if (bottom != null) bottom!,
+                      SizedBox(
+                        height: headerHeight,
+                        child: CustomHeader(
+                          bottom: bottom,
+                        ),
+                      ),
                       Expanded(child: body),
                     ],
                   ),
@@ -87,8 +125,7 @@ class AppScaffold extends StatelessWidget {
     );
   }
 
-  SidebarXItem _buildListTile(
-      bool isMobile, {
+  SidebarXItem _buildListTile({
         required BuildContext context,
         required IconData icon,
         required String title,

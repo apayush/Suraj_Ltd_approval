@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:suraj_approval/ui/common/finance_module/widgets/view/finance_tabbar_view.dart';
 import '../../../../core/widgets/app_scaffold.dart';
-import '../../../../core/widgets/common_widgets.dart';
 import '../../../../feature/controller/finance_controllers/finance_controller.dart';
-import '../../../utills/app_module_container.dart';
 
 class FinanceMobile extends StatelessWidget {
   FinanceMobile({super.key});
@@ -12,13 +11,13 @@ class FinanceMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: Center(
-        child: AppText(
-          'Finance Mobile',
-          style: TextStyles.normal(context),
-          alignment: Alignment.center,
-        ),
+      bottom: TabBar(
+        controller: controller.tabController,
+        tabs: controller.myTabs,
+        tabAlignment: TabAlignment.start,
+        isScrollable: true,
       ),
+      body: FinanceTabView(controller: controller),
     );
   }
 }

@@ -12,7 +12,6 @@ class DashboardWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-        // appBar: CustomHeader(),
         body: Center(
           child: AppText('Dashboard Web', style: TextStyles.normal(context),alignment: Alignment.center,),
         )

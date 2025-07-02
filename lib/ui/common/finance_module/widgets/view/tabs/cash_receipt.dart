@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/ui/utills/app_module_container.dart';
+
+class CashReceipt extends StatelessWidget {
+  const CashReceipt({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AppText('Cash Receipt', style: TextStyles.medium(context),alignment: Alignment.center,),
+    );
+  }
+}

@@ -44,6 +44,16 @@ body {
   text-align: center;
 }
 
+.element-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: radial-gradient(circle, #212c39, #0c1014 40%);
+}
+
 @keyframes translateIn {
   30% {
     transform: rotateX(60deg) rotateY(0deg) rotateZ(45deg) translateZ(20px) scale(0.95);

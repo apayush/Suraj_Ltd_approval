@@ -4,15 +4,25 @@ import 'package:suraj_approval/ui/common/production_module/widgets/production_mo
 import 'package:suraj_approval/ui/common/production_module/widgets/production_tablet.dart';
 import 'package:suraj_approval/ui/common/production_module/widgets/production_web.dart';
 
+import '../../../core/widgets/loading_widget.dart';
+import '../../../feature/controller/production_controllers/production_controller.dart';
+
 class ProductionScreen extends StatelessWidget {
-  const ProductionScreen({super.key});
+  ProductionScreen({super.key});
+
+  final controller = ProductionController.instance;
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTypeLayout.builder(
-      mobile: (context) => ProductionMobile(),
-      tablet: (context) => ProductionTablet(),
-      desktop: (context) => ProductionWeb(),
+    return Stack(
+      children: [
+        ScreenTypeLayout.builder(
+          mobile: (context) => ProductionMobile(),
+          tablet: (context) => ProductionTablet(),
+          desktop: (context) => ProductionWeb(),
+        ),
+        LoaderWidget(controller: controller)
+      ]
     );
   }
 }

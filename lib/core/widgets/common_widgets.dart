@@ -182,21 +182,7 @@ class SidebarXDrawer extends StatelessWidget {
               ? 125
               : 40
               : null,
-          child: isVertical
-              ? Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildLogout(mContext)
-            ],
-          )
-              : Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              buildLogout(mContext)
-            ],
-          ),
+          child: buildLogout(mContext)
         );
       },
     );
@@ -218,17 +204,15 @@ class SidebarXDrawer extends StatelessWidget {
   }
 
   Widget buildLogout(BuildContext context) {
-    return Expanded(
-      child: IconButton(
-        tooltip: AppStrings.logOut,
-        icon: const Icon(
-          CupertinoIcons.square_arrow_right,
-          color: Colors.grey,
-        ),
-        onPressed: () {
-          sideBarXController.navigateToLoginScreen(context);
-        },
+    return IconButton(
+      tooltip: AppStrings.logOut,
+      icon: const Icon(
+        CupertinoIcons.square_arrow_right,
+        color: Colors.grey,
       ),
+      onPressed: () {
+        sideBarXController.navigateToLoginScreen(context);
+      },
     );
   }
 }

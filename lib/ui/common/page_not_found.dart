@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/app_images.dart';
 
 import '../../core/widgets/common_widgets.dart';
 import '../utills/app_module_container.dart';
@@ -67,7 +68,7 @@ class PageNotfound extends StatelessWidget {
         Expanded(
           flex: 8,
           child: AppImageAssets(
-            'assets/images/error_image.png',
+            AppImages.errorPage,
             height: 50.0,
             width: MediaQuery.of(context).size.width / 1.5,
             fit: BoxFit.fill, // or any fit you need
