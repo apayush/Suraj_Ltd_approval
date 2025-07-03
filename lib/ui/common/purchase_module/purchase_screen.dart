@@ -4,7 +4,7 @@ import 'package:suraj_approval/ui/common/purchase_module/widgets/purchase_mobile
 import 'package:suraj_approval/ui/common/purchase_module/widgets/purchase_tablet.dart';
 import 'package:suraj_approval/ui/common/purchase_module/widgets/purchase_web.dart';
 import '../../../core/widgets/loading_widget.dart';
-import '../../../feature/controller/purchase_controllers/purchase_controller.dart';
+import '../../../features/purchase/controller/purchase_controller.dart';
 
 class PurchaseScreen extends StatelessWidget {
   PurchaseScreen({super.key});

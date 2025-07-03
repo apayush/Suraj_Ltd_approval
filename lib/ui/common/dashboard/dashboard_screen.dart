@@ -5,7 +5,7 @@ import 'package:suraj_approval/ui/common/dashboard/widgets/dashboard_tablet.dart
 import 'package:suraj_approval/ui/common/dashboard/widgets/dashboard_web.dart';
 
 import '../../../core/widgets/loading_widget.dart';
-import '../../../feature/controller/dashboard_controllers/dashboard_controller.dart';
+import '../../../features/dashboard/controller/dashboard_controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});

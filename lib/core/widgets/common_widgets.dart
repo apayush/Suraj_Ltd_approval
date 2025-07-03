@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
-import '../../feature/controller/dashboard_controllers/sidebarx_controller.dart';
+import '../../features/dashboard/controller/sidebarx_controller.dart';
 import '../../ui/utills/app_module_container.dart';
 import '../constants/app_strings.dart';
 import '../constants/radius_utils.dart';

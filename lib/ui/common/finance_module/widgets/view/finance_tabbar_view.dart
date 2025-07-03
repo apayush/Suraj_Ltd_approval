@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../feature/controller/finance_controllers/finance_controller.dart';
+import '../../../../../features/finance/controller/finance_controller.dart';
 import 'tabs/bank_payment.dart';
 import 'tabs/bank_receipt.dart';
 import 'tabs/cash_payment.dart';

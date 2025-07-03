@@ -4,7 +4,7 @@ import 'package:suraj_approval/ui/common/finance_module/widgets/finance_mobile.d
 import 'package:suraj_approval/ui/common/finance_module/widgets/finance_tablet.dart';
 import 'package:suraj_approval/ui/common/finance_module/widgets/finance_web.dart';
 import '../../../core/widgets/loading_widget.dart';
-import '../../../feature/controller/finance_controllers/finance_controller.dart';
+import '../../../features/finance/controller/finance_controller.dart';
 
 class FinanceScreen extends StatelessWidget {
   FinanceScreen({super.key});

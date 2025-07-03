@@ -5,7 +5,7 @@ import 'package:suraj_approval/ui/common/sales_module/widgets/sales_tablet.dart'
 import 'package:suraj_approval/ui/common/sales_module/widgets/saless_web.dart';
 
 import '../../../core/widgets/loading_widget.dart';
-import '../../../feature/controller/sales_controllers/sales_controller.dart';
+import '../../../features/sales/controller/sales_controller.dart';
 
 class SalesScreen extends StatelessWidget {
   SalesScreen({super.key});

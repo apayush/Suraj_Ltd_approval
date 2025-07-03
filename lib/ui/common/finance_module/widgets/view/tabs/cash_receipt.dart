@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:suraj_approval/core/widgets/common_widgets.dart';
-import 'package:suraj_approval/ui/utills/app_module_container.dart';
+
+import '../../../../../../core/widgets/app_text_field.dart';
 
 class CashReceipt extends StatelessWidget {
   const CashReceipt({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: AppText('Cash Receipt', style: TextStyles.medium(context),alignment: Alignment.center,),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            buildSearchTextField(),
+          ],
+        ),
+      ],
     );
   }
+}
+
+Widget buildSearchTextField() {
+  return AppTextField(
+    hint: 'Search',
+    // controller: controller.searchController,
+    // onChanged: (value) {
+    //   controller.filterData(value);
+    // },
+  );
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sidebarx/sidebarx.dart';
-import '../../feature/controller/dashboard_controllers/app_drawer_controller.dart';
+import '../../features/dashboard/controller/app_drawer_controller.dart';
 import '../router/app_router.dart';
 import 'app_footer.dart';
 import 'app_header.dart';

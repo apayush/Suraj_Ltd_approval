@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'core/router/app_router.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
-import 'feature/controller/dashboard_controllers/app_drawer_controller.dart';
-import 'feature/controller/dashboard_controllers/sidebarx_controller.dart';
+import 'features/dashboard/controller/app_drawer_controller.dart';
+import 'features/dashboard/controller/sidebarx_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

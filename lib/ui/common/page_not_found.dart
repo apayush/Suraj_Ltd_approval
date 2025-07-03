@@ -5,8 +5,8 @@ import 'package:suraj_approval/core/constants/app_images.dart';
 import '../../core/widgets/common_widgets.dart';
 import '../utills/app_module_container.dart';
 
-class PageNotfound extends StatelessWidget {
-  const PageNotfound({super.key});
+class PageNotFound extends StatelessWidget {
+  const PageNotFound({super.key});
 
   @override
   Widget build(BuildContext context) {

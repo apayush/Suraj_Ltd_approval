@@ -5,7 +5,7 @@ import 'package:suraj_approval/ui/common/production_module/widgets/production_ta
 import 'package:suraj_approval/ui/common/production_module/widgets/production_web.dart';
 
 import '../../../core/widgets/loading_widget.dart';
-import '../../../feature/controller/production_controllers/production_controller.dart';
+import '../../../features/production/controller/production_controller.dart';
 
 class ProductionScreen extends StatelessWidget {
   ProductionScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:suraj_approval/ui/common/finance_module/widgets/view/finance_tabbar_view.dart';
 import '../../../../core/widgets/app_scaffold.dart';
-import '../../../../feature/controller/finance_controllers/finance_controller.dart';
+import '../../../../features/finance/controller/finance_controller.dart';
 
 class FinanceTablet extends StatelessWidget {
   FinanceTablet({super.key});
@@ -17,7 +17,10 @@ class FinanceTablet extends StatelessWidget {
         tabAlignment: TabAlignment.start,
         isScrollable: true,
       ),
-      body: FinanceTabView(controller: controller),
+      body: Padding(
+        padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 10.0),
+        child: FinanceTabView(controller: controller),
+      ),
     );
   }
 }

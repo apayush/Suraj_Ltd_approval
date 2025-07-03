@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:suraj_approval/feature/controller/sales_controllers/sales_controller.dart';
+import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../../utills/app_module_container.dart';
