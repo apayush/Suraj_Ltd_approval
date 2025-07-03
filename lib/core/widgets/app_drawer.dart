@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../ui/common/dashboard/dashboard_screen.dart';
-import '../../ui/common/finance_module/finance_screen.dart';
-import '../../ui/common/production_module/production_screen.dart';
-import '../../ui/common/purchase_module/purchase_screen.dart';
-import '../../ui/common/sales_module/sales_screen.dart';
+import '../../features/dashboard/view/dashboard_screen.dart';
+import '../../features/finance/view/finance_screen.dart';
+import '../../features/production/view/production_screen.dart';
+import '../../features/purchase/view/purchase_screen.dart';
+import '../../features/sales/view/sales_screen.dart';
 import '../router/app_router.dart';
 
 // class AppDrawer extends Drawer {

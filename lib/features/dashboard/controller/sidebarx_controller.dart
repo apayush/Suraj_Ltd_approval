@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/common_widgets.dart';
-import '../../../ui/utills/app_module_container.dart';
+import '../../../core/utills/app_module_container.dart';
 
 class SidebarController extends GetxController {
   RxString appVersion = 'Loading...'.obs;

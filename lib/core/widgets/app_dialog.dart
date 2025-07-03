@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../ui/utills/app_module_container.dart';
+import '../utills/app_module_container.dart';
 import '../constants/radius_utils.dart';
 import '../theme/app_colors.dart';
 import 'common_widgets.dart';

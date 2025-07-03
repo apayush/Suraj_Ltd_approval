@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../ui/utills/app_module_container.dart';
+import '../utills/app_module_container.dart';
 import '../constants/radius_utils.dart';
 import 'common_widgets.dart';
 

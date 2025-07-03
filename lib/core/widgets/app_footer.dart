@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
-import '../../ui/utills/app_module_container.dart';
+import '../utills/app_module_container.dart';
 import '../theme/app_colors.dart';
 import 'common_widgets.dart';
 
