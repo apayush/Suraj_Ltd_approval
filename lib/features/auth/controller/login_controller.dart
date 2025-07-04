@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/app_utills.dart';
 
 class LoginController extends GetxController {
   final TextEditingController userIdController = TextEditingController();
@@ -28,11 +30,11 @@ class LoginController extends GetxController {
       // Mock validation
       if (userIdController.text == 'admin' &&
           passwordController.text == 'password') {
-        Get.snackbar(
-          'Success',
+        AppUtils.showSnackBar(
           'Login successful!',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+          title: 'Success',
+          background: AppColors.primaryColor,
+          position: SnackPosition.BOTTOM,
         );
         // Navigate to dashboard
         Get.offAllNamed(AppRouter.dashboardScreen);

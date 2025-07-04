@@ -19,49 +19,12 @@ class AppScaffold extends StatelessWidget {
     this.bottom,
   });
 
-  @override
-  State<AppScaffold> createState() => _AppScaffoldState();
-}
-
-class _AppScaffoldState extends State<AppScaffold> {
-  late final AppDrawerController drawerController;
-  final _routeToIndex = {
-    AppRouter.dashboardScreen: 0,
-    AppRouter.financeScreen: 1,
-    AppRouter.productionScreen: 2,
-    AppRouter.purchaseScreen: 3,
-    AppRouter.salesScreen: 4,
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    drawerController = Get.find<AppDrawerController>();
-    _syncIndexWithRoute();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _syncIndexWithRoute();
-  }
-
-  void _syncIndexWithRoute() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentRoute = Get.currentRoute;
-      if (_routeToIndex.containsKey(currentRoute)) {
-        final newIndex = _routeToIndex[currentRoute]!;
-        if (drawerController.sideBarXController.selectedIndex != newIndex) {
-          drawerController.sideBarXController.selectIndex(newIndex);
-        }
-      }
-    });
-  }
+  final drawerController = Get.find<AppDrawerController>();
 
   @override
   Widget build(BuildContext context) {
     final screenType = getDeviceType(MediaQuery.of(context).size);
-    final headerHeight = CustomHeader(bottom: widget.bottom).preferredSize.height;
+    final headerHeight = CustomHeader(bottom: bottom).preferredSize.height;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -154,10 +117,10 @@ class _AppScaffoldState extends State<AppScaffold> {
                 SizedBox(
                   height: headerHeight,
                   child: CustomHeader(
-                    bottom: widget.bottom,
+                    bottom: bottom,
                   ),
                 ),
-                Expanded(child: widget.body),
+                Expanded(child: body),
               ],
             ),
           ),
