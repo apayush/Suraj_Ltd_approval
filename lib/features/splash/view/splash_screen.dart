@@ -15,14 +15,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 1), () {
-        Get.offAllNamed(AppRouter.login);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        Get.offAllNamed(AppRouter.onboarding);
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('Splash Screen')));
+    return Scaffold();
   }
 }

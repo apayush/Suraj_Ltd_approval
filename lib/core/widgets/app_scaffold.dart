@@ -13,11 +13,7 @@ class AppScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? bottom;
 
-  AppScaffold({
-    super.key,
-    required this.body,
-    this.bottom,
-  });
+  AppScaffold({super.key, required this.body, this.bottom});
 
   final drawerController = Get.find<AppDrawerController>();
 
@@ -28,48 +24,51 @@ class AppScaffold extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      drawer: screenType == DeviceScreenType.mobile ? SidebarXDrawer(
-        controller: drawerController.sideBarXController,
-        items: [
-          _buildListTile(
-            context: context,
-            icon: FontAwesomeIcons.gaugeHigh,
-            title: 'Dashboard',
-            route: AppRouter.dashboardScreen,
-          ),
-          _buildListTile(
-            context: context,
-            icon: FontAwesomeIcons.moneyBillTrendUp,
-            title: 'Finance',
-            route: AppRouter.financeScreen,
-          ),
-          _buildListTile(
-            context: context,
-            icon: FontAwesomeIcons.industry,
-            title: 'Production',
-            route: AppRouter.productionScreen,
-          ),
-          _buildListTile(
-            context: context,
-            icon: FontAwesomeIcons.cartShopping,
-            title: 'Purchase',
-            route: AppRouter.purchaseScreen,
-          ),
-          _buildListTile(
-            context: context,
-            icon: FontAwesomeIcons.bagShopping,
-            title: 'Sales',
-            route: AppRouter.salesScreen,
-          ),
-        ],
-      ) : null,
+      drawer:
+          screenType == DeviceScreenType.mobile
+              ? SidebarXDrawer(
+                controller: drawerController.sideBarXController,
+                items: [
+                  _buildListTile(
+                    context: context,
+                    icon: FontAwesomeIcons.gaugeHigh,
+                    title: 'Dashboard',
+                    route: AppRouter.dashboardScreen,
+                  ),
+                  _buildListTile(
+                    context: context,
+                    icon: FontAwesomeIcons.moneyBillTrendUp,
+                    title: 'Finance',
+                    route: AppRouter.financeScreen,
+                  ),
+                  _buildListTile(
+                    context: context,
+                    icon: FontAwesomeIcons.industry,
+                    title: 'Production',
+                    route: AppRouter.productionScreen,
+                  ),
+                  _buildListTile(
+                    context: context,
+                    icon: FontAwesomeIcons.cartShopping,
+                    title: 'Purchase',
+                    route: AppRouter.purchaseScreen,
+                  ),
+                  _buildListTile(
+                    context: context,
+                    icon: FontAwesomeIcons.bagShopping,
+                    title: 'Sales',
+                    route: AppRouter.salesScreen,
+                  ),
+                ],
+              )
+              : null,
       body: AnimatedBuilder(
-          animation: drawerController,
-          builder: (context, _) {
-            return Row(
-              children: [
-                if (screenType != DeviceScreenType.mobile)
-                  SidebarXDrawer  (
+        animation: drawerController,
+        builder: (context, _) {
+          return Row(
+            children: [
+              if (screenType != DeviceScreenType.mobile)
+                SidebarXDrawer(
                   controller: drawerController.sideBarXController,
                   items: [
                     _buildListTile(
@@ -104,33 +103,34 @@ class AppScaffold extends StatelessWidget {
                     ),
                   ],
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: headerHeight,
-                        child: CustomHeader(
-                          bottom: bottom,
-                        ),
-                      ),
-                      Expanded(child: body),
-                    ],
-                  ),
+              Expanded(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: headerHeight,
+                      child: CustomHeader(bottom: bottom),
+                    ),
+                    Expanded(child: body),
+                  ],
                 ),
-              ],
-            );
-          }
+              ),
+            ],
+          );
+        },
       ),
-      bottomNavigationBar: MediaQuery.of(context).size.width > 950 ? AppFooter() : const SizedBox.shrink(),
+      bottomNavigationBar:
+          MediaQuery.of(context).size.width > 950
+              ? AppFooter()
+              : const SizedBox.shrink(),
     );
   }
 
   SidebarXItem _buildListTile({
-        required BuildContext context,
-        required IconData icon,
-        required String title,
-        required String route,
-      }) {
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String route,
+  }) {
     return SidebarXItem(
       label: title,
       icon: icon,

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:suraj_approval/core/constants/app_images.dart';
 import '../../ui/utills/app_module_container.dart';
 import '../theme/app_colors.dart';
+import 'package:suraj_approval/core/constants/app_images.dart';
 import 'common_widgets.dart';
 
 class AppFooter extends StatelessWidget implements PreferredSizeWidget {
   const AppFooter({super.key});
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(30.0); // Set height of the header
+  Size get preferredSize => const Size.fromHeight(30.0); // Set height of the header
 
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
       mobile: (context) => buildMobileFooter(context),
       tablet: (context) => buildWebFooter(context),
-      desktop: (context) => buildWebFooter(context)
+      desktop: (context) => buildWebFooter(context),
     );
   }
 
@@ -58,24 +57,23 @@ class AppFooter extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          buildPoweredBy(context),
-        ],
+        children: [buildPoweredBy(context)],
       ),
     );
   }
 
   Widget buildPoweredBy(BuildContext context) {
     return Expanded(
-        child: InkWell(
-          onTap: () {
-            // openLink('https://www.weservecodes.com');
-          },
-          child: AppText(
-            '© ${DateTime.now().year} Powered By Vertical Infonet Pvt. Ltd.',
-            alignment: Alignment.center,
-            style: TextStyles.small(context, textColor: Colors.white),
-          ),
-        ));
+      child: InkWell(
+        onTap: () {
+          // openLink('https://www.weservecodes.com');
+        },
+        child: AppText(
+          '© ${DateTime.now().year} Powered By Vertical Infonet Pvt. Ltd.',
+          alignment: Alignment.center,
+          style: TextStyles.small(context, textColor: Colors.white),
+        ),
+      ),
+    );
   }
 }
