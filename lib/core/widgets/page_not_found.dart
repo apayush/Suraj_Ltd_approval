@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
+import 'package:suraj_approval/core/router/app_router.dart';
 
 import 'common_widgets.dart';
 import '../utills/app_module_container.dart';
@@ -16,7 +17,9 @@ class PageNotFound extends StatelessWidget {
       appBar: AppBar(
         title: AppText('Page Not Found', style: TextStyles.normal(context)),
         backgroundColor: Theme.of(context).drawerTheme.backgroundColor,
-        leading: IconButton(icon: const Icon(Icons.close), onPressed: () {}),
+        leading: IconButton(icon: const Icon(Icons.close), onPressed: () {
+          Get.offAllNamed(AppRouter.login);
+        }),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -76,10 +79,13 @@ class PageNotFound extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: AppText(
-            'But Dash is here to help! Maybe one of these will point you in the right direction?',
-            alignment: Alignment.center,
-            style: TextStyles.heading3(context, textColor: Colors.black),
+          child: InkWell(
+            onTap: ()=> Get.offAllNamed(AppRouter.login),
+            child: AppText(
+              'But Dash is here to help! Go back to the home page or try searching for what you need.',
+              alignment: Alignment.center,
+              style: TextStyles.heading3(context, textColor: Colors.black),
+            ),
           ),
         ),
       ],

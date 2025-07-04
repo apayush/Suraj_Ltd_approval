@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/router/app_router.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/widgets/app_dialog.dart';
@@ -39,7 +40,7 @@ class SidebarController extends GetxController {
         primaryButtonText: AppStrings.yes,
         secondaryButtonText: AppStrings.no,
         onPrimaryButtonPressed: () {
-          Get.back();
+          Get.offAndToNamed(AppRouter.login);
         },
         onSecondaryButtonPressed: () {
           Get.back();

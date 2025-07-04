@@ -18,7 +18,7 @@ class FinanceWeb extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 10.0),
-        child: FinanceTabView(controller: controller),
+        child: FinanceTabView(),
       ),
     );
   }

@@ -1,14 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:suraj_approval/core/widgets/common_widgets.dart';
-import 'package:suraj_approval/core/utills/app_module_container.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+import '../../../../../../core/widgets/app_text_field.dart';
 
 class BankPayment extends StatelessWidget {
   const BankPayment({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: AppText('Bank Payment', style: TextStyles.medium(context),alignment: Alignment.center,),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSearchFieldRow(context),
+      ],
     );
   }
+}
+
+Widget buildSearchFieldRow(BuildContext context) {
+  final screenType = getDeviceType(MediaQuery.of(context).size);
+  return Row(
+    children: [
+      if(screenType == DeviceScreenType.mobile)
+        Expanded(child: buildSearchTextField())
+      else
+        buildSearchTextField(),
+    ],
+  );
+}
+
+Widget buildSearchTextField() {
+  return AppTextField(
+    hint: 'Search',
+    // controller: controller.searchController,
+    // onChanged: (value) {
+    //   controller.filterData(value);
+    // },
+  );
 }

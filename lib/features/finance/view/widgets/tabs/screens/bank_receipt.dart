@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:suraj_approval/core/widgets/no_data_found.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+import '../../../../../../core/widgets/app_text_field.dart';
 
 class BankReceipt extends StatelessWidget {
   const BankReceipt({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: NoDataFound(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSearchFieldRow(context),
+      ],
     );
   }
+}
+
+Widget buildSearchFieldRow(BuildContext context) {
+  final screenType = getDeviceType(MediaQuery.of(context).size);
+  return Row(
+    children: [
+      if(screenType == DeviceScreenType.mobile)
+        Expanded(child: buildSearchTextField())
+      else
+        buildSearchTextField(),
+    ],
+  );
+}
+
+Widget buildSearchTextField() {
+  return AppTextField(
+    hint: 'Search',
+    // controller: controller.searchController,
+    // onChanged: (value) {
+    //   controller.filterData(value);
+    // },
+  );
 }

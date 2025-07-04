@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:suraj_approval/core/utills/storage_utills.dart';
 
+import '../../features/dashboard/controller/session_controller.dart';
+import '../service/api_client.dart';
 import 'app_module_container.dart';
 import '../theme/app_colors.dart';
 
@@ -93,6 +97,14 @@ class AppUtils {
       isDismissible: true,
     );
   }
+}
+
+final GetIt getIt = GetIt.instance;
+
+void setupLocator() {
+  getIt.registerLazySingleton<StorageUtils>(() => StorageUtils());
+  getIt.registerLazySingleton<SessionController>(() => SessionController());
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient('https://mocki.io/v1/f113e2f5-15e4-49d5-a9b7-62b95a4ff4b7'));
 }
 
 // void openLink(String url) async {

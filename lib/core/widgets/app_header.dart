@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
-
 import '../constants/app_images.dart';
 import 'notification.dart';
 
@@ -62,10 +60,10 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: NotificationBell(
             notifications: [
-              "Your Not Confirmed Booking #505 is rejected",
-              "Your Not Confirmed Booking #382 is awaiting for your confirmation",
-              "Your Not Confirmed Booking #515 is awaiting for your confirmation",
-              "Your Not Confirmed Booking #552 is awaiting for your confirmation",
+              'Your Not Confirmed Booking #505 is rejected',
+              'Your Not Confirmed Booking #382 is awaiting for your confirmation',
+              'Your Not Confirmed Booking #515 is awaiting for your confirmation',
+              'Your Not Confirmed Booking #552 is awaiting for your confirmation',
             ],
             unreadCount: notificationCount ?? 0,
           ),

@@ -15,8 +15,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(seconds: 1), () {
-        Get.offAllNamed(AppRouter.login);
+      final currentRoute = Get.currentRoute;
+
+      if (currentRoute == '/notfound') return;
+
+      Future.delayed(Duration(seconds: 1), () {
+        Get.offNamed(AppRouter.login); // or dashboard
       });
     });
   }
