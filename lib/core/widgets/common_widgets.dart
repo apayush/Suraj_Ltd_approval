@@ -77,7 +77,8 @@ class SidebarXDrawer extends StatelessWidget {
       children: [
         SidebarX(
           controller: controller,
-          animationDuration: const Duration(milliseconds: 150),
+          animationDuration: Duration.zero,
+          // animationDuration: const Duration(milliseconds: 150),
           showToggleButton: false,
           theme: SidebarXTheme(
             margin: EdgeInsets.zero,
@@ -169,21 +170,7 @@ class SidebarXDrawer extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: sideBarXController.isProfileExpanded,
       builder: (context, isExpanded, child) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: isVertical
-              ? isExpanded
-              ? 125
-              : 40
-              : null,
-          width: !isVertical
-              ? isExpanded
-              ? 125
-              : 40
-              : null,
-          child: buildLogout(mContext)
-        );
+        return buildLogout(mContext);
       },
     );
   }

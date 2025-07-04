@@ -25,6 +25,8 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
+      defaultTransition: Transition.noTransition,
+      transitionDuration: Duration.zero,
       initialBinding: BindingsBuilder(() {
         Get.lazyPut<SidebarController>(() => SidebarController());
         Get.lazyPut<AppDrawerController>(() => AppDrawerController());

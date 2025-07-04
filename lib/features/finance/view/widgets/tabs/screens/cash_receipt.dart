@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../../../../core/widgets/app_text_field.dart';
 
 class CashReceipt extends StatelessWidget {
   const CashReceipt({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            buildSearchTextField(),
-          ],
-        ),
+        buildSearchFieldRow(context),
       ],
     );
   }
+}
+
+Widget buildSearchFieldRow(BuildContext context) {
+  final screenType = getDeviceType(MediaQuery.of(context).size);
+  return Row(
+    children: [
+      if(screenType == DeviceScreenType.mobile)
+        Expanded(child: buildSearchTextField())
+      else
+        buildSearchTextField(),
+    ],
+  );
 }
 
 Widget buildSearchTextField() {

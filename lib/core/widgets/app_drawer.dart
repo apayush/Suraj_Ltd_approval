@@ -72,26 +72,26 @@ import '../router/app_router.dart';
 //   }
 // }
 
-class GetXNavigationController extends StatelessWidget {
-  const GetXNavigationController({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var currentRoute = Get.currentRoute;
-    switch (currentRoute) {
-      case AppRouter.dashboardScreen:
-        return DashboardScreen();
-      case AppRouter.financeScreen:
-        return FinanceScreen();
-      case AppRouter.productionScreen:
-        return ProductionScreen();
-      case AppRouter.purchaseScreen:
-        return PurchaseScreen();
-      case AppRouter.salesScreen:
-        return SalesScreen();
-      default:
-        return const Center(child: Text('Select a screen from the drawer'));
-    }
-  }
-}
-
+// class GetXNavigationController extends StatelessWidget {
+//   const GetXNavigationController({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var currentRoute = Get.currentRoute;
+//     switch (currentRoute) {
+//       case AppRouter.dashboardScreen:
+//         return DashboardScreen();
+//       case AppRouter.financeScreen:
+//         return FinanceScreen();
+//       case AppRouter.productionScreen:
+//         return ProductionScreen();
+//       case AppRouter.purchaseScreen:
+//         return PurchaseScreen();
+//       case AppRouter.salesScreen:
+//         return SalesScreen();
+//       default:
+//         return const Center(child: Text('Select a screen from the drawer'));
+//     }
+//   }
+// }
+//
