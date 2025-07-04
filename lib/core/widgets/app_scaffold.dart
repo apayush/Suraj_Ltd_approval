@@ -9,7 +9,7 @@ import 'app_header.dart';
 import 'common_widgets.dart';
 import 'package:get/get.dart';
 
-class AppScaffold extends StatefulWidget {
+class AppScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? bottom;
 

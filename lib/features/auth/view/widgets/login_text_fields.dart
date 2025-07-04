@@ -14,10 +14,10 @@ class LoginTextFields extends GetView<LoginController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CommonTextField(
-          labelText: 'Email',
-          hintText: 'Enter your email',
+          labelText: 'User Id',
+          hintText: 'Enter your user id',
           keyboardType: TextInputType.emailAddress,
-          controller: controller.emailController,
+          controller: controller.userIdController,
         ),
         const SizedBox(height: 16.0),
         CommonTextField(

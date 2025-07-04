@@ -3,7 +3,6 @@ import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 import 'package:suraj_approval/features/sales/view/sales_screen.dart';
 import '../../features/dashboard/controller/app_drawer_controller.dart';
 import '../../features/dashboard/controller/dashboard_controller.dart';
-import '../../features/dashboard/controller/session_controller.dart';
 import '../../features/dashboard/controller/sidebarx_controller.dart';
 import '../../features/finance/controller/finance_controller.dart';
 import '../../features/production/controller/production_controller.dart';
