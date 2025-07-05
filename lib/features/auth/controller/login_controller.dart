@@ -1,8 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
+import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
 
 class LoginController extends GetxController {
   final TextEditingController userIdController = TextEditingController();
@@ -12,6 +16,7 @@ class LoginController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isPasswordVisible = false.obs;
   final RxString errorMessage = ''.obs;
+  final _apiService = ApiService();
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -24,22 +29,27 @@ class LoginController extends GetxController {
     errorMessage.value = '';
 
     try {
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-
-      // Mock validation
-      if (userIdController.text == 'admin' &&
-          passwordController.text == 'password') {
+      final response = await _apiService.getData(
+        ApiUrl.loginApi,
+        queryParams: {
+          'mUser': userIdController.text.trim(),
+          'mPasswords': passwordController.text.trim(),
+        },
+      );
+      print("object:$response");
+      if (isClosed) return;
+      final data = response.data;
+      if (data['success'] == 'YES') {
         AppUtils.showSnackBar(
           'Login successful!',
           title: 'Success',
           background: AppColors.primaryColor,
           position: SnackPosition.BOTTOM,
         );
-        // Navigate to dashboard
+        GetIt.I<SessionController>().startSessionTimer();
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
-        errorMessage.value = 'Invalid credentials. Please try again.';
+        errorMessage.value = 'Ivalid credentials. Please try again.';
       }
     } catch (e) {
       errorMessage.value = 'Login failed. Please try again.';
@@ -62,8 +72,8 @@ class LoginController extends GetxController {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+    if (value.length < 3) {
+      return 'Password must be at least 3 characters';
     }
     return null;
   }

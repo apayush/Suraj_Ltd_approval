@@ -32,79 +32,87 @@ class ApiClient {
 
   ApiClient(String initialBaseUrl) {
     _baseUrl = initialBaseUrl;
-    _dio = Dio(BaseOptions(
-      baseUrl: _baseUrl,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      connectTimeout: Duration(seconds: 45),
-      receiveTimeout: Duration(seconds: 45),
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: _baseUrl,
+        // headers: {
+        //   'Content-Type': 'application/json',
+        //   'Accept': 'application/json',
+        // },
+        connectTimeout: Duration(seconds: 45),
+        receiveTimeout: Duration(seconds: 45),
+      ),
+    );
 
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        final token = storageUtils.getToken();
-        if (token != null) {
-          options.headers['Authorization'] = token;
-        }
-
-        if (kDebugMode) {
-          logger.i('Request: ${options.method} ${options.uri}');
-          if (options.headers.isNotEmpty) {
-            logger.d('Headers: ${jsonEncode(options.headers)}');
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final token = storageUtils.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = token;
           }
-          if (options.queryParameters.isNotEmpty) {
-            logger.d('Query Parameters: ${options.queryParameters}');
+
+          if (kDebugMode) {
+            logger.i('Request: ${options.method} ${options.uri}');
+            if (options.headers.isNotEmpty) {
+              logger.d('Headers: ${jsonEncode(options.headers)}');
+            }
+            if (options.queryParameters.isNotEmpty) {
+              logger.d('Query Parameters: ${options.queryParameters}');
+            }
+            if (options.data != null) {
+              logger.d('Request Body: ${options.data}');
+            }
           }
-          if (options.data != null) {
-            logger.d('Request Body: ${options.data}');
+
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          if (kDebugMode) {
+            logger.w('Response: ${jsonEncode(response.data)}');
           }
-        }
+          return handler.next(response);
+        },
+        onError: (DioException error, handler) {
+          final apiName = error.requestOptions.uri.toString();
 
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        if (kDebugMode) {
-          logger.w('Response: ${jsonEncode(response.data)}');
-        }
-        return handler.next(response);
-      },
-      onError: (DioException error, handler) {
-        final apiName = error.requestOptions.uri.toString();
+          if (error.response != null) {
+            final statusCode = error.response?.statusCode;
+            final errorData = error.response?.data;
 
-        if (error.response != null) {
-          final statusCode = error.response?.statusCode;
-          final errorData = error.response?.data;
+            logger.e('[ERROR] API: $apiName - ${jsonEncode(errorData)}');
 
-          logger.e('[ERROR] API: $apiName - ${jsonEncode(errorData)}');
-
-          switch (statusCode) {
-            case 401:
-            case 403:
-              _handleInvalidToken(errorData['message'].toString());
-              break;
-            case 440:
-              _handleSessionExpired();
-              break;
-            case 500:
-              AppUtils.showSnackBar(errorData['message'].toString());
-              break;
-            default:
-              logger.e('Unhandled status code: $statusCode');
-              break;
+            switch (statusCode) {
+              case 401:
+              case 403:
+                _handleInvalidToken(errorData['message'].toString());
+                break;
+              case 440:
+                _handleSessionExpired();
+                break;
+              case 500:
+                AppUtils.showSnackBar(errorData['message'].toString());
+                break;
+              default:
+                logger.e('Unhandled status code: $statusCode');
+                break;
+            }
           }
-        }
 
-        if (error.type == DioExceptionType.connectionError) {
-          logger.e('[ERROR] Network error: Please check your internet connection.');
-        } else if (error.type == DioExceptionType.connectionTimeout) {
-          logger.e('[ERROR] API: $apiName - Connection Timeout');
-        }
+          print(error.response);
+          print("statusCode");
+          if (error.type == DioExceptionType.connectionError) {
+            logger.e(
+              '[ERROR] Network error: Please check your internet connection.',
+            );
+          } else if (error.type == DioExceptionType.connectionTimeout) {
+            logger.e('[ERROR] API: $apiName - Connection Timeout');
+          }
 
-        return handler.next(error);
-      },
-    ));
+          return handler.next(error);
+        },
+      ),
+    );
   }
 
   void updateBaseUrl(String baseUrl) {
@@ -149,7 +157,8 @@ class ApiClient {
           content: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              message ?? 'Your session is no longer valid. Please log in again.',
+              message ??
+                  'Your session is no longer valid. Please log in again.',
               style: TextStyles.medium(Get.context!),
             ),
           ),
