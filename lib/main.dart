@@ -12,7 +12,7 @@ import 'features/dashboard/controller/sidebarx_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupDependencies(baseUrl: ApiUrl.baseUrl);
+  setupDependencies(baseUrl: ApiUrl.baseUrl2);
   await LocalDB.init();
   runApp(const MyApp());
 }
