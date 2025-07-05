@@ -38,6 +38,15 @@ class AppUtils {
     Get.focusScope?.unfocus();
   }
 
+  static Color getDataGridRowColor(int rowIndex) {
+    Color? backgroundColor = Theme.of(Get.context!).drawerTheme.backgroundColor;
+    if ((rowIndex % 2) == 0) {
+      // backgroundColor = Colors.grey.withOpacity(0.04);
+      backgroundColor = AppColors.blue.withOpacity(0.03);
+    }
+    return backgroundColor ?? AppColors.blue.withOpacity(0.03);
+  }
+
   static void showDialog({
     required BuildContext context,
     required String title,
@@ -99,13 +108,6 @@ class AppUtils {
   }
 }
 
-final GetIt getIt = GetIt.instance;
-
-void setupLocator() {
-  getIt.registerLazySingleton<StorageUtils>(() => StorageUtils());
-  getIt.registerLazySingleton<SessionController>(() => SessionController());
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient('https://mocki.io/v1/f113e2f5-15e4-49d5-a9b7-62b95a4ff4b7'));
-}
 
 // void openLink(String url) async {
 //   final Uri uri = Uri.parse(url);

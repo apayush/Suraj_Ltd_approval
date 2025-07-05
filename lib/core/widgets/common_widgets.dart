@@ -59,6 +59,73 @@ class AppText extends StatelessWidget {
   }
 }
 
+class AppIconButton extends StatelessWidget {
+  final void Function() onPressed;
+  final IconData icon;
+  final String tooltip;
+  final double iconSize;
+  final Color? iconColor;
+  final Color? backgroundColor;
+
+  const AppIconButton(
+      {super.key,
+        required this.onPressed,
+        required this.icon,
+        this.tooltip = '',
+        this.iconSize = 20.0,
+        this.iconColor,
+        this.backgroundColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45.0,
+      width: 45.0,
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).primaryColor,
+        borderRadius: RadiusUtils.borderRadiusForButtons,
+        border: Border.all(
+          color: Colors.grey,
+          width: 0.5,
+        ),
+      ),
+      child: Tooltip(
+        message: tooltip, // Tooltip for the button
+        child: ClipRRect(
+          // Ensure the icon respects the border radius
+          borderRadius: RadiusUtils.borderRadiusForButtons,
+          child: Material(
+            color: Colors.transparent,
+            // Use transparent to inherit container's color
+            child: InkWell(
+              borderRadius: RadiusUtils.borderRadiusForButtons,
+              onTap: onPressed, // Button action
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  icon,
+                  color: iconColor ?? Theme.of(context).primaryColorDark,
+                  size: iconSize,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget appGridLabel(String label, {Alignment align = Alignment.centerLeft}) {
+  return Container(
+    padding: const EdgeInsets.all(8.0),
+    alignment: Alignment.centerLeft,
+    child: AppText(label,
+        alignment: align,
+        style: TextStyles.normal(Get.context!, textColor: Colors.white)),
+  );
+}
+
 class SidebarXDrawer extends StatelessWidget {
   final List<SidebarXItem> items;
   final SidebarXController controller;

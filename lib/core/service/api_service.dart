@@ -7,9 +7,15 @@ class ApiService {
   final _apiClient = GetIt.I<ApiClient>(); // Access shared AuthService
 
   // Example GET request
-  Future<Response> getData(String endpoint, {Map<String, dynamic>? queryParams}) async {
+  Future<Response> getData(
+    String endpoint, {
+    Map<String, dynamic>? queryParams,
+  }) async {
     try {
-      Response response = await _apiClient.client.get(endpoint, queryParameters: queryParams);
+      Response response = await _apiClient.client.get(
+        endpoint,
+        queryParameters: queryParams,
+      );
       return response;
     } catch (e) {
       rethrow;
@@ -17,9 +23,17 @@ class ApiService {
   }
 
   /// POST request
-  Future<Response> postData(String endpoint, {dynamic data, Map<String, dynamic>? queryParams}) async {
+  Future<Response> postData(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+  }) async {
     try {
-      final response = await _apiClient.client.post(endpoint, data: data, queryParameters: queryParams);
+      final response = await _apiClient.client.post(
+        endpoint,
+        data: data,
+        queryParameters: queryParams,
+      );
       return response;
     } catch (e) {
       print('Error in POST request: $e');
@@ -28,19 +42,17 @@ class ApiService {
   }
 
   Future<Response> postDataFullUrl(
-      String fullUrl, {
-        dynamic data,
-        Map<String, dynamic>? queryParams,
-        Map<String, String>? headers,
-      }) async {
+    String fullUrl, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+    Map<String, String>? headers,
+  }) async {
     try {
       final response = await _apiClient.client.post(
         fullUrl,
         data: data,
         queryParameters: queryParams,
-        options: Options(
-          headers: headers,
-        ),
+        options: Options(headers: headers),
       );
       return response;
     } catch (e) {
@@ -50,9 +62,17 @@ class ApiService {
   }
 
   /// PUT request
-  Future<Response> putData(String endpoint, {dynamic data, Map<String, dynamic>? queryParams}) async {
+  Future<Response> putData(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParams,
+  }) async {
     try {
-      final response = await _apiClient.client.put(endpoint, data: data, queryParameters: queryParams);
+      final response = await _apiClient.client.put(
+        endpoint,
+        data: data,
+        queryParameters: queryParams,
+      );
       return response;
     } catch (e) {
       print('Error in PUT request: $e');
@@ -60,11 +80,16 @@ class ApiService {
     }
   }
 
-
   /// DELETE request
-  Future<Response> deleteData(String endpoint, {Map<String, dynamic>? queryParams}) async {
+  Future<Response> deleteData(
+    String endpoint, {
+    Map<String, dynamic>? queryParams,
+  }) async {
     try {
-      Response response = await _apiClient.client.delete(endpoint, queryParameters: queryParams);
+      Response response = await _apiClient.client.delete(
+        endpoint,
+        queryParameters: queryParams,
+      );
       return response;
     } catch (e) {
       rethrow;
@@ -73,16 +98,18 @@ class ApiService {
 
   /// Multipart (File Upload) request
   Future<Map<String, dynamic>> uploadFile(
-      String endpoint, {
-        required File file,
-        String? fileKey = 'file', // The key to use for the file field
-        Map<String, dynamic>?
-        additionalData, // Any additional data to send with the file
-      }) async {
+    String endpoint, {
+    required File file,
+    String? fileKey = 'file', // The key to use for the file field
+    Map<String, dynamic>?
+    additionalData, // Any additional data to send with the file
+  }) async {
     try {
       FormData formData = FormData.fromMap({
-        fileKey!: await MultipartFile.fromFile(file.path,
-            filename: file.path.split('/').last),
+        fileKey!: await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
         if (additionalData != null) ...additionalData,
         // Include additional data if provided
       });

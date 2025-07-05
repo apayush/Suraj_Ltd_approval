@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/api_url.dart';
 import 'core/router/app_router.dart';
+import 'core/service/dependencies.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utills/app_utills.dart';
@@ -10,7 +12,7 @@ import 'features/dashboard/controller/sidebarx_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
+  setupDependencies(baseUrl: ApiUrl.baseUrl2);
   await LocalDB.init();
   runApp(const MyApp());
 }

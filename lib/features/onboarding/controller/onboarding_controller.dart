@@ -9,19 +9,19 @@ class OnboardingController extends GetxController {
 
   final List<OnboardingData> onboardingPages = [
     OnboardingData(
-      title: "Smart ERP, Smarter Approvals",
-      subtitle: "See vouchers, orders & approvals—all in one dashboard.",
+      title: 'Smart ERP, Smarter Approvals',
+      subtitle: 'See vouchers, orders & approvals—all in one dashboard.',
       imagePath: AppImages.onboarding1,
     ),
     OnboardingData(
-      title: "Instant Actions, Anywhere",
-      subtitle: "Approve or reject entries securely from your mobile device.",
+      title: 'Instant Actions, Anywhere',
+      subtitle: 'Approve or reject entries securely from your mobile device.',
       imagePath: AppImages.onboarding2,
     ),
     OnboardingData(
-      title: "Seamless Workflow, Clear Control",
+      title: 'Seamless Workflow, Clear Control',
       subtitle:
-          "Efficient filtering, search, and detail views—designed for speed.",
+          'Efficient filtering, search, and detail views—designed for speed.',
       imagePath: AppImages.onboarding3,
     ),
   ];
