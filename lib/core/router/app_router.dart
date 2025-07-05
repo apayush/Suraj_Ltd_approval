@@ -22,7 +22,7 @@ import '../../features/purchase/view/purchase_screen.dart';
 
 class AppRouter {
   static const String splash = '/splash';
-  static const String onboarding = '/splash';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String onboardingScreen = '/OnboardingScreen';
   static const String dashboardScreen = '/dashboard_screen';
