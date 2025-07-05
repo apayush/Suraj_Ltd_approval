@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
+import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 import 'package:suraj_approval/features/sales/view/sales_screen.dart';
 import '../../features/dashboard/controller/app_drawer_controller.dart';
 import '../../features/dashboard/controller/dashboard_controller.dart';
@@ -20,6 +22,7 @@ import '../../features/purchase/view/purchase_screen.dart';
 
 class AppRouter {
   static const String splash = '/splash';
+  static const String onboarding = '/splash';
   static const String login = '/login';
   static const String onboardingScreen = '/OnboardingScreen';
   static const String dashboardScreen = '/dashboard_screen';
@@ -29,10 +32,12 @@ class AppRouter {
   static const String salesScreen = '/sales_screen';
 
   static final List<GetPage> routes = [
-    GetPage(name: splash, page: () => const SplashScreen(),
+    GetPage(
+      name: splash,
+      page: () => const SplashScreen(),
       binding: BindingsBuilder(() {
-        Get.put(SessionController(),permanent: true);
-      })
+        Get.put(SessionController(), permanent: true);
+      }),
     ),
     GetPage(name: onboardingScreen, page: () => const OnboardingScreen(),
       binding: BindingsBuilder(() {
@@ -43,7 +48,14 @@ class AppRouter {
       name: login,
       page: () => const LoginScreen(),
       binding: BindingsBuilder(() {
-        Get.put(LoginController(),permanent: true);
+        Get.put(LoginController(), permanent: true);
+      }),
+    ),
+    GetPage(
+      name: onboarding,
+      page: () => const OnboardingScreen(),
+      binding: BindingsBuilder(() {
+        Get.put(OnboardingController());
       }),
     ),
     GetPage(
