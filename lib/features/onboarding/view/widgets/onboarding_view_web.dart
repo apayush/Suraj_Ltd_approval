@@ -54,7 +54,7 @@ class OnboardingViewWeb extends StatelessWidget {
                         // Content side
                         Expanded(
                           flex: 2,
-                          child: Padding(
+                          child: SingleChildScrollView(
                             padding: const EdgeInsets.only(right: 48.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
