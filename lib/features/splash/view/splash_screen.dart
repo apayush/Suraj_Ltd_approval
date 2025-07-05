@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (currentRoute == '/notfound') return;
 
       Future.delayed(Duration(seconds: 1), () {
-        Get.offNamed(AppRouter.login); // or dashboard
+        Get.offNamed(AppRouter.onboardingScreen); // or dashboard
       });
     });
   }

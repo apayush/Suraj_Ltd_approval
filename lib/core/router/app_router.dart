@@ -6,6 +6,8 @@ import '../../features/dashboard/controller/dashboard_controller.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../../features/dashboard/controller/sidebarx_controller.dart';
 import '../../features/finance/controller/finance_controller.dart';
+import '../../features/onboarding/controller/onboarding_controller.dart';
+import '../../features/onboarding/view/onboarding_screen.dart';
 import '../../features/production/controller/production_controller.dart';
 import '../../features/purchase/controller/purchase_controller.dart';
 import '../../features/auth/controller/login_controller.dart';
@@ -19,6 +21,7 @@ import '../../features/purchase/view/purchase_screen.dart';
 class AppRouter {
   static const String splash = '/splash';
   static const String login = '/login';
+  static const String onboardingScreen = '/OnboardingScreen';
   static const String dashboardScreen = '/dashboard_screen';
   static const String financeScreen = '/finance_screen';
   static const String productionScreen = '/production_screen';
@@ -29,6 +32,11 @@ class AppRouter {
     GetPage(name: splash, page: () => const SplashScreen(),
       binding: BindingsBuilder(() {
         Get.put(SessionController(),permanent: true);
+      })
+    ),
+    GetPage(name: onboardingScreen, page: () => const OnboardingScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<OnboardingController>(() => OnboardingController());
       })
     ),
     GetPage(

@@ -14,6 +14,7 @@ class AppStrings {
   static const String edit = 'Edit';
   static const String reject = 'Reject';
   static const String search = 'Search';
+  static const String reset = 'Reset';
   static const String filters = 'Filters';
   static const String submit = 'Submit';
   static const String confirm = 'Confirm';
