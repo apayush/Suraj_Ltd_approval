@@ -39,10 +39,12 @@ class AppRouter {
         Get.put(SessionController(), permanent: true);
       }),
     ),
-    GetPage(name: onboardingScreen, page: () => const OnboardingScreen(),
+    GetPage(
+      name: onboardingScreen,
+      page: () => const OnboardingScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<OnboardingController>(() => OnboardingController());
-      })
+      }),
     ),
     GetPage(
       name: login,
