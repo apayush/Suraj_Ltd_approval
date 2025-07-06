@@ -8,10 +8,13 @@ import 'core/theme/app_theme.dart';
 import 'core/widgets/page_not_found.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/sidebarx_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupDependencies(baseUrl: ApiUrl.baseUrl2);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  setupDependencies(baseUrl: ApiUrl.baseUrl);
   await LocalDB.init();
   runApp(const MyApp());
 }

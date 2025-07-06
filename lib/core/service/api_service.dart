@@ -4,10 +4,10 @@ import 'package:get_it/get_it.dart';
 import 'api_client.dart';
 
 class ApiService {
-  final _apiClient = GetIt.I<ApiClient>(); // Access shared AuthService
+  static final _apiClient = GetIt.I<ApiClient>(); // Access shared AuthService
 
   // Example GET request
-  Future<Response> getData(
+  static Future<Response> getData(
     String endpoint, {
     Map<String, dynamic>? queryParams,
   }) async {
@@ -23,10 +23,9 @@ class ApiService {
   }
 
   /// POST request
-  Future<Response> postData(
+  static Future<Response> postData(
     String endpoint, {
     dynamic data,
-
     Map<String, dynamic>? queryParams,
   }) async {
     try {
@@ -42,7 +41,7 @@ class ApiService {
     }
   }
 
-  Future<Response> postDataFullUrl(
+  static Future<Response> postDataFullUrl(
     String fullUrl, {
     dynamic data,
     Map<String, dynamic>? queryParams,
@@ -63,7 +62,7 @@ class ApiService {
   }
 
   /// PUT request
-  Future<Response> putData(
+  static Future<Response> putData(
     String endpoint, {
     dynamic data,
     Map<String, dynamic>? queryParams,
@@ -82,7 +81,7 @@ class ApiService {
   }
 
   /// DELETE request
-  Future<Response> deleteData(
+  static Future<Response> deleteData(
     String endpoint, {
     Map<String, dynamic>? queryParams,
   }) async {
@@ -98,7 +97,7 @@ class ApiService {
   }
 
   /// Multipart (File Upload) request
-  Future<Map<String, dynamic>> uploadFile(
+  static Future<Map<String, dynamic>> uploadFile(
     String endpoint, {
     required File file,
     String? fileKey = 'file', // The key to use for the file field

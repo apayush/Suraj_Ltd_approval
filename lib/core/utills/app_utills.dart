@@ -14,13 +14,35 @@ class AppUtils {
   }) {
     Get.showSnackbar(
       GetSnackBar(
-        title: title ?? 'Alert',
-        message: message,
+        title: title ?? null,
+        messageText: Center(
+          child: IntrinsicWidth(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 20.0,
+              ),
+              decoration: BoxDecoration(
+                color: background ?? AppColors.blue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
         snackPosition: position ?? SnackPosition.BOTTOM,
+        backgroundColor: Colors.transparent,
+        margin: const EdgeInsets.all(16),
         isDismissible: true,
-        backgroundColor: background ?? Colors.black,
-        animationDuration: const Duration(milliseconds: 500),
-        duration: const Duration(seconds: 3),
+        borderRadius: 0,
+        duration: const Duration(seconds: 1),
       ),
     );
   }

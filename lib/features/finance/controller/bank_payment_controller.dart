@@ -8,7 +8,6 @@ class BankPaymentController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static BankPaymentController get instance => Get.find();
 
-  final _apiService = ApiService();
   RxBool isLoading = false.obs;
 
   // Two lists to hold the Api data and filtered data
@@ -21,7 +20,7 @@ class BankPaymentController extends GetxController
   Future<void> getBankPaymentData() async {
     isLoading.value = true;
     try {
-      final response = await _apiService.getData(ApiUrl.baseUrl);
+      final response = await ApiService.getData(ApiUrl.baseUrl);
       if (response.statusCode == 200) {
         List<BankPaymentModel> payment = BankPaymentModel.fromDecodedJsonList(
           response.data ?? [],
@@ -31,6 +30,7 @@ class BankPaymentController extends GetxController
         bankPaymentList.assignAll(
           payment,
         ); // Use assignAll to replace all items
+        bankPaymentList.assignAll(payment);
         bankPaymentDataSource.updateDataSource(payment);
       }
     } catch (e) {

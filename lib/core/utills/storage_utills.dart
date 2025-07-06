@@ -83,6 +83,8 @@ class StorageUtils extends GetxService {
       if (cookiePair[0] == key) {
         return cookiePair[1];
       }
+      print('Cookie found: $key = ${cookiePair[1]}');
+      print('Cookie not found: $key');
     }
     return null;
   }

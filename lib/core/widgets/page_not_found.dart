@@ -47,7 +47,7 @@ class PageNotFound extends StatelessWidget {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              Get.offAllNamed('/'); // Navigate back to home
+              Get.offAllNamed(AppRouter.login);
             },
             child: const Text('Go to Home'),
           ),

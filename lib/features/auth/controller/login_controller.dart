@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
-import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
+
+import '../../dashboard/controller/session_controller.dart';
 
 class LoginController extends GetxController {
   final TextEditingController userIdController = TextEditingController();
@@ -16,7 +16,7 @@ class LoginController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isPasswordVisible = false.obs;
   final RxString errorMessage = ''.obs;
-  final _apiService = ApiService();
+  final sessionController = GetIt.I<SessionController>();
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -42,11 +42,10 @@ class LoginController extends GetxController {
       if (data['success'] == 'YES') {
         AppUtils.showSnackBar(
           'Login successful!',
-          title: 'Success',
           background: AppColors.primaryColor,
-          position: SnackPosition.BOTTOM,
         );
-        GetIt.I<SessionController>().startSessionTimer();
+        sessionController.startSessionTimer();
+        // Navigate to dashboard
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
         errorMessage.value = 'Ivalid credentials. Please try again.';
