@@ -36,7 +36,7 @@ class LoginController extends GetxController {
           'mPasswords': passwordController.text.trim(),
         },
       );
-      print("object:$response");
+      print('object:$response');
       if (isClosed) return;
       final data = response.data;
       if (data['success'] == 'YES') {

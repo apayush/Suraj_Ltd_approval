@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
-import 'package:suraj_approval/core/utills/storage_utills.dart';
 
-import '../../features/dashboard/controller/session_controller.dart';
-import '../service/api_client.dart';
 import 'app_module_container.dart';
 import '../theme/app_colors.dart';
 
@@ -107,7 +103,6 @@ class AppUtils {
     );
   }
 }
-
 
 // void openLink(String url) async {
 //   final Uri uri = Uri.parse(url);

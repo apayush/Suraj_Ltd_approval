@@ -5,7 +5,6 @@ import 'core/router/app_router.dart';
 import 'core/service/dependencies.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
-import 'core/utills/app_utills.dart';
 import 'core/widgets/page_not_found.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/sidebarx_controller.dart';

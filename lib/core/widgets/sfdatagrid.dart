@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -23,7 +22,8 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
   final ScrollPhysics verticalScrollPhysics;
   final List<StackedHeaderRow>? stackedHeaderRows;
 
-  const SfDataGridPaginationWithAllData({super.key,
+  const SfDataGridPaginationWithAllData({
+    super.key,
     required this.controller,
     required this.dynamicColumns,
     required this.totalItems,
@@ -37,8 +37,8 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
     this.tableSummaryRows = const <GridTableSummaryRow>[],
     this.isScrollbarAlwaysShown = true,
     this.verticalScrollPhysics = const AlwaysScrollableScrollPhysics(),
-    this.stackedHeaderRows});
-
+    this.stackedHeaderRows,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(child: _buildDataGrid(context)),
-        hidePaging ? Container() : _buildPager()
+        hidePaging ? Container() : _buildPager(),
       ],
     );
   }
@@ -61,31 +61,32 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
       ),
       child: SfDataGridTheme(
         data: SfDataGridThemeData(
-            headerColor: AppColors.blue,
-            sortIconColor: Colors.grey.shade300,
-            gridLineColor: Colors.transparent,
-            rowHoverColor: Colors.black12
+          headerColor: AppColors.blue,
+          sortIconColor: Colors.grey.shade300,
+          gridLineColor: Colors.transparent,
+          rowHoverColor: Colors.black12,
         ),
         child: ClipRRect(
           borderRadius: RadiusUtils.borderRadiusForDataGrid,
           child: SfDataGrid(
-              key: sfDataKey ?? GlobalKey<SfDataGridState>(),
-              source: source,
-              columnWidthMode: ColumnWidthMode.fill,
-              tableSummaryRows: tableSummaryRows,
-              columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-              onQueryRowHeight: (details) {
-                return details.rowIndex == 0 ? 45.0 : 50.0;
-              },
-              showHorizontalScrollbar: true,
-              showVerticalScrollbar: true,
-              verticalScrollPhysics: verticalScrollPhysics,
-              isScrollbarAlwaysShown: isScrollbarAlwaysShown,
-              allowSorting: true,
-              gridLinesVisibility: GridLinesVisibility.both,
-              headerGridLinesVisibility: GridLinesVisibility.both,
-              columns: dynamicColumns,
-              stackedHeaderRows: stackedHeaderRows ?? []),
+            key: sfDataKey ?? GlobalKey<SfDataGridState>(),
+            source: source,
+            columnWidthMode: ColumnWidthMode.fill,
+            tableSummaryRows: tableSummaryRows,
+            columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+            onQueryRowHeight: (details) {
+              return details.rowIndex == 0 ? 45.0 : 50.0;
+            },
+            showHorizontalScrollbar: true,
+            showVerticalScrollbar: true,
+            verticalScrollPhysics: verticalScrollPhysics,
+            isScrollbarAlwaysShown: isScrollbarAlwaysShown,
+            allowSorting: true,
+            gridLinesVisibility: GridLinesVisibility.both,
+            headerGridLinesVisibility: GridLinesVisibility.both,
+            columns: dynamicColumns,
+            stackedHeaderRows: stackedHeaderRows ?? [],
+          ),
         ),
       ),
     );
@@ -94,8 +95,10 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
   Widget _buildPager() {
     final double pageCount = (totalItems / rowsPerPage).ceilToDouble();
     return SfDataPagerTheme(
-      data: const SfDataPagerThemeData(selectedItemColor: AppColors.blue,
-          selectedItemTextStyle: TextStyle(color: Colors.white)),
+      data: const SfDataPagerThemeData(
+        selectedItemColor: AppColors.blue,
+        selectedItemTextStyle: TextStyle(color: Colors.white),
+      ),
       child: SfDataPager(
         pageCount: pageCount,
         delegate: source,

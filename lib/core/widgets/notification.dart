@@ -87,7 +87,7 @@ class _NotificationBellState extends State<NotificationBell> {
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text("See All Alerts"),
+                                Text('See All Alerts'),
                                 Icon(Icons.chevron_right),
                               ],
                             ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import '../../../core/service/api_service.dart';
@@ -25,11 +23,14 @@ class BankPaymentController extends GetxController
     try {
       final response = await _apiService.getData(ApiUrl.baseUrl);
       if (response.statusCode == 200) {
-        List<BankPaymentModel> payment =
-        BankPaymentModel.fromDecodedJsonList(response.data?? []);
+        List<BankPaymentModel> payment = BankPaymentModel.fromDecodedJsonList(
+          response.data ?? [],
+        );
 
         // final data = response.data;
-        bankPaymentList.assignAll(payment); // Use assignAll to replace all items
+        bankPaymentList.assignAll(
+          payment,
+        ); // Use assignAll to replace all items
         bankPaymentDataSource.updateDataSource(payment);
       }
     } catch (e) {
@@ -52,17 +53,17 @@ class BankPaymentController extends GetxController
   void handleMenuSelection(String value, BankPaymentModel bankPayment) {
     if (value == 'View') {
     } else if (value == 'Approve') {
-    } else if (value == 'Reject') {
-    }
+    } else if (value == 'Reject') {}
     print('value is $value');
   }
-
 
   @override
   void onInit() {
     super.onInit();
-    bankPaymentDataSource =
-        BankPaymentDataSource(bankPaymentList, rowsPerPage: rowsPerPage.value);
+    bankPaymentDataSource = BankPaymentDataSource(
+      bankPaymentList,
+      rowsPerPage: rowsPerPage.value,
+    );
     getBankPaymentData();
   }
 }

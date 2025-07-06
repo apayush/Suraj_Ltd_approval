@@ -26,6 +26,7 @@ class ApiService {
   Future<Response> postData(
     String endpoint, {
     dynamic data,
+
     Map<String, dynamic>? queryParams,
   }) async {
     try {

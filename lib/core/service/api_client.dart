@@ -100,7 +100,7 @@ class ApiClient {
           }
 
           print(error.response);
-          print("statusCode");
+          print('statusCode');
           if (error.type == DioExceptionType.connectionError) {
             logger.e(
               '[ERROR] Network error: Please check your internet connection.',

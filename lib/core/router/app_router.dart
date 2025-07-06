@@ -8,8 +8,6 @@ import '../../features/dashboard/controller/dashboard_controller.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../../features/dashboard/controller/sidebarx_controller.dart';
 import '../../features/finance/controller/finance_controller.dart';
-import '../../features/onboarding/controller/onboarding_controller.dart';
-import '../../features/onboarding/view/onboarding_screen.dart';
 import '../../features/production/controller/production_controller.dart';
 import '../../features/purchase/controller/purchase_controller.dart';
 import '../../features/auth/controller/login_controller.dart';
