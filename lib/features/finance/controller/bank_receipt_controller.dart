@@ -6,13 +6,12 @@ class BankReceiptController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static BankReceiptController get instance => Get.find();
 
-  final _apiService = ApiService();
   RxBool isLoading = false.obs;
 
   Future<void> getBankReceiptData() async {
     isLoading.value = true;
     try {
-      final response = await _apiService.getData(ApiUrl.baseUrl);
+      final response = await ApiService.getData(ApiUrl.baseUrl);
       if (response.statusCode == 200) {
         print('Response Data: ${response.data}');
       }

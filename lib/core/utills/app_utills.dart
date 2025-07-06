@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
-import 'package:suraj_approval/core/utills/storage_utills.dart';
-
-import '../../features/dashboard/controller/session_controller.dart';
-import '../service/api_client.dart';
 import 'app_module_container.dart';
 import '../theme/app_colors.dart';
 
@@ -18,14 +13,33 @@ class AppUtils {
   }) {
     Get.showSnackbar(
       GetSnackBar(
-        title: title ?? 'Alert',
-        message: message,
+        title: title ?? null,
+        messageText: Center(
+          child: IntrinsicWidth(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+              decoration: BoxDecoration(
+                color: background ?? AppColors.blue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
         snackPosition: position ?? SnackPosition.BOTTOM,
+        backgroundColor: Colors.transparent,
+        margin: const EdgeInsets.all(16),
         isDismissible: true,
-        backgroundColor: background ?? Colors.black,
-        animationDuration: const Duration(milliseconds: 500),
-        duration: const Duration(seconds: 3),
-      ),
+        borderRadius: 0,
+        duration: const Duration(seconds: 1),
+      )
     );
   }
 

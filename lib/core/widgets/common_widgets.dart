@@ -237,7 +237,12 @@ class SidebarXDrawer extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: sideBarXController.isProfileExpanded,
       builder: (context, isExpanded, child) {
-        return buildLogout(mContext);
+        return Column(
+          children: [
+            buildSetting(mContext),
+            buildLogout(mContext),
+          ],
+        );
       },
     );
   }
@@ -266,6 +271,19 @@ class SidebarXDrawer extends StatelessWidget {
       ),
       onPressed: () {
         sideBarXController.navigateToLoginScreen(context);
+      },
+    );
+  }
+
+  Widget buildSetting(BuildContext context) {
+    return IconButton(
+      tooltip: AppStrings.settings,
+      icon: const Icon(
+        CupertinoIcons.gear_solid,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        sideBarXController.navigateToSettingDialog(context);
       },
     );
   }

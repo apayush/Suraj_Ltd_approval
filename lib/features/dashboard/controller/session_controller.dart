@@ -10,7 +10,8 @@ import '../../../core/widgets/common_widgets.dart';
 
 class SessionController extends GetxController {
   Timer? _inactivityTimer;
-  final int sessionTimeout = 30 * 60 * 1000; // 15 minutes in milliseconds
+  // final int sessionTimeout = 30 * 60 * 1000; // 15 minutes for production
+  final int sessionTimeout = 10 * 1000; // 10 seconds for testing
   final storageUtils = GetIt.I<StorageUtils>();
 
   // @override
@@ -21,16 +22,19 @@ class SessionController extends GetxController {
 
   // Start the session timer when user logs in
   void startSessionTimer() {
+    print('session timer started');
     _startInactivityTimer();
   }
 
   // Stop the session timer when user logs out
   void stopSessionTimer() {
+    print('session timer stopped');
     _inactivityTimer?.cancel();
   }
 
   // Start the inactivity timer
   void _startInactivityTimer() {
+    print('Starting inactivity timer');
     _inactivityTimer?.cancel(); // Cancel any existing timer
     _inactivityTimer = Timer(
         Duration(milliseconds: sessionTimeout), _showSessionExpiredDialog);
@@ -38,6 +42,7 @@ class SessionController extends GetxController {
 
   // Reset the timer whenever the user interacts with the app
   void resetInactivityTimer() {
+    print('Resetting inactivity timer');
     if (Get.currentRoute != AppRouter.login) {
       _startInactivityTimer();
     }
@@ -64,6 +69,7 @@ class SessionController extends GetxController {
       barrierDismissible: false,
       GenericDialogBox(
         headerText: AppStrings.youHaveLoggedOut,
+        showCloseIcon: false,
         content: AppText(AppStrings.sessionHasExpired2,
             softWrap: true, style: TextStyles.medium(Get.context!)),
         primaryButtonText: AppStrings.loginAgain,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/widgets/app_text_field.dart';
 
 import '../../../core/constants/app_strings.dart';
 import '../../../core/widgets/app_dialog.dart';
@@ -19,6 +21,10 @@ class SidebarController extends GetxController {
   void navigateToLoginScreen(BuildContext context) {
     isProfileExpanded.value = false;
     showAlertLogoutDialog(context);
+  }
+
+  void navigateToSettingDialog(BuildContext context) {
+    showSettingsDialog(context);
   }
 
   void toggleProfileExpanded() {
@@ -41,6 +47,30 @@ class SidebarController extends GetxController {
         secondaryButtonText: AppStrings.no,
         onPrimaryButtonPressed: () {
           Get.offAndToNamed(AppRouter.login);
+        },
+        onSecondaryButtonPressed: () {
+          Get.back();
+        },
+      ),
+    );
+  }
+
+  void showSettingsDialog(BuildContext context) {
+    Get.dialog(
+      GenericDialogBox(
+        headerText: AppStrings.settings,
+        content: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Row(children: [
+            AppText('Enter New Base URL :', style: TextStyles.medium(Get.context!)),
+            10.widthGap,
+            AppTextField(hint: 'Base Url')
+          ],)
+        ),
+        primaryButtonText: AppStrings.confirm,
+        secondaryButtonText: AppStrings.cancel,
+        onPrimaryButtonPressed: () {
+          Get.back();
         },
         onSecondaryButtonPressed: () {
           Get.back();

@@ -13,6 +13,7 @@ class GenericDialogBox extends StatelessWidget {
   final String secondaryButtonText;
   final VoidCallback? onSecondaryButtonPressed;
   final bool isFullScreen;
+  final bool showCloseIcon;
 
   const GenericDialogBox({
     super.key,
@@ -23,6 +24,7 @@ class GenericDialogBox extends StatelessWidget {
     this.secondaryButtonText = '',
     this.onSecondaryButtonPressed,
     this.isFullScreen = false,
+    this.showCloseIcon = true,
   });
 
   @override
@@ -76,16 +78,14 @@ class GenericDialogBox extends StatelessWidget {
                               textColor: Colors.white,
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
+                          if (showCloseIcon)
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                icon: const Icon(Icons.close, color: Colors.white),
+                                onPressed: Get.back,
                               ),
-                              onPressed: Get.back,
-                            ),
-                          ),
+                            )
                         ],
                       ),
                     ),
