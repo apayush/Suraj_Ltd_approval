@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
+import 'package:suraj_approval/core/service/notification_service.dart';
 import 'core/router/app_router.dart';
 import 'core/service/dependencies.dart';
 import 'core/service/local_db.dart';
@@ -12,10 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  setupDependencies(baseUrl: ApiUrl.baseUrl);
-  await LocalDB.init();
+  await initializeApp();
   runApp(const MyApp());
 }
 
@@ -44,4 +42,13 @@ class MyApp extends StatelessWidget {
       }),
     );
   }
+}
+
+Future<void> initializeApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.initialize();
+
+  setupDependencies(baseUrl: ApiUrl.baseUrl2);
+  await LocalDB.init();
 }

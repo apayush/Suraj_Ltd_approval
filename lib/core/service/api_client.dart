@@ -47,23 +47,23 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          final token = storageUtils.getToken();
-          if (token != null) {
-            options.headers['Authorization'] = token;
-          }
+          // final token = storageUtils.getToken();
+          // if (token != null) {
+          //   options.headers['Authorization'] = token;
+          // }
 
-          if (kDebugMode) {
-            logger.i('Request: ${options.method} ${options.uri}');
-            if (options.headers.isNotEmpty) {
-              logger.d('Headers: ${jsonEncode(options.headers)}');
-            }
-            if (options.queryParameters.isNotEmpty) {
-              logger.d('Query Parameters: ${options.queryParameters}');
-            }
-            if (options.data != null) {
-              logger.d('Request Body: ${options.data}');
-            }
-          }
+          // if (kDebugMode) {
+          //   logger.i('Request: ${options.method} ${options.uri}');
+          //   if (options.headers.isNotEmpty) {
+          //     logger.d('Headers: ${jsonEncode(options.headers)}');
+          //   }
+          //   if (options.queryParameters.isNotEmpty) {
+          //     logger.d('Query Parameters: ${options.queryParameters}');
+          //   }
+          //   if (options.data != null) {
+          //     logger.d('Request Body: ${options.data}');
+          //   }
+          // }
 
           return handler.next(options);
         },
@@ -99,8 +99,6 @@ class ApiClient {
             }
           }
 
-          print(error.response);
-          print('statusCode');
           if (error.type == DioExceptionType.connectionError) {
             logger.e(
               '[ERROR] Network error: Please check your internet connection.',
