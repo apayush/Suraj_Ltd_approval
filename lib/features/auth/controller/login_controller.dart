@@ -44,9 +44,7 @@ class LoginController extends GetxController {
           'fcmid': fcmId,
         },
       );
-      print("re1");
-      print(response);
-      print("re2");
+
       if (isClosed) return;
       final data = response.data;
       if (data['status'] == 'success') {
