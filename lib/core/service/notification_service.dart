@@ -75,7 +75,7 @@ class NotificationService {
     if (Platform.isAndroid) {
       final notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
-          _androidNotificationChannel,
+          'Suraj Approval',
           _notificationChannelName,
         ),
       );

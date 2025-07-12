@@ -56,16 +56,35 @@ class SidebarController extends GetxController {
   }
 
   void showSettingsDialog(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     Get.dialog(
       GenericDialogBox(
-        headerText: AppStrings.settings,
+        headerText: AppStrings.confirmation,
         content: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Row(children: [
-            AppText('Enter New Base URL :', style: TextStyles.medium(Get.context!)),
-            10.widthGap,
-            Flexible(child: AppTextField(hint: 'Base Url'))
-          ],)
+          child:
+              isMobile
+                  ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        'Enter New Base URL:',
+                        style: TextStyles.medium(context),
+                      ),
+                      10.heightGap,
+                      AppTextField(hint: 'Base Url'),
+                    ],
+                  )
+                  : Row(
+                    children: [
+                      AppText(
+                        'Enter New Base URL:',
+                        style: TextStyles.medium(context),
+                      ),
+                      10.widthGap,
+                      Flexible(child: AppTextField(hint: 'Base Url')),
+                    ],
+                  ),
         ),
         primaryButtonText: AppStrings.confirm,
         secondaryButtonText: AppStrings.cancel,

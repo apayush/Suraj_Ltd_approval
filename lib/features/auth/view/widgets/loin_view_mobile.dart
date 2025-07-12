@@ -72,8 +72,8 @@ class LoginViewMobile extends StatelessWidget {
                   controller: controller.userIdController,
                   validator: controller.validateUserId,
                   decoration: InputDecoration(
-                    labelText: 'User ID',
-                    hintText: 'Enter your user ID',
+                    labelText: 'User Name',
+                    hintText: 'Enter your user name',
                     prefixIcon: const Icon(Icons.person_outline),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -184,21 +184,6 @@ class LoginViewMobile extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Forgot password
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // Handle forgot password
-                    },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.blue, fontSize: 14),
                     ),
                   ),
                 ),

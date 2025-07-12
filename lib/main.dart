@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Suraj Ltd Approval',
-      initialRoute: AppRouter.onboarding,
+      initialRoute: AppRouter.splash,
       getPages: AppRouter.routes,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -55,6 +55,6 @@ Future<void> initializeApp() async {
   await LocalDB.init();
   final user = LocalDB.getUserModel();
   if (user != null) {
-    Get.put<UserModel>(user, permanent: true); // ✅ register for global access
+    Get.put<UserModel>(user, permanent: true);
   }
 }
