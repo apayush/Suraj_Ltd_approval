@@ -12,13 +12,15 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+
+    final userDetails = (json['userDetails'] ?? json['UserDetails']) as List?;
+
     return UserModel(
-      mUser: json['mUser'],
-      fcmid: json['fcmid'],
-      userDetails:
-          (json['userDetails'] as List)
-              .map((e) => UserDetails.fromJson(e))
-              .toList(),
+      mUser: json['mUser'] ?? json['MUser'],
+      fcmid: json['fcmid'] ?? json['FCMId'],
+      userDetails: userDetails?.map((e) {
+        return UserDetails.fromJson(e);
+      }).toList() ?? [],
     );
   }
 
@@ -49,13 +51,16 @@ class UserDetails {
   });
 
   factory UserDetails.fromJson(Map<String, dynamic> json) {
+    final mainMenuStr = json['MainMenu'] ?? json['mainMenu'] ?? json['mainmenu'];
+    final subMenuStr = json['SubMenu'] ?? json['subMenu'] ?? json['submenu'];
+
     return UserDetails(
-      branch: json['Branch'],
-      type: json['Type'],
-      ids: json['IDs'],
-      userLevel: json['UserLevel'],
-      mainMenu: MenuType.fromKey(json['MainMenu']),
-      subMenu: SubMenuType.fromKey(json['SubMenu']),
+      branch: json['Branch'] ?? json['branch'],
+      type: json['Type'] ?? json['type'],
+      ids: json['IDs'] ?? json['ids'],
+      userLevel: json['UserLevel'] ?? json['userLevel'],
+      mainMenu: MenuType.fromKey(mainMenuStr),
+      subMenu: SubMenuType.fromKey(subMenuStr),
     );
   }
 

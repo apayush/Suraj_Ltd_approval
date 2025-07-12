@@ -28,6 +28,7 @@ class BankPayment extends StatelessWidget {
   }
 
   Widget buildPaymentTable(BuildContext context) {
+    final isMobile = getDeviceType(MediaQuery.of(context).size) == DeviceScreenType.mobile;
     return controller.bankPaymentList.isNotEmpty
         ? Expanded(
       child: Obx(() {
@@ -74,7 +75,7 @@ class BankPayment extends StatelessWidget {
             ),
             GridColumn(
               columnName: 'Link',
-              columnWidthMode: ColumnWidthMode.fill,
+              columnWidthMode: isMobile ? ColumnWidthMode.auto : ColumnWidthMode.fill,
               label: appGridLabel('Link'),
             ),
             GridColumn(

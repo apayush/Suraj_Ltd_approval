@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
+import 'package:suraj_approval/core/utills/app_utills.dart';
 import '../../../core/service/api_service.dart';
 import '../../../core/utills/table_data_sources/bank_payment/bank_payment_data_source.dart';
 import '../model/bank_payment_model.dart';
@@ -40,8 +41,30 @@ class BankPaymentController extends GetxController
     }
   }
 
+  Future<void> getBankpaymentReport() async {
+    isLoading.value = true;
+    try {
+      final response = await ApiService.getData(
+        ApiUrl.getBankpaymentReport,
+        queryParams: {
+          'mbranch': 'HO',
+          'mYearCode': '00101042025',
+          'mType': 'BNA',
+          'mSrl': '000001',
+        },
+      );
+      if (response.statusCode == 200) {
+        AppUtils.openPdf( response.data['Base64Pdf']);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   resetFilters() {
-    getBankPaymentData();
+    getBankpaymentReport();
   }
 
   var rowsPerPage = 10.obs;

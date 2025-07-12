@@ -10,8 +10,8 @@ import '../../../core/widgets/common_widgets.dart';
 
 class SessionController extends GetxController {
   Timer? _inactivityTimer;
-  // final int sessionTimeout = 30 * 60 * 1000; // 15 minutes for production
-  final int sessionTimeout = 10 * 1000; // 10 seconds for testing
+  final int sessionTimeout = 30 * 60 * 1000; // 15 minutes for production
+  // final int sessionTimeout = 10 * 1000; // 10 seconds for testing
   final storageUtils = GetIt.I<StorageUtils>();
 
   // @override

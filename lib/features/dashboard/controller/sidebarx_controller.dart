@@ -64,7 +64,7 @@ class SidebarController extends GetxController {
           child: Row(children: [
             AppText('Enter New Base URL :', style: TextStyles.medium(Get.context!)),
             10.widthGap,
-            AppTextField(hint: 'Base Url')
+            Flexible(child: AppTextField(hint: 'Base Url'))
           ],)
         ),
         primaryButtonText: AppStrings.confirm,

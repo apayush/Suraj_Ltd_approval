@@ -1,7 +1,9 @@
-import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:get_storage/get_storage.dart';
 import '../constants/app_constants.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:get/get.dart';
+import '../models/user_model.dart';
+import '../service/local_db.dart';
 
 class StorageUtils extends GetxService {
   final GetStorage _storage = GetStorage();
@@ -99,6 +101,8 @@ class StorageUtils extends GetxService {
         final cookiePair = cookie.split('=');
         html.document.cookie = '${cookiePair[0]}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       }
+      await LocalDB.clearUser();
+      Get.delete<UserModel>();
     } else {
       // Clear GetStorage for mobile
       await _storage.erase();

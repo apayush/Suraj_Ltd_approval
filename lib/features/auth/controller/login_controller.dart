@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -9,9 +8,9 @@ import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
-import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
 
+import '../../../core/models/user_model.dart';
 import '../../dashboard/controller/session_controller.dart';
 
 class LoginController extends GetxController {
@@ -50,16 +49,17 @@ class LoginController extends GetxController {
       if (data['status'] == 'success') {
         AppUtils.showSnackBar(
           'Login successful!',
-          title: 'Success',
-          background: AppColors.primaryColor,
-          position: SnackPosition.BOTTOM,
         );
         final userData = (data['data'] as Map);
-        LocalDB.setString(AppConstants.currentUser, jsonEncode(userData));
+        final jsonString = jsonEncode(userData);
+        await LocalDB.setString(AppConstants.currentUser, jsonString);
+        final userModel = UserModel.fromJson(data['data']);
+        Get.put(userModel,permanent: true);
+
         GetIt.I<SessionController>().startSessionTimer();
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
-        errorMessage.value = 'Ivalid credentials. Please try again.';
+        errorMessage.value = 'Invalid credentials. Please try again.';
       }
     } catch (e) {
       errorMessage.value = 'Login failed. Please try again.$e';

@@ -36,8 +36,34 @@ class LocalDB {
   }
 
   static UserModel? getUserModel() {
-    final userData = _pref.getString(AppConstants.currentUser) ?? '';
-    if (userData.isEmpty) return null;
-    return UserModel.fromJson(jsonDecode(userData));
+    final userData = _pref.getString(AppConstants.currentUser);
+    if (userData == null || userData.isEmpty) return null;
+    return UserModel.fromJson(jsonDecode(userData)); // ✅ Restore from SharedPreferences
   }
+
+  static Future<void> clearUser() async {
+    await _pref.remove(AppConstants.currentUser);
+  }
+
+  // static UserModel? getUserModel() {
+  //   try {
+  //     final userData = _pref.getString(AppConstants.currentUser);
+  //     print('🟢 Raw userData from SharedPreferences: $userData');
+  //
+  //     if (userData == null || userData.isEmpty) {
+  //       print('🔴 No user data found in SharedPreferences');
+  //       return null;
+  //     }
+  //
+  //     final decodedData = jsonDecode(userData);
+  //     print('🟢 Decoded userData: $decodedData');
+  //
+  //     final userModel = UserModel.fromJson(decodedData);
+  //     print('🟢 UserModel created successfully: ${userModel.toJson()}');
+  //     return userModel;
+  //   } catch (e) {
+  //     print('🔴 Error in getUserModel(): $e');
+  //     return null;
+  //   }
+  // }
 }

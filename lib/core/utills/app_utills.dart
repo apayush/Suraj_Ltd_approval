@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io' as io;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:universal_html/html.dart' as html;
 import 'app_module_container.dart';
 import '../theme/app_colors.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 class AppUtils {
   // Show a simple Snackbar
@@ -123,6 +128,30 @@ class AppUtils {
       enableDrag: true,
       isDismissible: true,
     );
+  }
+
+  static Future<void> openPdf(String base64String, {String fileName = 'Report.pdf'}) async {
+    try {
+      final bytes = base64Decode(base64String);
+
+      if (kIsWeb) {
+        // ✅ Web: open in browser tab
+        final blob = html.Blob([bytes], 'application/pdf');
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        html.window.open(url, '_blank');
+        html.Url.revokeObjectUrl(url);
+      } else {
+        // ✅ Mobile/Desktop: save to file and open
+        final dir = await getTemporaryDirectory();
+        final file = io.File('${dir.path}/$fileName');
+        await file.writeAsBytes(bytes);
+
+        final result = await OpenFile.open(file.path);
+        print('🟢 Opened PDF: ${result.message}');
+      }
+    } catch (e) {
+      print('❌ Failed to open PDF: $e');
+    }
   }
 }
 

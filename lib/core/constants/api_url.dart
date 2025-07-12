@@ -4,4 +4,5 @@ class ApiUrl {
   static const String baseUrl2 = 'http://124.123.122.112:7081/Report';
 
   static const String loginApi = '/Login';
+  static const String getBankpaymentReport = '/getBankpaymentReport';
 }

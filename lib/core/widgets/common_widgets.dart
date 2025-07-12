@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
 import '../../features/dashboard/controller/sidebarx_controller.dart';
+import '../models/user_model.dart';
 import '../utills/app_module_container.dart';
 import '../constants/app_strings.dart';
 import '../constants/radius_utils.dart';
@@ -182,6 +183,8 @@ class SidebarXDrawer extends StatelessWidget {
             width: 220,
           ),
           headerBuilder: (context, extended) {
+            final userModel = Get.find<UserModel>();
+            final username = userModel.mUser ?? 'User';
             return SizedBox(
               height: 60.0,
               child: Padding(
@@ -192,7 +195,7 @@ class SidebarXDrawer extends StatelessWidget {
                       : MainAxisAlignment.center,
                   children: [
                     if (extended) ...[
-                      Expanded(child: AppText('Suraj Pvt. Ltd.', style: TextStyles.medium(context, textColor: Colors.white))),
+                      Expanded(child: AppText('$username', style: TextStyles.medium(context, textColor: Colors.white))),
                     ],
                     IconButton(
                         onPressed: () {
@@ -212,15 +215,7 @@ class SidebarXDrawer extends StatelessWidget {
               children: [
                 buildDivider(),
                 const SizedBox(height: 10),
-                extended ? Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  height: 60.0,
-                  child: Row(
-                    children: [
-                      bottomPanel,
-                    ],
-                  ),
-                ) : Column(
+                Column(
                   children: [
                     bottomPanel,
                   ],

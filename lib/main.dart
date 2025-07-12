@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
+import 'core/models/user_model.dart';
 import 'core/router/app_router.dart';
 import 'core/service/dependencies.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/page_not_found.dart';
+import 'features/auth/controller/drawer_menu_controller.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/sidebarx_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Suraj Ltd Approval',
-      initialRoute: AppRouter.splash,
+      initialRoute: AppRouter.onboarding,
       getPages: AppRouter.routes,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -37,8 +39,8 @@ class MyApp extends StatelessWidget {
         page: () => const PageNotFound(),
       ),
       initialBinding: BindingsBuilder(() {
-        Get.lazyPut<SidebarController>(() => SidebarController());
-        Get.lazyPut<AppDrawerController>(() => AppDrawerController());
+        Get.put(SidebarController(),permanent: true);
+        Get.put(AppDrawerController(),permanent: true);
       }),
     );
   }
@@ -51,4 +53,8 @@ Future<void> initializeApp() async {
 
   setupDependencies(baseUrl: ApiUrl.baseUrl2);
   await LocalDB.init();
+  final user = LocalDB.getUserModel();
+  if (user != null) {
+    Get.put<UserModel>(user, permanent: true); // ✅ register for global access
+  }
 }
