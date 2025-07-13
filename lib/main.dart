@@ -1,17 +1,17 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
+
 import 'core/models/user_model.dart';
 import 'core/router/app_router.dart';
 import 'core/service/dependencies.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/page_not_found.dart';
-import 'features/auth/controller/drawer_menu_controller.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/sidebarx_controller.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
         page: () => const PageNotFound(),
       ),
       initialBinding: BindingsBuilder(() {
-        Get.put(SidebarController(),permanent: true);
-        Get.put(AppDrawerController(),permanent: true);
+        Get.put(SidebarController(), permanent: true);
+        Get.put(AppDrawerController(), permanent: true);
       }),
     );
   }

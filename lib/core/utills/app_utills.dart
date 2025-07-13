@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:universal_html/html.dart' as html;
-import 'app_module_container.dart';
-import '../theme/app_colors.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:universal_html/html.dart' as html;
+
+import '../theme/app_colors.dart';
+import 'app_module_container.dart';
 
 class AppUtils {
   // Show a simple Snackbar
@@ -130,7 +133,10 @@ class AppUtils {
     );
   }
 
-  static Future<void> openPdf(String base64String, {String fileName = 'Report.pdf'}) async {
+  static Future<void> openPdf(
+    String base64String, {
+    String fileName = 'Report.pdf',
+  }) async {
     try {
       final bytes = base64Decode(base64String);
 
@@ -152,6 +158,14 @@ class AppUtils {
     } catch (e) {
       print('❌ Failed to open PDF: $e');
     }
+  }
+
+  static Future<File> base64ToPdfFile(String base64Str, String filename) async {
+    final bytes = base64Decode(base64Str);
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/$filename');
+    await file.writeAsBytes(bytes);
+    return file;
   }
 }
 

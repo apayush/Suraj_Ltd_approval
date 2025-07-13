@@ -4,9 +4,9 @@ import 'package:suraj_approval/core/extentions/menu_extension.dart';
 
 import '../../../core/constants/app_enum.dart';
 import '../../../core/models/user_model.dart';
-import '../view/widgets/tabs/screens/bank_payment.dart';
-import '../view/widgets/tabs/screens/bank_receipt.dart';
-import '../view/widgets/tabs/screens/cash_payment.dart';
+import '../view/widgets/tabs/widgets/bank_payment.dart';
+import '../view/widgets/tabs/widgets/bank_receipt.dart';
+import '../view/widgets/tabs/widgets/cash_payment.dart';
 //
 // class FinanceController extends GetxController
 //     with GetSingleTickerProviderStateMixin {
@@ -29,7 +29,8 @@ import '../view/widgets/tabs/screens/cash_payment.dart';
 //   }
 // }
 
-class FinanceController extends GetxController with GetTickerProviderStateMixin {
+class FinanceController extends GetxController
+    with GetTickerProviderStateMixin {
   static FinanceController get instance => Get.find();
 
   RxBool isLoading = false.obs;

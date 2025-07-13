@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 class BankPaymentModel {
   String? link;
   String? type;
@@ -7,6 +9,7 @@ class BankPaymentModel {
   String? narr;
   double? amount;
   bool? authorise;
+  RxBool? isPdfLoading;
 
   BankPaymentModel({
     this.link,
@@ -17,6 +20,7 @@ class BankPaymentModel {
     this.narr,
     this.amount,
     this.authorise,
+    this.isPdfLoading,
   });
 
   factory BankPaymentModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,7 @@ class BankPaymentModel {
       narr: json['narr'] as String?,
       amount: (json['amount'] as num?)?.toDouble(),
       authorise: json['authorise'] as bool?,
+      isPdfLoading: false.obs,
     );
   }
 

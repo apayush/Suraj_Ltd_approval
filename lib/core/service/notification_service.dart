@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> handlerBackgroundMessage(RemoteMessage message) async {
@@ -15,57 +14,61 @@ class NotificationService {
   static late final _notificationChannelName;
 
   static Future<void> initialize() async {
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
+    try {
+      await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+
+      if (!kIsWeb) {
+        final androidInitSettings = AndroidInitializationSettings(
+          '@mipmap/ic_launcher',
         );
 
-    if (!kIsWeb) {
-      final androidInitSettings = AndroidInitializationSettings(
-        '@mipmap/ic_launcher',
-      );
+        _notificationChannelName = 'Suraj Approval Notification Channel';
+        _androidNotificationChannel = AndroidNotificationChannel(
+          'Suraj Approval',
+          _notificationChannelName,
+          importance: Importance.high,
+          enableVibration: true,
+          playSound: true,
+          showBadge: true,
+        );
 
-      _notificationChannelName = 'Suraj Approval Notification Channel';
-      _androidNotificationChannel = AndroidNotificationChannel(
-        'Suraj Approval',
-        _notificationChannelName,
-        importance: Importance.high,
-        enableVibration: true,
-        playSound: true,
-        showBadge: true,
-      );
+        final initialSetting = InitializationSettings(
+          android: androidInitSettings,
+        );
+        await localNotification.initialize(initialSetting);
 
-      final initialSetting = InitializationSettings(
-        android: androidInitSettings,
-      );
-      await localNotification.initialize(initialSetting);
-
-      await localNotification
-          .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >()
-          ?.createNotificationChannel(_androidNotificationChannel);
-    }
-
-    FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
-    FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
-
-    if (kIsWeb) {
-      await setUpNotificationWeb();
-    } else {
-      if (defaultTargetPlatform == TargetPlatform.android) {
-        debugPrint(await getFcmId());
-      } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-        await FirebaseMessaging.instance.getAPNSToken();
-        debugPrint(await getFcmId());
+        await localNotification
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()
+            ?.createNotificationChannel(_androidNotificationChannel);
       }
+
+      FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
+      FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
+
+      if (kIsWeb) {
+        await setUpNotificationWeb();
+      } else {
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          debugPrint(await getFcmId());
+        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+          await FirebaseMessaging.instance.getAPNSToken();
+          debugPrint(await getFcmId());
+        }
+      }
+    } catch (e) {
+      print("error ${e.toString()}");
     }
   }
 

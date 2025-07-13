@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
-import 'package:suraj_approval/features/auth/model/user_model.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/screens/bank_payment.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/screens/bank_receipt.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/screens/cash_payment.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/screens/cash_receipt.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_payment.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_receipt.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_payment.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_receipt.dart';
+
 import '../../../../../core/models/user_model.dart';
 import '../../../controller/bank_payment_controller.dart';
 import '../../../controller/bank_receipt_controller.dart';
@@ -14,9 +14,14 @@ import '../../../controller/cash_payment_controller.dart';
 import '../../../controller/cash_receipt_controller.dart';
 import '../../../controller/finance_controller.dart';
 
-class FinanceTabView extends StatelessWidget {
+class FinanceTabView extends StatefulWidget {
   FinanceTabView({super.key});
 
+  @override
+  State<FinanceTabView> createState() => _FinanceTabViewState();
+}
+
+class _FinanceTabViewState extends State<FinanceTabView> {
   final userModel = Get.find<UserModel>();
 
   @override
@@ -66,9 +71,7 @@ class FinanceTabView extends StatelessWidget {
     }
 
     if (tabViews.isEmpty) {
-      tabViews.add(
-        const Center(child: Text('No Access to Finance Submenus')),
-      );
+      tabViews.add(const Center(child: Text('No Access to Finance Submenus')));
     }
 
     final controller = Get.find<FinanceController>();

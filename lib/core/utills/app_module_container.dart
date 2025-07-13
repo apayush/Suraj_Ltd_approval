@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/models/material_item_model.dart';
 
 import '../constants/radius_utils.dart';
 import '../theme/app_colors.dart';
 import '../widgets/common_widgets.dart';
-import '../../feature/model/material_item_model.dart';
 
 class AppModuleContainer extends StatelessWidget {
   final List<MaterialItem> items;
