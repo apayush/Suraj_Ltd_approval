@@ -61,7 +61,7 @@ class NotificationService {
         await setUpNotificationWeb();
       } else {
         if (defaultTargetPlatform == TargetPlatform.android) {
-          debugPrint(await getFcmId());
+          debugPrint('here is fcmid : ${await getFcmId()}');
         } else if (defaultTargetPlatform == TargetPlatform.iOS) {
           await FirebaseMessaging.instance.getAPNSToken();
           debugPrint(await getFcmId());
@@ -98,6 +98,7 @@ class NotificationService {
     } catch (e) {
       fcmId = '';
     }
+    print('FCM ID: $fcmId');
     return fcmId;
   }
 

@@ -43,7 +43,7 @@ class PageNotFound extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline, color: Colors.red, size: 100),
           const SizedBox(height: 20),
-          AppText('404 - Page Not Found', style: TextStyles.heading4(context)),
+          AppText('404 - Page Not Found', style: TextStyles.heading4(context),alignment: Alignment.center,),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
