@@ -36,7 +36,6 @@ class AppScaffold extends StatelessWidget {
       SidebarXDrawer(
         controller: drawerController.sideBarXController,
         items: userModel.allowedMenus.mapIndexed((i, mainMenu) {
-          print('main menu is : ${mainMenu?.key}');
           return _buildListTile(
             context: context,
             icon: _getMenuIcon(mainMenu?.key ?? ''),
@@ -65,7 +64,7 @@ class AppScaffold extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: bottom!=null? kToolbarHeight+65:null,
+                  height: bottom!=null? kToolbarHeight+40:null,
                     child: CustomHeader(bottom: bottom,)),
                 Expanded(child: body),
               ],

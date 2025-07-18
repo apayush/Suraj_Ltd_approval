@@ -33,7 +33,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
     DateTime? parsedDate;
     try {
-      parsedDate = DateTime.parse(payment.docdate ?? '');
+      parsedDate = DateTime.parse(payment.docDate ?? '');
     } catch (e) {
       parsedDate = null;
     }
@@ -72,33 +72,33 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               ),
               child: Column(
                 children: [
-                  Icon(
-                    (payment.authorise ?? false)
-                        ? Icons.check_circle
-                        : Icons.pending,
-                    size: 48,
-                    color:
-                        (payment.authorise ?? false)
-                            ? Colors.green
-                            : Colors.orange,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    (payment.authorise ?? false)
-                        ? 'Authorised'
-                        : 'Unauthorised',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color:
-                          (payment.authorise ?? false)
-                              ? Colors.green
-                              : Colors.orange,
-                    ),
-                  ),
+                  // Icon(
+                  //   (payment.authorise ?? false)
+                  //       ? Icons.check_circle
+                  //       : Icons.pending,
+                  //   size: 48,
+                  //   color:
+                  //       (payment.authorise ?? false)
+                  //           ? Colors.green
+                  //           : Colors.orange,
+                  // ),
+                  // SizedBox(height: 12),
+                  // Text(
+                  //   (payment.authorise ?? false)
+                  //       ? 'Authorised'
+                  //       : 'Unauthorised',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.w600,
+                  //     color:
+                  //         (payment.authorise ?? false)
+                  //             ? Colors.green
+                  //             : Colors.orange,
+                  //   ),
+                  // ),
                   SizedBox(height: 8),
                   Text(
-                    currencyFormat.format(payment.amount ?? 0),
+                    currencyFormat.format(payment.credit ?? 0),
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -147,11 +147,11 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                     'Date',
                     parsedDate != null
                         ? dateFormat.format(parsedDate)
-                        : payment.docdate ?? 'N/A',
+                        : payment.docDate ?? 'N/A',
                   ),
                   _buildDetailRow(
                     'Amount',
-                    currencyFormat.format(payment.amount ?? 0),
+                    currencyFormat.format(payment.credit ?? 0),
                   ),
 
                   if (payment.narr != null && payment.narr!.isNotEmpty) ...[
@@ -175,10 +175,10 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                     ),
                   ],
 
-                  if (payment.link != null && payment.link!.isNotEmpty) ...[
+                  if (payment.linkField != null && payment.linkField!.isNotEmpty) ...[
                     SizedBox(height: 20),
                     InkWell(
-                      onTap: () => _launchURL(payment.link!),
+                      onTap: () => _launchURL(payment.linkField!),
                       child: Container(
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(

@@ -57,17 +57,17 @@ class FinanceController extends GetxController
 
     if (subMenus.contains(SubMenuType.bankReceipt)) {
       tabs.add(const Tab(text: 'Bank Receipt'));
-      views.add(BankReceipt()); // Replace with real widget
+      views.add(BankReceipt());
     }
 
     if (subMenus.contains(SubMenuType.cashPayment)) {
       tabs.add(const Tab(text: 'Cash Payment'));
-      views.add(CashPayment()); // Replace with real widget
+      views.add(CashPayment());
     }
 
     if (subMenus.contains(SubMenuType.cashReceipt)) {
       tabs.add(const Tab(text: 'Cash Receipt'));
-      views.add(CashPayment()); // Replace with real widget
+      views.add(CashPayment());
     }
 
     myTabs = tabs;

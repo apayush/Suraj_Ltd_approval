@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
 
 class UserModel {
@@ -30,6 +31,12 @@ class UserModel {
       'fcmid': fcmid,
       'userDetails': userDetails.map((e) => e.toJson()).toList(),
     };
+  }
+
+  UserDetails? getDetailFor(MenuType menu, SubMenuType submenu) {
+    return userDetails.firstWhereOrNull(
+          (e) => e.mainMenu == menu && e.subMenu == submenu,
+    );
   }
 }
 

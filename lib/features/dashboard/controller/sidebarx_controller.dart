@@ -5,6 +5,8 @@ import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 
 import '../../../core/constants/app_strings.dart';
+import '../../../core/models/user_model.dart';
+import '../../../core/service/local_db.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../../../core/utills/app_module_container.dart';
@@ -45,7 +47,9 @@ class SidebarController extends GetxController {
         ),
         primaryButtonText: AppStrings.yes,
         secondaryButtonText: AppStrings.no,
-        onPrimaryButtonPressed: () {
+        onPrimaryButtonPressed: () async {
+          await LocalDB.clearUser(); // clear any saved storage
+          Get.delete<UserModel>();
           Get.offAndToNamed(AppRouter.login);
         },
         onSecondaryButtonPressed: () {

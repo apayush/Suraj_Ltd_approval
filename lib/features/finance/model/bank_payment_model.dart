@@ -1,55 +1,73 @@
-import 'package:get/get.dart';
-
 class BankPaymentModel {
-  String? link;
-  String? type;
-  int? srl;
-  String? docdate;
-  String? party;
-  String? narr;
-  double? amount;
-  bool? authorise;
-  RxBool? isPdfLoading;
+  final String? mainType;
+  final String? linkField;
+  final String? type;
+  final String? srl;
+  final String? docDate;
+  final int? sno;
+  final String? party;
+  final double? debit;
+  final double? credit;
+  final String? cheque;
+  final String? narr;
+  final String? authIds;
+  final String? fcmid;
+  final String? mBranch;
 
   BankPaymentModel({
-    this.link,
+    this.mainType,
+    this.linkField,
     this.type,
     this.srl,
-    this.docdate,
+    this.docDate,
+    this.sno,
     this.party,
+    this.debit,
+    this.credit,
+    this.cheque,
     this.narr,
-    this.amount,
-    this.authorise,
-    this.isPdfLoading,
+    this.authIds,
+    this.fcmid,
+    this.mBranch
   });
 
   factory BankPaymentModel.fromJson(Map<String, dynamic> json) {
     return BankPaymentModel(
-      link: json['link'] as String?,
-      type: json['type'] as String?,
-      srl: json['srl'] as int?,
-      docdate: json['docdate'] as String?,
-      party: json['party'] as String?,
-      narr: json['narr'] as String?,
-      amount: (json['amount'] as num?)?.toDouble(),
-      authorise: json['authorise'] as bool?,
-      isPdfLoading: false.obs,
+      mainType: json['MainType'] as String?,
+      linkField: json['LinkField'] as String?,
+      type: json['Type'] as String?,
+      srl: json['Srl'] as String?,
+      docDate: json['DocDate'] as String?,
+      sno: json['Sno'] as int?,
+      party: json['Party'] as String?,
+      debit: (json['Debit'] as num?)?.toDouble(),
+      credit: (json['Credit'] as num?)?.toDouble(),
+      cheque: json['Cheque'] as String?,
+      narr: json['Narr'] as String?,
+      authIds: json['AuthIds'] as String?,
+      fcmid: json['fcmid'] as String?,
+      mBranch: json['mBranch'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'link': link,
-      'type': type,
-      'srl': srl,
-      'docdate': docdate,
-      'party': party,
-      'narr': narr,
-      'amount': amount,
-      'authorise': authorise,
+      'MainType': mainType,
+      'LinkField': linkField,
+      'Type': type,
+      'Srl': srl,
+      'DocDate': docDate,
+      'Sno': sno,
+      'Party': party,
+      'Debit': debit,
+      'Credit': credit,
+      'Cheque': cheque,
+      'Narr': narr,
+      'AuthIds': authIds,
+      'fcmid': fcmid,
+      'mBranch': mBranch,
     };
   }
-
   static List<BankPaymentModel> fromDecodedJsonList(List<dynamic> jsonList) {
     return jsonList.map((item) => BankPaymentModel.fromJson(item)).toList();
   }

@@ -85,8 +85,6 @@ class StorageUtils extends GetxService {
       if (cookiePair[0] == key) {
         return cookiePair[1];
       }
-      print('Cookie found: $key = ${cookiePair[1]}');
-      print('Cookie not found: $key');
     }
     return null;
   }
@@ -102,6 +100,11 @@ class StorageUtils extends GetxService {
         html.document.cookie = '${cookiePair[0]}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       }
       await LocalDB.clearUser();
+
+      if (Get.isRegistered<UserModel>()) {
+        Get.delete<UserModel>(force: true); // Removes permanently registered instance
+      }
+
       Get.delete<UserModel>();
     } else {
       // Clear GetStorage for mobile

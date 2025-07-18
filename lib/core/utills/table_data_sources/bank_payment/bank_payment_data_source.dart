@@ -43,14 +43,16 @@ class BankPaymentDataSource extends DataGridSource {
 
   List<DataGridCell<dynamic>> _buildDataGridCells(BankPaymentModel e) {
     List<DataGridCell<dynamic>> cells = [
-      _createCell('Authorise', (e.authorise ?? '').toString()),
-      _createCell('Amount', (e.amount ?? 0).toString()),
-      _createCell('Srl', (e.srl ?? '').toString()),
-      _createCell('Docdate', e.docdate ?? ''),
+      _createCell('', (e.sno ?? '').toString()),
+      _createCell('Branch', (e.mBranch ?? '').toString()),
+      _createCell('Type', (e.type ?? '').toString()),
+      _createCell('Srl', e.srl ?? ''),
+      _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Type', e.type ?? ''),
+      _createCell('Debit', e.debit?.toString() ?? '0'),
+      _createCell('Credit', e.credit?.toString() ?? '0'),
+      _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
-      _createCell('Link', e.link ?? ''),
     ];
     cells.add(DataGridCell(columnName: 'Action', value: e));
     return cells;
@@ -74,7 +76,7 @@ class BankPaymentDataSource extends DataGridSource {
       cells:
           row.getCells().map<Widget>((dataGridCell) {
             if (dataGridCell.columnName == 'Action') {
-              return showPopupMenuAction(
+              return buildActionIcons(
                 dataGridCell.value as BankPaymentModel,
               );
             } else {
@@ -120,21 +122,33 @@ class BankPaymentDataSource extends DataGridSource {
     return true;
   }
 
-  Widget showPopupMenuAction(BankPaymentModel e) {
+  Widget buildActionIcons(BankPaymentModel model) {
     final controller = Get.find<BankPaymentController>();
-    return PopupMenuButton<String>(
-      onSelected: (value) {
-        controller.handleMenuSelection(value, e);
-      },
-      itemBuilder:
-          (BuildContext context) => <PopupMenuEntry<String>>[
-            const PopupMenuItem<String>(value: 'View', child: Text('View')),
-            const PopupMenuItem<String>(
-              value: 'Approve',
-              child: Text('Approve'),
-            ),
-            const PopupMenuItem<String>(value: 'Reject', child: Text('Reject')),
-          ],
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: IconButton(
+            icon: const Icon(Icons.visibility, color: Colors.blue),
+            tooltip: 'View',
+            onPressed: () => controller.handleMenuSelection('View', model),
+          ),
+        ),
+        Flexible(
+          child: IconButton(
+            icon: const Icon(Icons.check_circle_outline, color: Colors.green),
+            tooltip: 'Approve',
+            onPressed: () => controller.handleMenuSelection('Approve', model),
+          ),
+        ),
+        Flexible(
+          child: IconButton(
+            icon: const Icon(Icons.cancel_outlined, color: Colors.red),
+            tooltip: 'Reject',
+            onPressed: () => controller.handleMenuSelection('Reject', model),
+          ),
+        ),
+      ],
     );
   }
 

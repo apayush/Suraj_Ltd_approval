@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
-
 import 'core/models/user_model.dart';
 import 'core/router/app_router.dart';
 import 'core/service/dependencies.dart';
@@ -51,7 +50,7 @@ Future<void> initializeApp() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.initialize();
 
-  setupDependencies(baseUrl: ApiUrl.baseUrl2);
+  setupDependencies(baseUrl: ApiUrl.baseUrl);
   await LocalDB.init();
   final user = LocalDB.getUserModel();
   if (user != null) {

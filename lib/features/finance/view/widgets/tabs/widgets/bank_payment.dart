@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
@@ -11,6 +12,7 @@ import '../../../../../../core/widgets/app_text_field.dart';
 import '../../../../../../core/widgets/common_widgets.dart';
 import '../../../../../../core/widgets/no_data_found.dart';
 import '../../../../../../core/widgets/sfdatagrid.dart';
+import '../../../../model/bank_payment_model.dart';
 
 class BankPayment extends StatelessWidget {
   BankPayment({super.key});
@@ -46,52 +48,71 @@ class BankPayment extends StatelessWidget {
                       rowsPerPage: controller.rowsPerPage.value,
                       dynamicColumns: [
                         GridColumn(
-                          columnName: 'Authorise',
+                          columnName: '',
                           columnWidthMode: ColumnWidthMode.auto,
-                          label: appGridLabel('Authorise'),
+                          label: appGridLabel(''),
+                          allowSorting: false
                         ),
                         GridColumn(
-                          columnName: 'Amount',
+                          columnName: 'Branch',
                           columnWidthMode: ColumnWidthMode.auto,
-                          label: appGridLabel('Amount'),
+                          label: appGridLabel('Branch'),
+                          allowSorting: false
+                        ),
+                        GridColumn(
+                          columnName: 'Type',
+                          columnWidthMode: ColumnWidthMode.auto,
+                          label: appGridLabel('Type'),
+                            allowSorting: false
                         ),
                         GridColumn(
                           columnName: 'Srl',
                           columnWidthMode: ColumnWidthMode.auto,
                           label: appGridLabel('Srl'),
+                            allowSorting: false
                         ),
                         GridColumn(
                           columnName: 'Docdate',
                           columnWidthMode: ColumnWidthMode.auto,
                           label: appGridLabel('Docdate'),
+                            allowSorting: false
                         ),
                         GridColumn(
                           columnName: 'Party',
                           columnWidthMode: ColumnWidthMode.fill,
                           label: appGridLabel('Party'),
+                            allowSorting: false
                         ),
                         GridColumn(
-                          columnName: 'Type',
-                          columnWidthMode: ColumnWidthMode.fill,
-                          label: appGridLabel('Type'),
+                          columnName: 'Debit',
+                          columnWidthMode: ColumnWidthMode.auto,
+                          label: appGridLabel('Debit'),
+                            allowSorting: false
                         ),
                         GridColumn(
-                          columnName: 'Narr',
-                          columnWidthMode: ColumnWidthMode.fill,
-                          label: appGridLabel('Narr'),
+                          columnName: 'Credit',
+                          columnWidthMode: ColumnWidthMode.auto,
+                          label: appGridLabel('Credit'),
+                            allowSorting: false
                         ),
                         GridColumn(
-                          columnName: 'Link',
-                          columnWidthMode:
-                              isMobile
-                                  ? ColumnWidthMode.auto
-                                  : ColumnWidthMode.fill,
-                          label: appGridLabel('Link'),
+                          columnName: 'AuthIds',
+                          columnWidthMode: ColumnWidthMode.auto,
+                          label: appGridLabel('AuthIds'),
+                            allowSorting: false
+                        ),
+                        GridColumn(
+                            columnName: 'Narr',
+                            columnWidthMode: ColumnWidthMode.fill,
+                            label: appGridLabel('Narr'),
+                            allowSorting: false
                         ),
                         GridColumn(
                           columnName: 'Action',
-                          columnWidthMode: ColumnWidthMode.auto,
+                          minimumWidth: 130,
+                          // columnWidthMode: ColumnWidthMode.auto,
                           label: appGridLabel('Action'),
+                            allowSorting: false
                         ),
                       ],
                       onPageNavigationStart: (pageIndex) {},
@@ -121,12 +142,14 @@ class BankPayment extends StatelessWidget {
   }
 
   Widget buildSearchTextField() {
-    return AppTextField(
-      hint: 'Search',
-      // controller: controller.searchController,
-      // onChanged: (value) {
-      //   controller.filterData(value);
-      // },
+    return Flexible(
+      child: AppTextField(
+        hint: 'Search',
+        controller: controller.searchController,
+        onChanged: (value) {
+          controller.filterData(value);
+        },
+      ),
     );
   }
 
@@ -137,4 +160,6 @@ class BankPayment extends StatelessWidget {
       icon: CupertinoIcons.arrow_clockwise,
     );
   }
+
+
 }

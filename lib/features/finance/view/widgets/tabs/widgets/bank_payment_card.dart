@@ -60,22 +60,22 @@ class PaymentCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Obx(
-                        () =>
-                            payment.isPdfLoading?.value == true
-                                ? const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                                : Icon(
-                                  Icons.picture_as_pdf,
-                                  color: Colors.red.shade600,
-                                  size: 20,
-                                ),
-                      ),
+                      // Obx(
+                      //   () =>
+                      //       payment.isPdfLoading?.value == true
+                      //           ? const SizedBox(
+                      //             width: 16,
+                      //             height: 16,
+                      //             child: CircularProgressIndicator(
+                      //               strokeWidth: 2,
+                      //             ),
+                      //           )
+                      //           : Icon(
+                      //             Icons.picture_as_pdf,
+                      //             color: Colors.red.shade600,
+                      //             size: 20,
+                      //           ),
+                      // ),
                     ],
                   ),
                 ],
@@ -131,7 +131,7 @@ class PaymentCard extends StatelessWidget {
                     ),
                     _buildDetailRow(
                       'Doc Date:',
-                      payment.docdate ?? '01-Jul-2025',
+                      payment.docDate ?? '01-Jul-2025',
                     ),
                     _buildDetailRow('Category:', 'Vendor Payment'),
                     _buildDetailRow(
@@ -140,7 +140,7 @@ class PaymentCard extends StatelessWidget {
                     ),
                     _buildDetailRow(
                       'Reference:',
-                      payment.link ?? 'INV-2024-001',
+                      payment.linkField ?? 'INV-2024-001',
                     ),
                   ],
                 ),
@@ -171,7 +171,7 @@ class PaymentCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    payment.docdate ?? '2024-01-15',
+                    payment.docDate ?? '2024-01-15',
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
@@ -183,7 +183,7 @@ class PaymentCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '₹${payment.amount?.toStringAsFixed(2) ?? '2,40,000.00'}',
+                    '₹${payment.credit?.toStringAsFixed(2) ?? '2,40,000.00'}',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -199,17 +199,17 @@ class PaymentCard extends StatelessWidget {
                       color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Text(
-                      payment.authorise == true ? 'Approved' : 'Pending',
-                      style: TextStyle(
-                        color:
-                            payment.authorise == true
-                                ? Colors.green.shade700
-                                : Colors.orange.shade700,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    // child: Text(
+                    //   payment.authorise == true ? 'Approved' : 'Pending',
+                    //   style: TextStyle(
+                    //     color:
+                    //         payment.authorise == true
+                    //             ? Colors.green.shade700
+                    //             : Colors.orange.shade700,
+                    //     fontSize: 12,
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
                   ),
                 ],
               ),
