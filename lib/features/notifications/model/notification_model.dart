@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:suraj_approval/core/constants/app_enum.dart';
+
 class NotificationModel {
   final String? title;
   final String? body;
-  final String? mainType;
-  final String? subType;
+  final MenuType? mainType;
+  final SubMenuType? subType;
   final String? sent;
 
   NotificationModel({
@@ -15,11 +18,11 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      title: json['Title'] as String?,
-      body: json['Body'] as String?,
-      mainType: json['MainType'] as String?,
-      subType: json['SubType'] as String?,
-      sent: json['SentAt'] as String?, // Optional, if exists in API
+      title: json['Title'],
+      body: json['Body'],
+      mainType: MenuType.fromKey(json['MainType']),
+      subType: SubMenuType.fromKey(json['SubType']),
+      sent: json['SentAt'],
     );
   }
 
@@ -27,8 +30,8 @@ class NotificationModel {
     return {
       'Title': title,
       'Body': body,
-      'MainType': mainType,
-      'SubType': subType,
+      'MainType': mainType?.key,
+      'SubType': subType?.key,
       'SentAt': sent,
     };
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:suraj_approval/core/widgets/app_pdf_viewer.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../theme/app_colors.dart';
@@ -151,9 +152,9 @@ class AppUtils {
         final dir = await getTemporaryDirectory();
         final file = io.File('${dir.path}/$fileName');
         await file.writeAsBytes(bytes);
-
-        final result = await OpenFile.open(file.path);
-        print('🟢 Opened PDF: ${result.message}');
+        Get.to(AppPdfViewer(pdfFile: file));
+        // final result = await OpenFile.open(file.path);
+        // print('🟢 Opened PDF: ${result.message}');
       }
     } catch (e) {
       print('❌ Failed to open PDF: $e');

@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
 import 'package:suraj_approval/features/finance/controller/bank_receipt_controller.dart';
+import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
+import 'package:suraj_approval/features/notifications/view/notifications_screen.dart';
 import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
@@ -28,6 +30,7 @@ class AppRouter {
   static const String productionScreen = '/production_screen';
   static const String purchaseScreen = '/purchase_screen';
   static const String salesScreen = '/sales_screen';
+  static const String notification = '/notifications';
 
   static final List<GetPage> routes = [
     GetPage(
@@ -91,6 +94,12 @@ class AppRouter {
       page: () => SalesScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<SalesController>(() => SalesController());
+      }),
+    ), GetPage(
+      name: notification,
+      page: () => NotificationsScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<NotificationController>(() => NotificationController());
       }),
     ),
   ];

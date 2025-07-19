@@ -5,12 +5,11 @@ import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
 import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../../../core/constants/app_strings.dart';
-import '../../../../../../core/widgets/app_text_field.dart';
-import '../../../../../../core/widgets/common_widgets.dart';
-import '../../../../../../core/widgets/no_data_found.dart';
-import '../../../../../../core/widgets/sfdatagrid.dart';
+import 'package:suraj_approval/core/constants/app_strings.dart';
+import 'package:suraj_approval/core/widgets/app_text_field.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/core/widgets/no_data_found.dart';
+import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
 
 class BankPayment extends GetView<FinanceController> {
   BankPayment({super.key});

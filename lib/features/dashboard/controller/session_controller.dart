@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
@@ -22,7 +23,9 @@ class SessionController extends GetxController {
 
   // Start the session timer when user logs in
   void startSessionTimer() {
+    if (!kIsWeb) return;
     print('session timer started');
+
     _startInactivityTimer();
   }
 
@@ -37,7 +40,9 @@ class SessionController extends GetxController {
     print('Starting inactivity timer');
     _inactivityTimer?.cancel(); // Cancel any existing timer
     _inactivityTimer = Timer(
-        Duration(milliseconds: sessionTimeout), _showSessionExpiredDialog);
+      Duration(milliseconds: sessionTimeout),
+      _showSessionExpiredDialog,
+    );
   }
 
   // Reset the timer whenever the user interacts with the app
@@ -70,8 +75,11 @@ class SessionController extends GetxController {
       GenericDialogBox(
         headerText: AppStrings.youHaveLoggedOut,
         showCloseIcon: false,
-        content: AppText(AppStrings.sessionHasExpired2,
-            softWrap: true, style: TextStyles.medium(Get.context!)),
+        content: AppText(
+          AppStrings.sessionHasExpired2,
+          softWrap: true,
+          style: TextStyles.medium(Get.context!),
+        ),
         primaryButtonText: AppStrings.loginAgain,
         onPrimaryButtonPressed: () {
           _logout();

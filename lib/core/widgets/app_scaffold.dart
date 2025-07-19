@@ -21,7 +21,7 @@ class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   final Widget? title;
 
-  AppScaffold({super.key, required this.body, this.bottom,this.title});
+  AppScaffold({super.key, required this.body, this.bottom, this.title});
 
   final drawerController = Get.find<AppDrawerController>();
   final userModel = Get.find<UserModel>();
@@ -71,13 +71,9 @@ class AppScaffold extends StatelessWidget {
                   height:
                       bottom != null
                           ? kToolbarHeight +
-                              ((DeviceType.isMobile(context))
-                                  ? 100
-                                  : 40)
+                              ((DeviceType.isMobile(context)) ? 100 : 40)
                           : null,
-                  child: CustomHeader(
-                      title: title,
-                      bottom: bottom),
+                  child: CustomHeader(title: title, bottom: bottom),
                 ),
                 Expanded(child: body),
               ],
@@ -104,7 +100,7 @@ class AppScaffold extends StatelessWidget {
       icon: icon,
       onTap: () {
         drawerController.sideBarXController.selectIndex(index);
-        Get.toNamed(route);
+        Get.offAllNamed(route);
       },
     );
   }

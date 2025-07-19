@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:suraj_approval/core/router/app_router.dart';
 
 class NotificationBell extends StatefulWidget {
   final List<String> notifications;
@@ -19,6 +21,8 @@ class _NotificationBellState extends State<NotificationBell> {
   OverlayEntry? _overlayEntry;
 
   void _toggleOverlay() {
+    Get.toNamed(AppRouter.notification);
+    return;
     if (_overlayEntry != null) {
       _overlayEntry!.remove();
       _overlayEntry = null;
@@ -111,7 +115,7 @@ class _NotificationBellState extends State<NotificationBell> {
         child: Badge.count(
           count: widget.unreadCount,
           isLabelVisible: widget.unreadCount > 0,
-          child: const Icon(Icons.notifications, size: 30, color: Colors.black),
+          child: const Icon(Icons.notifications, color: Colors.black),
         ),
       ),
     );
