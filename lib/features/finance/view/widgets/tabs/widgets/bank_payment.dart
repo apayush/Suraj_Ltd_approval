@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
+import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../../core/constants/app_strings.dart';
@@ -11,10 +12,8 @@ import '../../../../../../core/widgets/common_widgets.dart';
 import '../../../../../../core/widgets/no_data_found.dart';
 import '../../../../../../core/widgets/sfdatagrid.dart';
 
-class BankPayment extends StatelessWidget {
+class BankPayment extends GetView<FinanceController> {
   BankPayment({super.key});
-
-  final controller = Get.find<BankPaymentController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +28,6 @@ class BankPayment extends StatelessWidget {
   }
 
   Widget buildPaymentTable(BuildContext context) {
-    final isMobile =
-        getDeviceType(MediaQuery.of(context).size) == DeviceScreenType.mobile;
-
     return controller.bankPaymentList.isNotEmpty
         ? Expanded(
           child: Obx(() {

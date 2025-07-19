@@ -12,6 +12,8 @@ class ApiUrl {
   // ! FINANCE MODULE API
   static const String getAuthorisationList = '/GetAuthorisationList';
   static const String authoriseFinanceVoucher = '/AuthoriseFinanceVoucher';
+  static const String getAuthorisationListFilter = '/GetAuthorisationListFilter';
+  static const String getAllAuthorisationList = '/GetAllAuthorisationList';
 
   // ! Get PDF Report
   static const String getBankpaymentReport = '/getBankpaymentReport';

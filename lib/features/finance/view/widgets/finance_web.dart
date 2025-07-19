@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/finance_tabbar_view.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../controller/finance_controller.dart';
 
 
-class FinanceWeb extends StatelessWidget {
+class FinanceWeb extends GetView<FinanceController> {
   FinanceWeb({super.key});
 
-  final controller = FinanceController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,9 @@ class FinanceWeb extends StatelessWidget {
       bottom: TabBar(
         controller: controller.tabController,
         tabs: controller.myTabs,
+        onTap: (index) {
+          controller.getAllData();
+        },
         tabAlignment: TabAlignment.start,
         isScrollable: true,
       ),

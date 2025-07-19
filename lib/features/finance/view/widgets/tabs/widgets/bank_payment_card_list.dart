@@ -4,9 +4,10 @@ import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_payment_detail_screen.dart';
 
+import '../../../../controller/finance_controller.dart';
 import 'bank_payment_card.dart';
 
-class BankPaymentCardList extends GetView<BankPaymentController> {
+class BankPaymentCardList extends GetView<FinanceController> {
   const BankPaymentCardList({super.key});
 
   @override

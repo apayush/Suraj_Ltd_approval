@@ -59,6 +59,8 @@ class SidebarController extends GetxController {
     );
   }
 
+
+  TextEditingController baseUrlController = TextEditingController();
   void showSettingsDialog(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     Get.dialog(
@@ -76,7 +78,7 @@ class SidebarController extends GetxController {
                         style: TextStyles.medium(context),
                       ),
                       10.heightGap,
-                      AppTextField(hint: 'Base Url'),
+                      AppTextField(hint: 'Base Url',controller: baseUrlController,),
                     ],
                   )
                   : Row(
@@ -86,7 +88,7 @@ class SidebarController extends GetxController {
                         style: TextStyles.medium(context),
                       ),
                       10.widthGap,
-                      Flexible(child: AppTextField(hint: 'Base Url')),
+                      Flexible(child: AppTextField(hint: 'Base Url',controller: baseUrlController,)),
                     ],
                   ),
         ),

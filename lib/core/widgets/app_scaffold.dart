@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
+import 'package:suraj_approval/core/utills/device_type.dart';
 
 import '../../features/dashboard/controller/app_drawer_controller.dart';
 import '../models/user_model.dart';
@@ -70,7 +71,7 @@ class AppScaffold extends StatelessWidget {
                   height:
                       bottom != null
                           ? kToolbarHeight +
-                              ((Platform.isAndroid || Platform.isIOS)
+                              ((DeviceType.isMobile(context))
                                   ? 100
                                   : 40)
                           : null,

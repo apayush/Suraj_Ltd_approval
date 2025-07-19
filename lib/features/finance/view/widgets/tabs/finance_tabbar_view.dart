@@ -1,80 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:suraj_approval/core/constants/app_enum.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_payment.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_receipt.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_payment.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_receipt.dart';
-
+import '../../../../../core/constants/app_enum.dart';
 import '../../../../../core/models/user_model.dart';
-import '../../../controller/bank_payment_controller.dart';
-import '../../../controller/bank_receipt_controller.dart';
-import '../../../controller/cash_payment_controller.dart';
-import '../../../controller/cash_receipt_controller.dart';
 import '../../../controller/finance_controller.dart';
 
-class FinanceTabView extends StatefulWidget {
+class FinanceTabView extends StatelessWidget {
   FinanceTabView({super.key});
 
-  @override
-  State<FinanceTabView> createState() => _FinanceTabViewState();
-}
-
-class _FinanceTabViewState extends State<FinanceTabView> {
   final userModel = Get.find<UserModel>();
+  final controller = Get.find<FinanceController>();
 
   @override
   Widget build(BuildContext context) {
+    if (controller.myTabs.isEmpty || controller.tabController.length == 0) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final allowedSubMenus = userModel.getSubMenusFor(MenuType.finance);
 
-    final tabViews = <Widget>[];
-
-    if (allowedSubMenus.contains(SubMenuType.bankPayment)) {
-      tabViews.add(
-        GetBuilder<BankPaymentController>(
-          init: BankPaymentController(),
-          autoRemove: false,
-          builder: (_) => BankPayment(),
-        ),
+    final tabViews = allowedSubMenus.map((submenu) {
+      return Builder(
+        builder: (_) {
+          switch (submenu) {
+            case SubMenuType.bankPayment:
+              return BankPayment();
+            case SubMenuType.bankReceipt:
+              return BankReceipt();
+            case SubMenuType.cashPayment:
+              return CashPayment();
+            case SubMenuType.cashReceipt:
+              return CashReceipt();
+            default:
+              return const Center(child: Text('Invalid Tab'));
+          }
+        },
       );
-    }
-
-    if (allowedSubMenus.contains(SubMenuType.bankReceipt)) {
-      tabViews.add(
-        GetBuilder<BankReceiptController>(
-          init: BankReceiptController(),
-          autoRemove: false,
-          builder: (_) => BankReceipt(),
-        ),
-      );
-    }
-
-    if (allowedSubMenus.contains(SubMenuType.cashPayment)) {
-      tabViews.add(
-        GetBuilder<CashPaymentController>(
-          init: CashPaymentController(),
-          autoRemove: false,
-          builder: (_) => CashPayment(),
-        ),
-      );
-    }
-
-    if (allowedSubMenus.contains(SubMenuType.cashReceipt)) {
-      tabViews.add(
-        GetBuilder<CashReceiptController>(
-          init: CashReceiptController(),
-          autoRemove: false,
-          builder: (_) => const CashReceipt(),
-        ),
-      );
-    }
-
-    if (tabViews.isEmpty) {
-      tabViews.add(const Center(child: Text('No Access to Finance Submenus')));
-    }
-
-    final controller = Get.find<FinanceController>();
+    }).toList();
 
     return TabBarView(
       controller: controller.tabController,

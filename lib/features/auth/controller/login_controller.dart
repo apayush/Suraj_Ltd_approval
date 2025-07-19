@@ -12,6 +12,7 @@ import 'package:suraj_approval/core/service/notification_service.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
 
 import '../../../core/models/user_model.dart';
+import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
 
 class LoginController extends GetxController {
@@ -42,8 +43,7 @@ class LoginController extends GetxController {
           'mUser': userIdController.text.trim(),
           'mPasswords': passwordController.text.trim(),
           'fcmid': fcmId,
-          'mDeviceType':
-              Platform.isAndroid || Platform.isIOS ? 'mobile' : 'web',
+          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
       );
 

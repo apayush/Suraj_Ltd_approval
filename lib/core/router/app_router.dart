@@ -70,8 +70,6 @@ class AppRouter {
       page: () => FinanceScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<FinanceController>(() => FinanceController());
-        Get.lazyPut<BankPaymentController>(() => BankPaymentController());
-        Get.lazyPut<BankReceiptController>(() => BankReceiptController());
       }),
     ),
     GetPage(
