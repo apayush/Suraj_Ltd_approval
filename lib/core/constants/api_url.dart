@@ -7,6 +7,7 @@ class ApiUrl {
 
   // ! Common API
   static const String saveBaseURL = '/SaveBaseURL';
+  static const String getNotificationLogs = '/GetNotificationLogs';
 
   // ! FINANCE MODULE API
   static const String getAuthorisationList = '/GetAuthorisationList';

@@ -35,7 +35,6 @@ class BankPaymentController extends GetxController
         currentSubMenu,
       );
 
-      print('userModel.mUser : ${userModel?.mUser}');
       if (matchedUserDetail != null) {
         final param = {
           'mUser': userModel?.mUser,
@@ -46,7 +45,6 @@ class BankPaymentController extends GetxController
           ApiUrl.getAuthorisationList,
           queryParams: param,
         );
-        print("response.data:${response.data}");
         if (response.statusCode == 200) {
           List<BankPaymentModel> payment = BankPaymentModel.fromDecodedJsonList(
             response.data ?? [],
@@ -63,20 +61,54 @@ class BankPaymentController extends GetxController
   }
 
   // ! GET Bank Payment Report
-  Future<void> getBankpaymentReport() async {
+  Future<void> getBankpaymentReport(BankPaymentModel bankPayment) async {
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
         ApiUrl.getBankpaymentReport,
         queryParams: {
-          'mbranch': 'HO',
-          'mYearCode': '00101042025',
-          'mType': 'BNA',
-          'mSrl': '000001',
+          'mbranch': bankPayment.mBranch,
+          'mYearCode': bankPayment.linkField,
+          'mType': bankPayment.type,
+          'mSrl': bankPayment.srl,
         },
       );
       if (response.statusCode == 200) {
         AppUtils.openPdf(response.data['Base64Pdf']);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! Authorize Finance Voucher
+  Future<void> postFinanceVoucher(
+    BankPaymentModel bankPayment, {
+    required String paymentStatus,
+  }) async {
+    isLoading.value = true;
+    try {
+      final matchedUserDetail = userModel?.getDetailFor(
+        currentMenu,
+        currentSubMenu,
+      );
+      final response = await ApiService.postData(
+        ApiUrl.authoriseFinanceVoucher,
+        queryParams: {
+          'mUser': userModel?.mUser,
+          'mUserLevel': matchedUserDetail?.userLevel,
+          'LinkField': bankPayment.linkField,
+          'mAuthorise': paymentStatus,
+          'mRemarks': 'testing',
+        },
+      );
+      if (response.statusCode == 200) {
+        if (response.data['Success'] == true) {
+          AppUtils.showSnackBar('Voucher Updated Successfully');
+        }
+        getBankPaymentData();
       }
     } catch (e) {
       print(e);
@@ -92,40 +124,49 @@ class BankPaymentController extends GetxController
 
   // ! Search Functionality
   TextEditingController searchController = TextEditingController();
-  void filterData(String value) {
-    // if (searchController.text.isEmpty) {
-    //   filteredBankPaymentList.value = bankPaymentList;
-    // } else {
-    //   filteredBankPaymentList.value = bankPaymentList.where((item) {
-    //     final displayNo = item.mBranch?.toLowerCase() ?? '';
-    //     final credit = item.credit ?? 0.0;
-    //     final debit = item.debit ?? 0.0;
-    //
-    //     bool matchesText = displayNo.contains(searchController.text) ||
-    //         credit.contains(searchController.text.toLowerCase());
-    //
-    //     return matchesText;
-    //   }).toList();
-    // }
+
+  void filterData(String searchText) {
+    final query = searchText.toLowerCase().trim();
+
+    if (query.isEmpty) {
+      filteredBankPaymentList.assignAll(bankPaymentList);
+    } else {
+      filteredBankPaymentList.assignAll(
+        bankPaymentList.where((item) {
+          final mBranch = item.mBranch?.toLowerCase() ?? '';
+          final credit = (item.credit ?? 0.0).toString();
+          final debit = (item.debit ?? 0.0).toString();
+          final docDate = (item.docDate ?? 0.0).toString();
+          final mainType = (item.mainType ?? 0.0).toString();
+
+          return mBranch.contains(query) ||
+              credit.contains(query) ||
+              docDate.contains(query) ||
+              mainType.contains(query) ||
+              debit.contains(query);
+        }),
+      );
+    }
+
     bankPaymentDataSource.updateDataSource(filteredBankPaymentList);
   }
 
   // ! Grid Pagination
   var rowsPerPage = 10.obs;
+
   void changeRowsPerPage(int newRowsPerPage) {
     rowsPerPage.value = newRowsPerPage;
     bankPaymentDataSource.setRowsPerPage(newRowsPerPage);
   }
 
+  // ! Handle Action Menu Selection
   void handleMenuSelection(String value, BankPaymentModel bankPayment) {
     if (value == 'View') {
-      print('View Action Clicked');
+      getBankpaymentReport(bankPayment);
     } else if (value == 'Approve') {
-      print('Approve Action Clicked');
-      // Add your approve logic here
+      postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
     } else if (value == 'Reject') {
-      print('Reject Action Clicked');
-      // Add your reject logic here
+      postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
     }
     print('value is $value');
   }

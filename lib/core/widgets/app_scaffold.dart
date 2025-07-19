@@ -66,10 +66,10 @@ class AppScaffold extends StatelessWidget {
                 SizedBox(
                   height:
                       bottom != null
-                          ? kToolbarHeight +
-                              ((screenType == DeviceScreenType.desktop)
-                                  ? 40
-                                  : 100)
+                          ? kToolbarHeight + 45
+                              // ((screenType == DeviceScreenType.desktop)
+                              //     ? 40
+                              //     : 40)
                           : null,
                   child: CustomHeader(bottom: bottom),
                 ),
