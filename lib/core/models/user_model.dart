@@ -13,15 +13,16 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-
     final userDetails = (json['userDetails'] ?? json['UserDetails']) as List?;
 
     return UserModel(
       mUser: json['mUser'] ?? json['MUser'],
       fcmid: json['fcmid'] ?? json['FCMId'],
-      userDetails: userDetails?.map((e) {
-        return UserDetails.fromJson(e);
-      }).toList() ?? [],
+      userDetails:
+          userDetails?.map((e) {
+            return UserDetails.fromJson(e);
+          }).toList() ??
+          [],
     );
   }
 
@@ -35,7 +36,7 @@ class UserModel {
 
   UserDetails? getDetailFor(MenuType menu, SubMenuType submenu) {
     return userDetails.firstWhereOrNull(
-          (e) => e.mainMenu == menu && e.subMenu == submenu,
+      (e) => e.mainMenu == menu && e.subMenu == submenu,
     );
   }
 }
@@ -58,7 +59,8 @@ class UserDetails {
   });
 
   factory UserDetails.fromJson(Map<String, dynamic> json) {
-    final mainMenuStr = json['MainMenu'] ?? json['mainMenu'] ?? json['mainmenu'];
+    final mainMenuStr =
+        json['MainMenu'] ?? json['mainMenu'] ?? json['mainmenu'];
     final subMenuStr = json['SubMenu'] ?? json['subMenu'] ?? json['submenu'];
 
     return UserDetails(

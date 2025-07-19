@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart' as badges;
 
 class NotificationBell extends StatefulWidget {
   final List<String> notifications;
@@ -109,12 +108,9 @@ class _NotificationBellState extends State<NotificationBell> {
       link: _layerLink,
       child: GestureDetector(
         onTap: _toggleOverlay,
-        child: badges.Badge(
-          position: badges.BadgePosition.topEnd(top: -5, end: -5),
-          badgeContent: Text(
-            widget.unreadCount.toString(),
-            style: const TextStyle(color: Colors.black, fontSize: 10),
-          ),
+        child: Badge.count(
+          count: widget.unreadCount,
+          isLabelVisible: widget.unreadCount > 0,
           child: const Icon(Icons.notifications, size: 30, color: Colors.black),
         ),
       ),

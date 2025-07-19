@@ -44,6 +44,8 @@ enum SubMenuType {
   const SubMenuType(this.key);
 
   static SubMenuType? fromKey(String key) {
-    return SubMenuType.values.where((element) => element.key == key).firstOrNull;
+    return SubMenuType.values
+        .where((element) => element.key == key)
+        .firstOrNull;
   }
 }

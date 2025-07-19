@@ -1,13 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
+import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
 
 import '../../../core/constants/app_enum.dart';
-import '../../../core/extentions/menu_extension.dart';
-import '../../../core/models/user_model.dart';
 import '../../../core/service/api_service.dart';
 import '../../../core/utills/table_data_sources/bank_payment/bank_payment_data_source.dart';
 import '../model/bank_payment_model.dart';
@@ -18,7 +15,7 @@ class BankPaymentController extends GetxController
 
   RxBool isLoading = false.obs;
 
-  final userModel = Get.find<UserModel>();
+  final userModel = LocalDB.getUserModel();
   MenuType currentMenu = MenuType.finance;
   SubMenuType currentSubMenu = SubMenuType.bankPayment;
 
@@ -33,12 +30,15 @@ class BankPaymentController extends GetxController
   Future<void> getBankPaymentData() async {
     isLoading.value = true;
     try {
-      final matchedUserDetail = userModel.getDetailFor(currentMenu, currentSubMenu);
+      final matchedUserDetail = userModel?.getDetailFor(
+        currentMenu,
+        currentSubMenu,
+      );
 
-      print('userModel.mUser : ${userModel.mUser}');
+      print('userModel.mUser : ${userModel?.mUser}');
       if (matchedUserDetail != null) {
         final param = {
-          'mUser': userModel.mUser,
+          'mUser': userModel?.mUser,
           'mType': matchedUserDetail.type,
           'mUserLevel': matchedUserDetail.userLevel,
         };
@@ -46,6 +46,7 @@ class BankPaymentController extends GetxController
           ApiUrl.getAuthorisationList,
           queryParams: param,
         );
+        print("response.data:${response.data}");
         if (response.statusCode == 200) {
           List<BankPaymentModel> payment = BankPaymentModel.fromDecodedJsonList(
             response.data ?? [],
@@ -108,7 +109,6 @@ class BankPaymentController extends GetxController
     // }
     bankPaymentDataSource.updateDataSource(filteredBankPaymentList);
   }
-
 
   // ! Grid Pagination
   var rowsPerPage = 10.obs;
