@@ -1,5 +1,1 @@
-enum PageState{
-  idle,
-  loading,
-  error
-}
+enum PageState { idle, loading, error }

@@ -7,11 +7,10 @@ import '../../controller/finance_controller.dart';
 class FinanceMobile extends GetView<FinanceController> {
   FinanceMobile({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      title: Text('Finance'),
       bottom: TabBar(
         controller: controller.tabController,
         tabs: controller.myTabs,
@@ -19,7 +18,7 @@ class FinanceMobile extends GetView<FinanceController> {
         isScrollable: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 10.0),
+        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
         child: FinanceTabView(),
       ),
     );

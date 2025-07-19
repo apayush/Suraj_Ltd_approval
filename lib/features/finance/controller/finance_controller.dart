@@ -352,7 +352,7 @@ class FinanceController extends GetxController
     }
   }
 
- // ! GET All Data
+  // ! GET All Data
   Future<void> getAllData() async {
     isLoading.value = true;
     try {
@@ -365,7 +365,7 @@ class FinanceController extends GetxController
         final param = {
           'mUser': userModel?.mUser,
           'mType': matchedUserDetail.type,
-          'mDeviceType': 'web'
+          'mDeviceType': 'web',
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
@@ -492,11 +492,14 @@ class FinanceController extends GetxController
   // ! Handle Action Menu Selection
   TextEditingController remarkController = TextEditingController();
 
-  void handleMenuSelection(String value, BankPaymentModel bankPayment) {
+  Future<void> handleMenuSelection(
+    String value,
+    BankPaymentModel bankPayment,
+  ) async {
     if (value == 'View') {
       getBankpaymentReport(bankPayment);
     } else if (value == 'Approve') {
-      Get.dialog(
+      await Get.dialog(
         GenericDialogBox(
           headerText: 'Approve Bank Payment',
           content: Container(
@@ -524,15 +527,21 @@ class FinanceController extends GetxController
         ),
       );
     } else if (value == 'Reject') {
-      Get.dialog(
+      await Get.dialog(
         GenericDialogBox(
           headerText: 'Reject Bank Payment',
           content: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: AppText(
-              'Are you sure you want to Reject?',
-              softWrap: true,
-              style: TextStyles.medium(Get.context!),
+            child: Column(
+              children: [
+                AppText(
+                  'Are you sure you want to Reject?',
+                  softWrap: true,
+                  style: TextStyles.medium(Get.context!),
+                ),
+                20.heightGap,
+                buildRemarkField(),
+              ],
             ),
           ),
           primaryButtonText: 'Reject',
@@ -546,6 +555,7 @@ class FinanceController extends GetxController
         ),
       );
     }
+    remarkController.clear();
   }
 
   Widget buildRemarkField() {
@@ -554,8 +564,10 @@ class FinanceController extends GetxController
       hint: 'Enter Remarks',
       validator: validateRemarks,
       width: Get.width,
-      maxLines: 3,
-      height: 80.0,
+      minLines: 3,
+      height: 100,
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      maxLines: null,
     );
   }
 
@@ -566,47 +578,59 @@ class FinanceController extends GetxController
     return null;
   }
 
-@override
-void onInit() {
-  super.onInit();
+  @override
+  void onInit() {
+    super.onInit();
 
-  // Fetch submenus immediately (no need to delay using addPostFrameCallback)
-  final subMenus = userModel?.getSubMenusFor(MenuType.finance) ?? [];
+    // Fetch submenus immediately (no need to delay using addPostFrameCallback)
+    final subMenus = userModel?.getSubMenusFor(MenuType.finance) ?? [];
 
-  final tabs = <Tab>[];
-  final views = <Widget>[];
+    final tabs = <Tab>[];
+    final views = <Widget>[];
 
-  if (subMenus.contains(SubMenuType.bankPayment)) {
-    tabs.add(const Tab(text: 'Bank Payment'));
-    views.add(BankPayment());
+    if (subMenus.contains(SubMenuType.bankPayment)) {
+      tabs.add(const Tab(text: 'Bank Payment'));
+      views.add(BankPayment());
+    }
+
+    if (subMenus.contains(SubMenuType.bankReceipt)) {
+      tabs.add(const Tab(text: 'Bank Receipt'));
+      views.add(BankReceipt());
+    }
+
+    if (subMenus.contains(SubMenuType.cashPayment)) {
+      tabs.add(const Tab(text: 'Cash Payment'));
+      views.add(CashPayment());
+    }
+
+    if (subMenus.contains(SubMenuType.cashReceipt)) {
+      tabs.add(const Tab(text: 'Cash Receipt'));
+      views.add(CashPayment());
+    }
+
+    myTabs = tabs;
+    tabController = TabController(length: myTabs.length, vsync: this);
+
+    bankPaymentDataSource = BankPaymentDataSource(
+      bankPaymentList,
+      rowsPerPage: rowsPerPage.value,
+    );
+
+    getBankPaymentData();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final menuType = Get.arguments as SubMenuType?;
+      if (menuType == SubMenuType.bankPayment) {
+        tabController.animateTo(0);
+      } else if (menuType == SubMenuType.bankReceipt) {
+        tabController.animateTo(1);
+      } else if (menuType == SubMenuType.cashPayment) {
+        tabController.animateTo(2);
+      } else if (menuType == SubMenuType.cashReceipt) {
+        tabController.animateTo(3);
+      }
+    });
   }
-
-  if (subMenus.contains(SubMenuType.bankReceipt)) {
-    tabs.add(const Tab(text: 'Bank Receipt'));
-    views.add(BankReceipt());
-  }
-
-  if (subMenus.contains(SubMenuType.cashPayment)) {
-    tabs.add(const Tab(text: 'Cash Payment'));
-    views.add(CashPayment());
-  }
-
-  if (subMenus.contains(SubMenuType.cashReceipt)) {
-    tabs.add(const Tab(text: 'Cash Receipt'));
-    views.add(CashPayment());
-  }
-
-  myTabs = tabs;
-  tabController = TabController(length: myTabs.length, vsync: this);
-
-  bankPaymentDataSource = BankPaymentDataSource(
-    bankPaymentList,
-    rowsPerPage: rowsPerPage.value,
-  );
-
-  getBankPaymentData();
-}
-
 
   @override
   void onClose() {
@@ -614,4 +638,3 @@ void onInit() {
     super.onClose();
   }
 }
-

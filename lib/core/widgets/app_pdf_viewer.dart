@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class AppPdfViewer extends StatelessWidget {
@@ -11,7 +12,10 @@ class AppPdfViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('PDF Viewer')),
+      appBar: AppBar(
+        title: const Text('PDF Viewer'),
+        backgroundColor: AppColors.blue,
+      ),
       body:
           pdfFile != null
               ? SfPdfViewer.file(pdfFile!)

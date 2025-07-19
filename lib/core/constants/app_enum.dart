@@ -7,7 +7,7 @@ enum MenuType {
 
   final String key;
 
-  static MenuType? fromKey(String key) {
+  static MenuType? fromKey(String? key) {
     return MenuType.values.where((element) => element.key == key).firstOrNull;
   }
 
@@ -43,7 +43,7 @@ enum SubMenuType {
 
   const SubMenuType(this.key);
 
-  static SubMenuType? fromKey(String key) {
+  static SubMenuType? fromKey(String? key) {
     return SubMenuType.values
         .where((element) => element.key == key)
         .firstOrNull;
