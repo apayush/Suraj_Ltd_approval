@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -41,20 +42,20 @@ class LoginController extends GetxController {
           'mUser': userIdController.text.trim(),
           'mPasswords': passwordController.text.trim(),
           'fcmid': fcmId,
+          'mDeviceType':
+              Platform.isAndroid || Platform.isIOS ? 'mobile' : 'web',
         },
       );
 
       if (isClosed) return;
       final data = response.data;
       if (data['status'] == 'success') {
-        AppUtils.showSnackBar(
-          'Login successful!',
-        );
+        AppUtils.showSnackBar('Login successful!');
         final userData = (data['data'] as Map);
         final jsonString = jsonEncode(userData);
         await LocalDB.setString(AppConstants.currentUser, jsonString);
         final userModel = UserModel.fromJson(data['data']);
-        Get.put(userModel,permanent: true);
+        Get.put(userModel, permanent: true);
 
         GetIt.I<SessionController>().startSessionTimer();
         Get.offAllNamed(AppRouter.dashboardScreen);

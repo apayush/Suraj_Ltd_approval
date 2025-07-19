@@ -15,4 +15,5 @@ class ApiUrl {
 
   // ! Get PDF Report
   static const String getBankpaymentReport = '/getBankpaymentReport';
+  static const String notificationsList = '/GetNotificationLogs';
 }

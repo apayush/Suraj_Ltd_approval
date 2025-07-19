@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,8 +18,9 @@ import 'common_widgets.dart';
 class AppScaffold extends StatelessWidget {
   final Widget body;
   final PreferredSizeWidget? bottom;
+  final Widget? title;
 
-  AppScaffold({super.key, required this.body, this.bottom});
+  AppScaffold({super.key, required this.body, this.bottom,this.title});
 
   final drawerController = Get.find<AppDrawerController>();
   final userModel = Get.find<UserModel>();
@@ -66,12 +69,14 @@ class AppScaffold extends StatelessWidget {
                 SizedBox(
                   height:
                       bottom != null
-                          ? kToolbarHeight + 45
-                              // ((screenType == DeviceScreenType.desktop)
-                              //     ? 40
-                              //     : 40)
+                          ? kToolbarHeight +
+                              ((Platform.isAndroid || Platform.isIOS)
+                                  ? 100
+                                  : 40)
                           : null,
-                  child: CustomHeader(bottom: bottom),
+                  child: CustomHeader(
+                      title: title,
+                      bottom: bottom),
                 ),
                 Expanded(child: body),
               ],
