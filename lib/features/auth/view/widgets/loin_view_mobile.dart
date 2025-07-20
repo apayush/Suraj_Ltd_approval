@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
 
 class LoginViewMobile extends StatelessWidget {
@@ -29,7 +30,7 @@ class LoginViewMobile extends StatelessWidget {
                     width: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Colors.blue[50],
+                      color: AppColors.blue50,
                     ),
                     child: Image.asset(
                       AppImages.surajPvtLogo,
@@ -37,7 +38,7 @@ class LoginViewMobile extends StatelessWidget {
                         return Icon(
                           Icons.business,
                           size: 40,
-                          color: Colors.blue[600],
+                          color: AppColors.blue600,
                         );
                       },
                     ),
@@ -84,7 +85,7 @@ class LoginViewMobile extends StatelessWidget {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.blue),
+                      borderSide: const BorderSide(color: AppColors.blue),
                     ),
                   ),
                 ),
@@ -118,7 +119,7 @@ class LoginViewMobile extends StatelessWidget {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.blue),
+                        borderSide: const BorderSide(color: AppColors.blue),
                       ),
                     ),
                   ),
@@ -158,7 +159,7 @@ class LoginViewMobile extends StatelessWidget {
                       onPressed:
                           controller.isLoading.value ? null : controller.login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: AppColors.blue,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

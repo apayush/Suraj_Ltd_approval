@@ -5,5 +5,4 @@ class PurchaseController extends GetxController
   static PurchaseController get instance => Get.find();
 
   RxBool isLoading = false.obs;
-
 }

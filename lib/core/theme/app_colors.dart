@@ -18,6 +18,17 @@ class AppColors {
   static const Color textFieldBackgroundColor = Color(0xFFF6F6F6);
   static const Color dividerColors = Color(0xFFDADADA);
   static const Color blue = Color(0xFF00457A); // Good Color
+  static const Color blue50 = Color(0xFFE1EAF0);
+  static const Color blue100 = Color(0xFFB3C9DA);
+  static const Color blue200 = Color(0xFF80A5C1);
+  static const Color blue300 = Color(0xFF4D80A7);
+  static const Color blue400 = Color(0xFF266499);
+  static const Color blue500 = Color(0xFF00457A);
+  static const Color blue600 = Color(0xFF003F72);
+  static const Color blue700 = Color(0xFF003666);
+  static const Color blue800 = Color(0xFF002E59);
+  static const Color blue900 = Color(0xFF001F40);
+
   static const Color success = Colors.green;
   static const Color primaryColor = Color(0xFF007CB4);
 

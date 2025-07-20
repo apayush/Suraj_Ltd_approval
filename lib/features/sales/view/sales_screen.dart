@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:suraj_approval/features/dashboard/controller/app_drawer_controller.dart';
 import 'package:suraj_approval/features/sales/view/widgets/sales_mobile.dart';
 import 'package:suraj_approval/features/sales/view/widgets/sales_tablet.dart';
 import 'package:suraj_approval/features/sales/view/widgets/saless_web.dart';
@@ -7,10 +9,21 @@ import 'package:suraj_approval/features/sales/view/widgets/saless_web.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../controller/sales_controller.dart';
 
-class SalesScreen extends StatelessWidget {
+class SalesScreen extends StatefulWidget {
   SalesScreen({super.key});
 
-  final controller = SalesController.instance;
+  @override
+  State<SalesScreen> createState() => _SalesScreenState();
+}
+
+class _SalesScreenState extends State<SalesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Get.find<AppDrawerController>().setIndex(2);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +34,8 @@ class SalesScreen extends StatelessWidget {
           tablet: (context) => SalesTablet(),
           desktop: (context) => SalesWeb(),
         ),
-        LoaderWidget(controller: controller)
-      ]
+        LoaderWidget(controller: Get.find<SalesController>()),
+      ],
     );
   }
 }

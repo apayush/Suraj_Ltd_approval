@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../../../features/dashboard/controller/dashboard_controller.dart';
-import '../../../../core/utills/app_module_container.dart';
 
 class DashboardTablet extends StatelessWidget {
   DashboardTablet({super.key});
@@ -12,9 +13,14 @@ class DashboardTablet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-        body: Center(
-          child: AppText('Dashboard Tablet', style: TextStyles.normal(context),alignment: Alignment.center,),
-        )
+      title: Text('Dashboard', style: TextStyle(color: Colors.black)),
+      body: Center(
+        child: AppText(
+          'Dashboard Tablet',
+          style: TextStyles.normal(context),
+          alignment: Alignment.center,
+        ),
+      ),
     );
   }
 }

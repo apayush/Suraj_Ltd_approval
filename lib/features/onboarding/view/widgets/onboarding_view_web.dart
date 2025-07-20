@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 
 class OnboardingViewWeb extends StatelessWidget {
@@ -26,7 +27,7 @@ class OnboardingViewWeb extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: AppColors.blue,
                     ),
                   ),
                   TextButton(
@@ -66,14 +67,14 @@ class OnboardingViewWeb extends StatelessWidget {
                                     vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue[50],
+                                    color: AppColors.blue50,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
                                     'Step ${index + 1} of ${controller.onboardingPages.length}',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.blue[700],
+                                      color: AppColors.blue700,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -131,11 +132,11 @@ class OnboardingViewWeb extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    color: Colors.blue[50],
+                                    color: AppColors.blue50,
                                     child: Icon(
                                       Icons.business,
                                       size: 150,
-                                      color: Colors.blue[300],
+                                      color: AppColors.blue300,
                                     ),
                                   );
                                 },
@@ -168,7 +169,7 @@ class OnboardingViewWeb extends StatelessWidget {
                             decoration: BoxDecoration(
                               color:
                                   controller.currentPage.value == index
-                                      ? Colors.blue
+                                      ? AppColors.blue
                                       : Colors.grey[300],
                               borderRadius: BorderRadius.circular(4),
                             ),
@@ -202,7 +203,7 @@ class OnboardingViewWeb extends StatelessWidget {
                           () => ElevatedButton(
                             onPressed: controller.nextPage,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                              backgroundColor: AppColors.blue,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 32,
@@ -251,10 +252,10 @@ class OnboardingViewWeb extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.blue[50],
+              color: AppColors.blue50,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 20, color: Colors.blue[600]),
+            child: Icon(icon, size: 20, color: AppColors.blue600),
           ),
           const SizedBox(width: 16),
           Text(

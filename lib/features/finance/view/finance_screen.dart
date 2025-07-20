@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:suraj_approval/features/dashboard/controller/app_drawer_controller.dart';
 import 'package:suraj_approval/features/finance/view/widgets/finance_mobile.dart';
 import 'package:suraj_approval/features/finance/view/widgets/finance_tablet.dart';
 import 'package:suraj_approval/features/finance/view/widgets/finance_web.dart';
+
 import '../../../core/widgets/loading_widget.dart';
 import '../controller/finance_controller.dart';
 
-class FinanceScreen extends GetView<FinanceController> {
+class FinanceScreen extends StatefulWidget {
   FinanceScreen({super.key});
 
+  @override
+  State<FinanceScreen> createState() => _FinanceScreenState();
+}
+
+class _FinanceScreenState extends State<FinanceScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Get.find<AppDrawerController>().setIndex(0);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +34,8 @@ class FinanceScreen extends GetView<FinanceController> {
           tablet: (context) => FinanceTablet(),
           desktop: (context) => FinanceWeb(),
         ),
-        LoaderWidget(controller: controller)
-      ]
+        LoaderWidget(controller: Get.find<FinanceController>()),
+      ],
     );
   }
 }

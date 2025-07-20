@@ -18,7 +18,12 @@ class BankPaymentCardList extends GetView<FinanceController> {
           payment: payments,
           primaryColor: AppColors.blue,
           onTap: () {
-            Get.to(PaymentDetailScreen(payment: payments, primaryColor: AppColors.blue));
+            Get.to(
+              PaymentDetailScreen(
+                payment: payments,
+                primaryColor: AppColors.blue,
+              ),
+            );
           },
           onApprove: () {},
           onReject: () {},

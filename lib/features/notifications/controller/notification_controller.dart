@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
@@ -5,7 +6,7 @@ import 'package:suraj_approval/core/enum/page_state.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
-
+import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';
 
 class NotificationController extends GetxController {
@@ -54,12 +55,56 @@ class NotificationController extends GetxController {
     await fetchNotifications();
   }
 
-  // Handle notification tap
   void onNotificationTap(NotificationModel notification) {
-    // Navigate to detail screen based on notification type
     if (notification.mainType == MenuType.finance) {
-      Get.offAllNamed(AppRouter.financeScreen, arguments: notification.subType);
-    } else {}
+      redirectToNotificationTypeScreen(
+        route: AppRouter.financeScreen,
+        subMenuType: notification.subType,
+        onExistingRouteNavigate: () {
+          Get.find<FinanceController>().goTOSubMenu(notification.subType);
+        },
+      );
+    } else if (notification.mainType == MenuType.production) {
+      redirectToNotificationTypeScreen(
+        route: AppRouter.productionScreen,
+        subMenuType: notification.subType,
+        onExistingRouteNavigate: () {
+          // Get.find<ProductionController>().goTOSubMenu(notification.subType);
+        },
+      );
+    } else if (notification.mainType == MenuType.purchase) {
+      redirectToNotificationTypeScreen(
+        route: AppRouter.purchaseScreen,
+        subMenuType: notification.subType,
+        onExistingRouteNavigate: () {
+          // Get.find<PurchaseController>().goTOSubMenu(notification.subType);
+        },
+      );
+    } else if (notification.mainType == MenuType.sales) {
+      redirectToNotificationTypeScreen(
+        route: AppRouter.salesScreen,
+        subMenuType: notification.subType,
+        onExistingRouteNavigate: () {
+          // Get.find<SalesController>().goTOSubMenu(notification.subType);
+        },
+      );
+    }
+  }
+
+  void redirectToNotificationTypeScreen({
+    required String route,
+    SubMenuType? subMenuType,
+    required VoidCallback onExistingRouteNavigate,
+  }) {
+    bool targetRouteExists = Get.routing.previous == route;
+    if (targetRouteExists) {
+      Get.back();
+      Future.microtask(() {
+        onExistingRouteNavigate();
+      });
+    } else {
+      Get.offAllNamed(route, arguments: subMenuType);
+    }
   }
 
   Future<void> markAsRead(String notificationId) async {}

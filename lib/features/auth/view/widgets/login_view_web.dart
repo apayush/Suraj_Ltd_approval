@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
 
 class LoginViewWeb extends StatelessWidget {
@@ -22,7 +23,7 @@ class LoginViewWeb extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Colors.blue[600]!, Colors.blue[800]!],
+                  colors: [AppColors.blue600, AppColors.blue800],
                 ),
               ),
               child: Padding(
@@ -147,7 +148,7 @@ class LoginViewWeb extends StatelessWidget {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: const BorderSide(
-                                color: Colors.blue,
+                                color: AppColors.blue,
                                 width: 2,
                               ),
                             ),
@@ -193,7 +194,7 @@ class LoginViewWeb extends StatelessWidget {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                   width: 2,
                                 ),
                               ),
@@ -257,7 +258,7 @@ class LoginViewWeb extends StatelessWidget {
                                       ? null
                                       : controller.login,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: AppColors.blue,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),

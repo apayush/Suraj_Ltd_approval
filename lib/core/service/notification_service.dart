@@ -1,11 +1,41 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:suraj_approval/prepare_initial_route.dart';
 
+@pragma('vm:entry-point')
 Future<void> handlerBackgroundMessage(RemoteMessage message) async {
   //handle background notification when application is on terminat state.
+}
+
+@pragma('vm:entry-point')
+void onDidReceiveNotificationResponse(NotificationResponse details) {
+  final data = jsonDecode(details.payload ?? '');
+  final result = prepareInitialRoute(
+    RemoteMessage(
+      notification: RemoteNotification(
+        title: data['title'] ?? '',
+        body: data['body'] ?? '',
+      ),
+    ),
+  );
+  Future.microtask(() {
+    if (Get.routing.current != result.route &&
+        Get.routing.previous != result.route) {
+      Get.offAllNamed(result.route, arguments: result.argument);
+    } else if (Get.routing.previous == result.route) {
+      Get.back();
+      Future.microtask(() {
+        gotToSubMenuFromRoute(result.route, result.argument);
+      });
+    } else if (Get.routing.current == result.route) {
+      gotToSubMenuFromRoute(result.route, result.argument);
+    }
+  });
 }
 
 class NotificationService {
@@ -45,7 +75,10 @@ class NotificationService {
         final initialSetting = InitializationSettings(
           android: androidInitSettings,
         );
-        await localNotification.initialize(initialSetting);
+        await localNotification.initialize(
+          initialSetting,
+          onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+        );
 
         await localNotification
             .resolvePlatformSpecificImplementation<
@@ -56,6 +89,7 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
+      FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedApp);
 
       if (kIsWeb) {
         await setUpNotificationWeb();
@@ -75,6 +109,9 @@ class NotificationService {
   static Future<void> onFirebaseNotificationReceived(
     RemoteMessage message,
   ) async {
+    print(message.data);
+    print(message.notification?.title);
+    print(message.notification?.body);
     if (Platform.isAndroid) {
       final notificationDetails = NotificationDetails(
         android: AndroidNotificationDetails(
@@ -87,6 +124,10 @@ class NotificationService {
         message.notification?.title ?? 'Title not available',
         message.notification?.body ?? 'Message not available',
         notificationDetails,
+        payload: jsonEncode({
+          'title': message.notification?.title.toString(),
+          'body': message.notification?.body.toString(),
+        }),
       );
     }
   }
@@ -103,4 +144,13 @@ class NotificationService {
   }
 
   static Future<void> setUpNotificationWeb() async {}
+
+  static void onMessageOpenedApp(RemoteMessage message) {
+    final result = prepareInitialRoute(message);
+    Get.offAllNamed(result.route, arguments: result.argument);
+  }
+
+  static void deleteFCMToken() {
+    FirebaseMessaging.instance.deleteToken();
+  }
 }

@@ -395,17 +395,22 @@ class FinanceController extends GetxController
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final menuType = Get.arguments as SubMenuType?;
-      if (menuType == SubMenuType.bankPayment) {
-        tabController.animateTo(0);
-      } else if (menuType == SubMenuType.bankReceipt) {
-        tabController.animateTo(1);
-      } else if (menuType == SubMenuType.cashPayment) {
-        tabController.animateTo(2);
-      } else if (menuType == SubMenuType.cashReceipt) {
-        tabController.animateTo(3);
-      }
+      goTOSubMenu(menuType);
     });
     getAllData(mainType: currentSubMenu.value);
+  }
+
+  void goTOSubMenu(SubMenuType? menuType) {
+    if (menuType == SubMenuType.bankPayment) {
+      tabController.animateTo(0);
+    } else if (menuType == SubMenuType.bankReceipt) {
+      tabController.animateTo(1);
+    } else if (menuType == SubMenuType.cashPayment) {
+      tabController.animateTo(2);
+    } else if (menuType == SubMenuType.cashReceipt) {
+      tabController.animateTo(3);
+    }
+    if (menuType != null) getAllData(mainType: menuType);
   }
 
   @override

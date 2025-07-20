@@ -21,8 +21,8 @@ class ProductionScreen extends StatelessWidget {
           tablet: (context) => ProductionTablet(),
           desktop: (context) => ProductionWeb(),
         ),
-        LoaderWidget(controller: controller)
-      ]
+        LoaderWidget(controller: controller),
+      ],
     );
   }
 }

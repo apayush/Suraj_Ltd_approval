@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../features/finance/controller/finance_controller.dart';
@@ -128,7 +129,7 @@ class BankPaymentDataSource extends DataGridSource {
       children: [
         Flexible(
           child: IconButton(
-            icon: const Icon(Icons.visibility, color: Colors.blue),
+            icon: const Icon(Icons.visibility, color: AppColors.blue),
             tooltip: 'View',
             onPressed: () => controller.handleMenuSelection('View', model),
           ),

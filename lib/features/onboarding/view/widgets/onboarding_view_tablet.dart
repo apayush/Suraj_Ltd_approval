@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 
 class OnboardingViewTablet extends StatelessWidget {
@@ -54,11 +55,11 @@ class OnboardingViewTablet extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    color: Colors.blue[50],
+                                    color: AppColors.blue50,
                                     child: Icon(
                                       Icons.business,
                                       size: 120,
-                                      color: Colors.blue[300],
+                                      color: AppColors.blue300,
                                     ),
                                   );
                                 },
@@ -121,7 +122,7 @@ class OnboardingViewTablet extends StatelessWidget {
                           decoration: BoxDecoration(
                             color:
                                 controller.currentPage.value == index
-                                    ? Colors.blue
+                                    ? AppColors.blue
                                     : Colors.grey[300],
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -156,7 +157,7 @@ class OnboardingViewTablet extends StatelessWidget {
                         () => ElevatedButton(
                           onPressed: controller.nextPage,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppColors.blue,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 32,

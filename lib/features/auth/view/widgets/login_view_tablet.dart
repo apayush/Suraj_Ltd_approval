@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
 
 class LoginViewTablet extends StatelessWidget {
@@ -39,7 +40,7 @@ class LoginViewTablet extends StatelessWidget {
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: Colors.blue[50],
+                              color: AppColors.blue50,
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(16),
@@ -51,7 +52,7 @@ class LoginViewTablet extends StatelessWidget {
                                   return Icon(
                                     Icons.business,
                                     size: 50,
-                                    color: Colors.blue[600],
+                                    color: AppColors.blue600,
                                   );
                                 },
                               ),
@@ -102,7 +103,7 @@ class LoginViewTablet extends StatelessWidget {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: const BorderSide(
-                                color: Colors.blue,
+                                color: AppColors.blue,
                                 width: 2,
                               ),
                             ),
@@ -147,7 +148,7 @@ class LoginViewTablet extends StatelessWidget {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
-                                  color: Colors.blue,
+                                  color: AppColors.blue,
                                   width: 2,
                                 ),
                               ),
@@ -211,7 +212,7 @@ class LoginViewTablet extends StatelessWidget {
                                       ? null
                                       : controller.login,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: AppColors.blue,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),

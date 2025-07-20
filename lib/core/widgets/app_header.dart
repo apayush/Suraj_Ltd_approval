@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+
 import '../constants/app_images.dart';
 import 'notification.dart';
 
@@ -59,7 +60,8 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
                 height: 30,
                 fit: BoxFit.contain,
               ),
-            if (title != null) title!,
+            if (title != null)
+              Padding(padding: const EdgeInsets.only(left: 10), child: title!),
           ],
         ),
         actions: [

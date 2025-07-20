@@ -1,9 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/features/splash/view/widget/suraj_splash_animation.dart';
-
-import '../../../core/router/app_router.dart';
+import 'package:suraj_approval/prepare_initial_route.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,13 +17,13 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SurajSplashAnimation(
         onAnimationComplete: () {
-          // 🔁 Delay optional: just to see the end of animation
-          Future.delayed(const Duration(milliseconds: 500), () {
-            if (LocalDB.getUserModel() != null) {
-              Get.offAllNamed(AppRouter.dashboardScreen);
-            } else {
-              Get.offAllNamed(AppRouter.onboardingScreen);
-            }
+          Future.delayed(const Duration(milliseconds: 500), () async {
+            final message =
+                await FirebaseMessaging.instance.getInitialMessage();
+
+            final result = await prepareInitialRoute(message);
+
+            Get.offAllNamed(result.route, arguments: result.argument);
           });
         },
       ),

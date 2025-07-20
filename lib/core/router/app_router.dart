@@ -1,22 +1,23 @@
 import 'package:get/get.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/view/notifications_screen.dart';
+import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
-import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 import 'package:suraj_approval/features/sales/view/sales_screen.dart';
-import '../../features/dashboard/controller/dashboard_controller.dart';
-import '../../features/dashboard/controller/session_controller.dart';
-import '../../features/finance/controller/finance_controller.dart';
-import '../../features/production/controller/production_controller.dart';
-import '../../features/purchase/controller/purchase_controller.dart';
+
 import '../../features/auth/controller/login_controller.dart';
 import '../../features/auth/view/login_screen.dart';
-import '../../features/splash/view/splash_screen.dart';
+import '../../features/dashboard/controller/dashboard_controller.dart';
+import '../../features/dashboard/controller/session_controller.dart';
 import '../../features/dashboard/view/dashboard_screen.dart';
+import '../../features/finance/controller/finance_controller.dart';
 import '../../features/finance/view/finance_screen.dart';
+import '../../features/production/controller/production_controller.dart';
 import '../../features/production/view/production_screen.dart';
+import '../../features/purchase/controller/purchase_controller.dart';
 import '../../features/purchase/view/purchase_screen.dart';
+import '../../features/splash/view/splash_screen.dart';
 
 class AppRouter {
   static const String splash = '/splash';
@@ -35,7 +36,7 @@ class AppRouter {
       name: splash,
       page: () => const SplashScreen(),
       binding: BindingsBuilder(() {
-        Get.put(SessionController(), permanent: true);
+        Get.put(SessionController());
       }),
     ),
     GetPage(
@@ -49,7 +50,7 @@ class AppRouter {
       name: login,
       page: () => const LoginScreen(),
       binding: BindingsBuilder(() {
-        Get.put(LoginController(), permanent: true);
+        Get.put(LoginController());
       }),
     ),
     GetPage(
@@ -93,7 +94,8 @@ class AppRouter {
       binding: BindingsBuilder(() {
         Get.lazyPut<SalesController>(() => SalesController());
       }),
-    ), GetPage(
+    ),
+    GetPage(
       name: notification,
       page: () => NotificationsScreen(),
       binding: BindingsBuilder(() {

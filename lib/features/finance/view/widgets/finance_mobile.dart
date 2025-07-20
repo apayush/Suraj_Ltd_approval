@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/finance_tabbar_view.dart';
+
 import '../../../../core/constants/app_enum.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../controller/finance_controller.dart';
@@ -11,7 +12,7 @@ class FinanceMobile extends GetView<FinanceController> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: Text('Finance'),
+      title: Text('Finance', style: TextStyle(color: Colors.black)),
       bottom: TabBar(
         controller: controller.tabController,
         tabs: controller.myTabs,

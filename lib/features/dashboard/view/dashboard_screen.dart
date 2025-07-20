@@ -3,6 +3,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_mobile.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_tablet.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_web.dart';
+
 import '../../../core/widgets/loading_widget.dart';
 import '../controller/dashboard_controller.dart';
 
@@ -14,14 +15,14 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children : [
+      children: [
         ScreenTypeLayout.builder(
           mobile: (context) => DashboardMobile(),
           tablet: (context) => DashboardTablet(),
           desktop: (context) => DashboardWeb(),
         ),
-        LoaderWidget(controller: controller)
-      ]
+        LoaderWidget(controller: controller),
+      ],
     );
   }
 }

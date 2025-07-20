@@ -1,8 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/service/notification_service.dart';
+
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/storage_utills.dart';
@@ -55,6 +58,7 @@ class SessionController extends GetxController {
 
   // Logout function that logs the user out and redirects to the login page
   Future<void> _logout() async {
+    NotificationService.deleteFCMToken();
     stopSessionTimer(); // Stop the timer upon logout
     Get.back(); // Close the dialog
     await storageUtils.clearUserData();

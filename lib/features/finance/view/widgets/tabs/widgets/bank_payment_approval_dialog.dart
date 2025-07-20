@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 
@@ -49,7 +50,7 @@ class _ApprovalDialogState extends State<ApprovalDialog> {
                     context,
                     textColor:
                         widget.isApproval
-                            ? Colors.blue.shade700
+                            ? AppColors.blue700
                             : Colors.red.shade700,
                   ),
                   // ),
@@ -80,20 +81,14 @@ class _ApprovalDialogState extends State<ApprovalDialog> {
                 ),
                 AppText(
                   widget.requestId,
-                  style: TextStyles.medium(
-                    context,
-                    textColor: Colors.black87,
-                  ),
+                  style: TextStyles.medium(context, textColor: Colors.black87),
                 ),
               ],
             ),
             const SizedBox(height: 20),
 
             // Remarks Section
-            AppText(
-              'Remarks',
-              style: TextStyles.normal(context),
-            ),
+            AppText('Remarks', style: TextStyles.normal(context)),
             const SizedBox(height: 12),
 
             // Remarks TextField
@@ -151,7 +146,7 @@ class _ApprovalDialogState extends State<ApprovalDialog> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         widget.isApproval
-                            ? Colors.blue.shade600
+                            ? AppColors.blue600
                             : Colors.red.shade600,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(

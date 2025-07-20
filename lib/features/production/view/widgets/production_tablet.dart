@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../controller/production_controller.dart';
-import '../../../../core/utills/app_module_container.dart';
 
 class ProductionTablet extends StatelessWidget {
   ProductionTablet({super.key});
@@ -12,6 +13,7 @@ class ProductionTablet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      title: Text('Production', style: TextStyle(color: Colors.black)),
       body: Center(
         child: AppText(
           'Production Tablet',

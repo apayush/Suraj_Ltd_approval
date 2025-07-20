@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../../../features/dashboard/controller/dashboard_controller.dart';
-import '../../../../core/utills/app_module_container.dart';
 
 class DashboardMobile extends StatelessWidget {
   DashboardMobile({super.key});
@@ -12,6 +13,7 @@ class DashboardMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      title: Text('Dashboard', style: TextStyle(color: Colors.black)),
       body: Center(
         child: AppText(
           'Dashboard Mobile',

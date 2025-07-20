@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:suraj_approval/core/enum/page_state.dart';
-import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:suraj_approval/core/enum/page_state.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';
 
 class NotificationsScreen extends GetView<NotificationController> {
@@ -212,7 +213,7 @@ class NotificationsScreen extends GetView<NotificationController> {
         break;
       case 'Purchase Order':
         iconData = Icons.receipt_long;
-        iconColor = Colors.blue;
+        iconColor = AppColors.blue;
         break;
       case 'Bank Receipt':
         iconData = Icons.account_balance_wallet;

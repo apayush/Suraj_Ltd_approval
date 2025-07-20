@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 
 class OnboardingViewMobile extends StatelessWidget {
@@ -57,11 +58,11 @@ class OnboardingViewMobile extends StatelessWidget {
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(
-                                  color: Colors.blue[50],
+                                  color: AppColors.blue50,
                                   child: Icon(
                                     Icons.business,
                                     size: 80,
-                                    color: Colors.blue[300],
+                                    color: AppColors.blue300,
                                   ),
                                 );
                               },
@@ -119,7 +120,7 @@ class OnboardingViewMobile extends StatelessWidget {
                           decoration: BoxDecoration(
                             color:
                                 controller.currentPage.value == index
-                                    ? Colors.blue
+                                    ? AppColors.blue
                                     : Colors.grey[300],
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -138,7 +139,7 @@ class OnboardingViewMobile extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: controller.nextPage,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: AppColors.blue,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),

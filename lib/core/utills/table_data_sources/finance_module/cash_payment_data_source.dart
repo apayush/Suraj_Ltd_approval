@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import '../../../../features/finance/controller/finance_controller.dart';
 import '../../../../features/finance/model/bank_payment_model.dart';
 import '../../../widgets/common_widgets.dart';
@@ -36,8 +38,8 @@ class CashPaymentDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-      return DataGridRow(cells: _buildDataGridCells(e));
-    })
+          return DataGridRow(cells: _buildDataGridCells(e));
+        })
         .toList(growable: false);
   }
 
@@ -74,24 +76,22 @@ class CashPaymentDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-      row.getCells().map<Widget>((dataGridCell) {
-        if (dataGridCell.columnName == 'Action') {
-          return buildActionIcons(
-            dataGridCell.value as BankPaymentModel,
-          );
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: AppText(
-              dataGridCell.value.toString(),
-              style: TextStyles.small(Get.context!),
-              overflow: TextOverflow.ellipsis,
-              alignment: Alignment.centerLeft,
-            ),
-          );
-        }
-      }).toList(),
+          row.getCells().map<Widget>((dataGridCell) {
+            if (dataGridCell.columnName == 'Action') {
+              return buildActionIcons(dataGridCell.value as BankPaymentModel);
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                child: AppText(
+                  dataGridCell.value.toString(),
+                  style: TextStyles.small(Get.context!),
+                  overflow: TextOverflow.ellipsis,
+                  alignment: Alignment.centerLeft,
+                ),
+              );
+            }
+          }).toList(),
     );
   }
 
@@ -105,11 +105,11 @@ class CashPaymentDataSource extends DataGridSource {
       paginatedItems =
           cashPaymentList
               .getRange(
-            startIndex,
-            endIndex > cashPaymentList.length
-                ? cashPaymentList.length
-                : endIndex,
-          )
+                startIndex,
+                endIndex > cashPaymentList.length
+                    ? cashPaymentList.length
+                    : endIndex,
+              )
               .toList();
 
       _buildDataGridRows();
@@ -129,7 +129,7 @@ class CashPaymentDataSource extends DataGridSource {
       children: [
         Flexible(
           child: IconButton(
-            icon: const Icon(Icons.visibility, color: Colors.blue),
+            icon: const Icon(Icons.visibility, color: AppColors.blue),
             tooltip: 'View',
             onPressed: () => controller.handleMenuSelection('View', model),
           ),

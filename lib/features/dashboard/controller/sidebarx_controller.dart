@@ -7,9 +7,9 @@ import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/service/local_db.dart';
+import '../../../core/utills/app_module_container.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/common_widgets.dart';
-import '../../../core/utills/app_module_container.dart';
 
 class SidebarController extends GetxController {
   RxString appVersion = 'Loading...'.obs;
@@ -59,7 +59,6 @@ class SidebarController extends GetxController {
     );
   }
 
-
   TextEditingController baseUrlController = TextEditingController();
   void showSettingsDialog(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
@@ -78,7 +77,10 @@ class SidebarController extends GetxController {
                         style: TextStyles.medium(context),
                       ),
                       10.heightGap,
-                      AppTextField(hint: 'Base Url',controller: baseUrlController,),
+                      AppTextField(
+                        hint: 'Base Url',
+                        controller: baseUrlController,
+                      ),
                     ],
                   )
                   : Row(
@@ -88,7 +90,12 @@ class SidebarController extends GetxController {
                         style: TextStyles.medium(context),
                       ),
                       10.widthGap,
-                      Flexible(child: AppTextField(hint: 'Base Url',controller: baseUrlController,)),
+                      Flexible(
+                        child: AppTextField(
+                          hint: 'Base Url',
+                          controller: baseUrlController,
+                        ),
+                      ),
                     ],
                   ),
         ),
