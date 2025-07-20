@@ -20,19 +20,19 @@ class BankReceipt extends GetView<FinanceController> {
       children: [
         buildSearchFieldRow(context),
         10.heightGap,
-        Obx(() => buildPaymentTable(context)),
+        Obx(() => buildBankReceiptTable(context)),
       ],
     );
   }
 
-  Widget buildPaymentTable(BuildContext context) {
-    return controller.bankPaymentList.isNotEmpty
+  Widget buildBankReceiptTable(BuildContext context) {
+    return controller.bankReceiptList.isNotEmpty
         ? Expanded(
       child: Obx(() {
         return SfDataGridPaginationWithAllData(
           controller: controller,
-          source: controller.bankPaymentDataSource,
-          totalItems: controller.bankPaymentList.length,
+          source: controller.bankReceiptDataSource,
+          totalItems: controller.bankReceiptList.length,
           rowsPerPage: controller.rowsPerPage.value,
           dynamicColumns: [
             GridColumn(

@@ -8,20 +8,20 @@ import '../../../widgets/common_widgets.dart';
 import '../../app_module_container.dart';
 import '../../app_utills.dart';
 
-class BankPaymentDataSource extends DataGridSource {
-  List<BankPaymentModel> bankPaymentList = [];
+class CashPaymentDataSource extends DataGridSource {
+  List<BankPaymentModel> cashPaymentList = [];
   List<BankPaymentModel> paginatedItems = [];
   int rowsPerPage;
   int currentPageIndex = 0;
 
-  BankPaymentDataSource(this.bankPaymentList, {required this.rowsPerPage}) {
+  CashPaymentDataSource(this.cashPaymentList, {required this.rowsPerPage}) {
     _loadInitialPage();
   }
 
   List<DataGridRow> _dataGridRows = [];
 
   void _loadInitialPage() {
-    paginatedItems = bankPaymentList.take(rowsPerPage).toList();
+    paginatedItems = cashPaymentList.take(rowsPerPage).toList();
     _buildDataGridRows();
   }
 
@@ -37,8 +37,8 @@ class BankPaymentDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-          return DataGridRow(cells: _buildDataGridCells(e));
-        })
+      return DataGridRow(cells: _buildDataGridCells(e));
+    })
         .toList(growable: false);
   }
 
@@ -75,24 +75,24 @@ class BankPaymentDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-          row.getCells().map<Widget>((dataGridCell) {
-            if (dataGridCell.columnName == 'Action') {
-              return buildActionIcons(
-                dataGridCell.value as BankPaymentModel,
-              );
-            } else {
-              return Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: AppText(
-                  dataGridCell.value.toString(),
-                  style: TextStyles.small(Get.context!),
-                  overflow: TextOverflow.ellipsis,
-                  alignment: Alignment.centerLeft,
-                ),
-              );
-            }
-          }).toList(),
+      row.getCells().map<Widget>((dataGridCell) {
+        if (dataGridCell.columnName == 'Action') {
+          return buildActionIcons(
+            dataGridCell.value as BankPaymentModel,
+          );
+        } else {
+          return Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.center,
+            child: AppText(
+              dataGridCell.value.toString(),
+              style: TextStyles.small(Get.context!),
+              overflow: TextOverflow.ellipsis,
+              alignment: Alignment.centerLeft,
+            ),
+          );
+        }
+      }).toList(),
     );
   }
 
@@ -102,15 +102,15 @@ class BankPaymentDataSource extends DataGridSource {
     int startIndex = newPageIndex * rowsPerPage;
     int endIndex = startIndex + rowsPerPage;
 
-    if (startIndex < bankPaymentList.length) {
+    if (startIndex < cashPaymentList.length) {
       paginatedItems =
-          bankPaymentList
+          cashPaymentList
               .getRange(
-                startIndex,
-                endIndex > bankPaymentList.length
-                    ? bankPaymentList.length
-                    : endIndex,
-              )
+            startIndex,
+            endIndex > cashPaymentList.length
+                ? cashPaymentList.length
+                : endIndex,
+          )
               .toList();
 
       _buildDataGridRows();
@@ -154,9 +154,8 @@ class BankPaymentDataSource extends DataGridSource {
   }
 
   void updateDataSource(List<BankPaymentModel> updateList) {
-    bankPaymentList = updateList;
+    cashPaymentList = updateList;
     currentPageIndex = 0;
-    // paginatedItems = updateList.take(rowsPerPage).toList();
     _buildDataGridRows();
     notifyListeners();
   }

@@ -5,10 +5,8 @@ import '../../../../core/constants/app_enum.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../controller/finance_controller.dart';
 
-
 class FinanceWeb extends GetView<FinanceController> {
   FinanceWeb({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +29,7 @@ class FinanceWeb extends GetView<FinanceController> {
             default:
               type = SubMenuType.cashReceipt;
           }
+          controller.searchController.clear();
           controller.currentSubMenu.value = type;
           controller.getAllData(mainType: type);
         },

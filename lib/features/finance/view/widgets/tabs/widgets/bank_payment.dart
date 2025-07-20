@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:suraj_approval/core/extentions/num_extention.dart';
-import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
-import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:suraj_approval/core/constants/app_strings.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/no_data_found.dart';
 import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
+import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class BankPayment extends GetView<FinanceController> {
   BankPayment({super.key});
@@ -21,12 +20,12 @@ class BankPayment extends GetView<FinanceController> {
       children: [
         buildSearchFieldRow(context),
         10.heightGap,
-        Obx(() => buildPaymentTable(context)),
+        Obx(() => buildBankPaymentTable(context)),
       ],
     );
   }
 
-  Widget buildPaymentTable(BuildContext context) {
+  Widget buildBankPaymentTable(BuildContext context) {
     return controller.bankPaymentList.isNotEmpty
         ? Expanded(
           child: Obx(() {
