@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_payment.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_receipt.dart';
 
 import '../../../core/constants/api_url.dart';
@@ -18,7 +19,6 @@ import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../model/bank_payment_model.dart';
-import '../view/widgets/tabs/widgets/bank_payment.dart';
 import '../view/widgets/tabs/widgets/bank_receipt.dart';
 import '../view/widgets/tabs/widgets/cash_payment.dart';
 
@@ -377,6 +377,7 @@ class FinanceController extends GetxController
     }
 
     myTabs = tabs;
+    tabViews = views;
     tabController = TabController(length: myTabs.length, vsync: this);
 
     bankPaymentDataSource = BankPaymentDataSource(
