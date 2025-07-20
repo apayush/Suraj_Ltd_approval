@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:suraj_approval/features/finance/controller/bank_payment_controller.dart';
-import 'package:suraj_approval/features/finance/controller/bank_receipt_controller.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/view/notifications_screen.dart';
 import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';

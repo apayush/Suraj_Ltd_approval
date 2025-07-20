@@ -33,7 +33,8 @@ class FinanceController extends GetxController
   late TabController tabController;
   List<Tab> myTabs = [];
   List<Widget> tabViews = [];
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> approveFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> rejectFormKey = GlobalKey<FormState>();
 
   // ! Two lists to hold the Api data and filtered data for Bank Payment
   RxList<BankPaymentModel> bankPaymentList = <BankPaymentModel>[].obs;
@@ -153,7 +154,7 @@ class FinanceController extends GetxController
         if (response.data['Success'] == true) {
           AppUtils.showSnackBar('Voucher Updated Successfully');
         }
-        formKey.currentState?.reset();
+        // formKey.currentState?.reset();
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
       }
@@ -266,7 +267,7 @@ class FinanceController extends GetxController
         GenericDialogBox(
           headerText: 'Approve Bank Payment',
           content: Form(
-            key: formKey,
+            key: approveFormKey,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
@@ -284,9 +285,9 @@ class FinanceController extends GetxController
           ),
           primaryButtonText: 'Approve',
           secondaryButtonText: 'Cancel',
-          onPrimaryButtonPressed: () {
-            if (formKey.currentState!.validate()) {
-              postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
+          onPrimaryButtonPressed: () async {
+            if (approveFormKey.currentState!.validate()) {
+              await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
             }
           },
           onSecondaryButtonPressed: () {
@@ -298,24 +299,29 @@ class FinanceController extends GetxController
       await Get.dialog(
         GenericDialogBox(
           headerText: 'Reject Bank Payment',
-          content: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              children: [
-                AppText(
-                  'Are you sure you want to Reject?',
-                  softWrap: true,
-                  style: TextStyles.medium(Get.context!),
-                ),
-                20.heightGap,
-                buildRemarkField(),
-              ],
+          content: Form(
+            key: rejectFormKey,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                children: [
+                  AppText(
+                    'Are you sure you want to Reject?',
+                    softWrap: true,
+                    style: TextStyles.medium(Get.context!),
+                  ),
+                  20.heightGap,
+                  buildRemarkField(),
+                ],
+              ),
             ),
           ),
           primaryButtonText: 'Reject',
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () {
-            postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
+            if (rejectFormKey.currentState!.validate()) {
+              postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
+            }
           },
           onSecondaryButtonPressed: () {
             Get.back();
@@ -330,20 +336,12 @@ class FinanceController extends GetxController
     return AppTextField(
       controller: remarkController,
       hint: 'Enter Remarks',
-      validator: validateRemarks,
+      isValidator: true,
       width: Get.width,
       minLines: 3,
       height: 100,
-      // padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       maxLines: null,
     );
-  }
-
-  String? validateRemarks(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter Remarks';
-    }
-    return null;
   }
 
   @override
