@@ -44,6 +44,7 @@ class CashPaymentDataSource extends DataGridSource {
   }
 
   List<DataGridCell<dynamic>> _buildDataGridCells(BankPaymentModel e) {
+    print('e.sno : ${e.sno}');
     List<DataGridCell<dynamic>> cells = [
       _createCell('', (e.sno ?? '').toString()),
       _createCell('Branch', (e.mBranch ?? '').toString()),
@@ -155,6 +156,7 @@ class CashPaymentDataSource extends DataGridSource {
   void updateDataSource(List<BankPaymentModel> updateList) {
     cashPaymentList = updateList;
     currentPageIndex = 0;
+    paginatedItems = cashPaymentList.take(rowsPerPage).toList();
     _buildDataGridRows();
     notifyListeners();
   }

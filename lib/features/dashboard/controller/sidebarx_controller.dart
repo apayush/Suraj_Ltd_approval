@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 
+import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/models/user_model.dart';
+import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
+import '../../../core/utills/app_utills.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/common_widgets.dart';
 
 class SidebarController extends GetxController {
   RxString appVersion = 'Loading...'.obs;
+  RxBool isLoading = false.obs;
   final ValueNotifier<bool> isProfileExpanded = ValueNotifier(false);
 
   @override
@@ -60,15 +65,15 @@ class SidebarController extends GetxController {
   }
 
   TextEditingController baseUrlController = TextEditingController();
-  void showSettingsDialog(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+
+  void showSettingsDialog(BuildContext context) async {
     Get.dialog(
       GenericDialogBox(
         headerText: AppStrings.confirmation,
         content: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child:
-              isMobile
+              DeviceType.isMobile(context) || DeviceType.isTablet(context)
                   ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,13 +106,39 @@ class SidebarController extends GetxController {
         ),
         primaryButtonText: AppStrings.confirm,
         secondaryButtonText: AppStrings.cancel,
-        onPrimaryButtonPressed: () {
-          Get.back();
+        onPrimaryButtonPressed: () async {
+          if (baseUrlController.text.trim().isEmpty) {
+            AppUtils.showSnackBar('Base URL cannot be empty');
+            return;
+          }
+          await postFinanceVoucher(newBaseUrl: baseUrlController.text.trim());
         },
         onSecondaryButtonPressed: () {
           Get.back();
         },
       ),
     );
+  }
+
+  // ! Approve Reject Finance Voucher
+  Future<void> postFinanceVoucher({required String newBaseUrl}) async {
+    isLoading.value = true;
+    try {
+      final response = await ApiService.postData(
+        ApiUrl.saveBaseURL,
+        queryParams: {'mUrlString': baseUrlController.text},
+      );
+      if (response.statusCode == 200) {
+        Get.back();
+        if (response.data['Success'] == true) {
+          AppUtils.showSnackBar('BaseUrl Updated Successfully');
+        }
+        baseUrlController.clear();
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

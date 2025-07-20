@@ -85,18 +85,22 @@ class FinanceController extends GetxController
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
               bankPaymentDataSource.updateDataSource(bankPaymentList);
+              print('bankPaymentList : ${bankPaymentList.length}');
               break;
             case SubMenuType.bankReceipt:
               bankReceiptList.assignAll(payment);
               bankReceiptDataSource.updateDataSource(bankReceiptList);
+              print('bankReceiptList : ${bankReceiptList.length}');
               break;
             case SubMenuType.cashPayment:
               cashPaymentList.assignAll(payment);
               cashPaymentDataSource.updateDataSource(cashPaymentList);
+              print('cashPaymentList : ${cashPaymentList.length}');
               break;
             case SubMenuType.cashReceipt:
               cashReceiptList.assignAll(payment);
               cashReceiptDataSource.updateDataSource(cashReceiptList);
+              print('cashReceiptList : ${cashReceiptList.length}');
               break;
             default:
               break;
@@ -231,7 +235,7 @@ class FinanceController extends GetxController
   }
 
   // ! Grid Pagination
-  var rowsPerPage = 10.obs;
+  final RxInt rowsPerPage = 10.obs;
 
   void changeRowsPerPage(int newRowsPerPage) {
     rowsPerPage.value = newRowsPerPage;
@@ -403,14 +407,18 @@ class FinanceController extends GetxController
   void goTOSubMenu(SubMenuType? menuType) {
     if (menuType == SubMenuType.bankPayment) {
       tabController.animateTo(0);
+      currentSubMenu.value = SubMenuType.bankPayment;
     } else if (menuType == SubMenuType.bankReceipt) {
       tabController.animateTo(1);
+      currentSubMenu.value = SubMenuType.bankReceipt;
     } else if (menuType == SubMenuType.cashPayment) {
       tabController.animateTo(2);
+      currentSubMenu.value = SubMenuType.cashPayment;
     } else if (menuType == SubMenuType.cashReceipt) {
       tabController.animateTo(3);
+      currentSubMenu.value = SubMenuType.cashReceipt;
     }
-    if (menuType != null) getAllData(mainType: menuType);
+    if (menuType != null) getAllData(mainType: currentSubMenu.value);
   }
 
   @override

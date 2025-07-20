@@ -27,6 +27,7 @@ class CashPayment extends GetView<FinanceController> {
   }
 
   Widget buildCashPaymentTable(BuildContext context) {
+    print('cashPaymentList: ${controller.cashPaymentList.length}');
     return controller.cashPaymentList.isNotEmpty
         ? Expanded(
       child: Obx(() {

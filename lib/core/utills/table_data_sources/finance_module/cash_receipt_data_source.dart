@@ -155,6 +155,7 @@ class CashReceiptDataSource extends DataGridSource {
   void updateDataSource(List<BankPaymentModel> updateList) {
     cashReceiptList = updateList;
     currentPageIndex = 0;
+    paginatedItems = cashReceiptList.take(rowsPerPage).toList();
     _buildDataGridRows();
     notifyListeners();
   }
