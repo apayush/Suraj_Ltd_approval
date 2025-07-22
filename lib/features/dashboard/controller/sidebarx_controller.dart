@@ -107,11 +107,18 @@ class SidebarController extends GetxController {
         primaryButtonText: AppStrings.confirm,
         secondaryButtonText: AppStrings.cancel,
         onPrimaryButtonPressed: () async {
-          if (baseUrlController.text.trim().isEmpty) {
+          final trimmedUrl = baseUrlController.text.trim();
+          if (trimmedUrl.isEmpty) {
             AppUtils.showSnackBar('Base URL cannot be empty');
             return;
           }
-          await postFinanceVoucher(newBaseUrl: baseUrlController.text.trim());
+
+          if (!isValidBaseUrl(trimmedUrl)) {
+            AppUtils.showSnackBar('Please enter a valid URL');
+            return;
+          }
+
+          await postFinanceVoucher(newBaseUrl: trimmedUrl);
         },
         onSecondaryButtonPressed: () {
           Get.back();
@@ -130,8 +137,9 @@ class SidebarController extends GetxController {
       );
       if (response.statusCode == 200) {
         Get.back();
-        if (response.data['Success'] == true) {
+        if (response.data['status'] == 'success') {
           AppUtils.showSnackBar('BaseUrl Updated Successfully');
+          getBaseUrl();
         }
         baseUrlController.clear();
       }
@@ -141,4 +149,29 @@ class SidebarController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // ! GET Base URL
+  Future<void> getBaseUrl() async {
+    isLoading.value = true;
+    try {
+      final response = await ApiService.getData(
+        ApiUrl.getBaseUrl,
+      );
+      if (response.statusCode == 200) {
+        print('Base URL: ${response.data['data']}');
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  bool isValidBaseUrl(String url) {
+    final urlPattern =
+        r'^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:\d+)?(\/.*)?$';
+    final regex = RegExp(urlPattern);
+    return regex.hasMatch(url);
+  }
+
 }

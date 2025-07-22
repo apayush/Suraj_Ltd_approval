@@ -97,7 +97,7 @@ class BankPayment extends GetView<FinanceController> {
                 ),
                 GridColumn(
                   columnName: 'Action',
-                  minimumWidth: 130,
+                  minimumWidth: 210,
                   // columnWidthMode: ColumnWidthMode.auto,
                   label: appGridLabel('Action'),
                   allowSorting: false,

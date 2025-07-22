@@ -7,6 +7,8 @@ class ApiUrl {
 
   // ! Common API
   static const String saveBaseURL = '/SaveBaseURL';
+  // SaveBaseUrl?mUrlString=http://124.123.122.112:7081/Report&mUser=Admin
+  static const String getBaseUrl = '/GetBaseUrl';
   static const String getNotificationLogs = '/GetNotificationLogs';
 
   // ! FINANCE MODULE API

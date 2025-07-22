@@ -150,7 +150,7 @@ class FinanceController extends GetxController
           'mUserLevel': matchedUserDetail?.userLevel,
           'LinkField': bankPayment.linkField,
           'mAuthorise': paymentStatus,
-          'mRemarks': 'test',
+          'mRemarks': remarkController.value.text,
         },
       );
       if (response.statusCode == 200) {
@@ -169,7 +169,7 @@ class FinanceController extends GetxController
     }
   }
 
-  // ! RESET FITERS
+  // ! RESET FILTERS
   resetFilters() {
     getAllData(mainType: currentSubMenu.value);
   }

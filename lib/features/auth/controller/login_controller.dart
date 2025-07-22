@@ -50,6 +50,7 @@ class LoginController extends GetxController {
       if (isClosed) return;
       final data = response.data;
       if (data['status'] == 'success') {
+        getBaseUrl();
         AppUtils.showSnackBar('Login successful!');
         final userData = (data['data'] as Map);
         final jsonString = jsonEncode(userData);
@@ -64,6 +65,23 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Login failed. Please try again.$e';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! GET Base URL
+  Future<void> getBaseUrl() async {
+    isLoading.value = true;
+    try {
+      final response = await ApiService.getData(
+        ApiUrl.getBaseUrl,
+      );
+      if (response.statusCode == 200) {
+        print('Base URL: ${response.data['data']}');
+      }
+    } catch (e) {
+      print(e);
     } finally {
       isLoading.value = false;
     }
