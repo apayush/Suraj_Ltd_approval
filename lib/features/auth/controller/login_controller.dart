@@ -78,7 +78,12 @@ class LoginController extends GetxController {
         ApiUrl.getBaseUrl,
       );
       if (response.statusCode == 200) {
-        print('Base URL: ${response.data['data']}');
+        final baseURL = (response.data);
+        final jsonString = jsonEncode(baseURL);
+        await LocalDB.setString(AppConstants.baseUrl, jsonString);
+        final newBase = baseURL['data']['mUrl'];
+        ApiUrl.baseUrl = newBase;
+        print('Base URL updated: $newBase');
       }
     } catch (e) {
       print(e);

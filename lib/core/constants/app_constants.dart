@@ -16,4 +16,5 @@ class AppConstants {
   static const String loggedInUserName = 'loggedInUserName';
   static const String loggedInPassword = 'loggedInPassword';
   static const String currentUser = 'current_user';
+  static const String baseUrl = 'baseUrl';
 }

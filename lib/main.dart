@@ -56,4 +56,8 @@ Future<void> initializeApp() async {
   if (user != null) {
     Get.put<UserModel>(user, permanent: true);
   }
+  final storedUrl = LocalDB.getBaseUrl();
+  if (storedUrl != null) {
+    ApiUrl.baseUrl = storedUrl;
+  }
 }

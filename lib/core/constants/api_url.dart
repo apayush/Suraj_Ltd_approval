@@ -1,6 +1,6 @@
 class ApiUrl {
   // ! BASE URL
-  static const String baseUrl = 'http://124.123.122.112:7081/Report';
+  static String baseUrl = 'http://124.123.122.112:7081/Report';
 
   // ! LOGIN API
   static const String loginApi = '/Login';

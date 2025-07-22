@@ -41,6 +41,15 @@ class LocalDB {
     return UserModel.fromJson(jsonDecode(userData)); // ✅ Restore from SharedPreferences
   }
 
+  static String? getBaseUrl() {
+    final baseUrlData = _pref.getString(AppConstants.baseUrl);
+    if (baseUrlData == null || baseUrlData.isEmpty) return null;
+
+    final decoded = jsonDecode(baseUrlData);
+    return decoded['data']['mUrl']; // ✅ Extract actual base URL string
+  }
+
+
   static Future<void> clearUser() async {
     await _pref.remove(AppConstants.currentUser);
   }

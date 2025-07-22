@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
@@ -6,6 +8,7 @@ import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 
 import '../../../core/constants/api_url.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/service/api_service.dart';
@@ -158,7 +161,12 @@ class SidebarController extends GetxController {
         ApiUrl.getBaseUrl,
       );
       if (response.statusCode == 200) {
-        print('Base URL: ${response.data['data']}');
+        final baseURL = (response.data);
+        final jsonString = jsonEncode(baseURL);
+        await LocalDB.setString(AppConstants.baseUrl, jsonString);
+        final newBase = baseURL['data']['mUrl'];
+        ApiUrl.baseUrl = newBase;
+        print('Base URL updated: $newBase');
       }
     } catch (e) {
       print(e);
