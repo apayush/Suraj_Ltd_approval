@@ -33,6 +33,7 @@ dependencies:
   open_file: ^3.5.10
   intl:
   syncfusion_flutter_pdfviewer:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
