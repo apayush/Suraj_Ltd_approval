@@ -50,12 +50,28 @@ class NotificationController extends GetxController {
     }
   }
 
+  Future<void> updateNotificationLogs({required NotificationModel notification}) async {
+    try {
+      await ApiService.postData(
+        ApiUrl.updateFCMId,
+        queryParams: {
+          'Nid' : notification?.nid
+        },
+      );
+      if (isClosed) return;
+    } catch (e) {
+      print('Error updating FCM ID: $e');
+    } finally {
+    }
+  }
+
   // Refresh notifications
   Future<void> refreshNotifications() async {
     await fetchNotifications();
   }
 
   void onNotificationTap(NotificationModel notification) {
+    updateNotificationLogs(notification: notification);
     if (notification.mainType == MenuType.finance) {
       redirectToNotificationTypeScreen(
         route: AppRouter.financeScreen,

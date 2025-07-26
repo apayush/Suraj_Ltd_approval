@@ -7,6 +7,7 @@ class NotificationModel {
   final MenuType? mainType;
   final SubMenuType? subType;
   final String? sent;
+  final int? nid;
 
   NotificationModel({
     this.title,
@@ -14,6 +15,7 @@ class NotificationModel {
     this.mainType,
     this.subType,
     this.sent,
+    this.nid,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class NotificationModel {
       mainType: MenuType.fromKey(json['MainType']),
       subType: SubMenuType.fromKey(json['SubType']),
       sent: json['SentAt'],
+      nid: json['Nid'],
     );
   }
 
@@ -33,6 +36,7 @@ class NotificationModel {
       'MainType': mainType?.key,
       'SubType': subType?.key,
       'SentAt': sent,
+      'Nid': nid,
     };
   }
 }

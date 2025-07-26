@@ -76,12 +76,11 @@ class SessionController extends GetxController {
   Future<void> updateFCM() async {
     isLoading.value = true;
     try {
-      final fcmId = await NotificationService.getFcmId();
-      final response = await ApiService.postData(
+      await ApiService.postData(
         ApiUrl.updateFCMId,
         queryParams: {
           'fcmid': '',
-          'mUser': 'userModel?.mUser,',
+          'mUser': userModel?.mUser,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
       );

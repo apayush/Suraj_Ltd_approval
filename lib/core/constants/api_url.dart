@@ -11,6 +11,7 @@ class ApiUrl {
   // SaveBaseUrl?mUrlString=http://124.123.122.112:7081/Report&mUser=Admin
   static const String getBaseUrl = '/GetBaseUrl';
   static const String getNotificationLogs = '/GetNotificationLogs';
+  static const String updateNotificationLogs = '/UpdateNotificationLogs';
 
   // ! FINANCE MODULE API
   static const String getAuthorisationList = '/GetAuthorisationList';
