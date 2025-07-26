@@ -22,6 +22,25 @@ class ApiClient {
         receiveTimeout: Duration(seconds: 45),
       ),
     );
+
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Ensure latest baseUrl is used
+        if (_baseUrl != options.baseUrl) {
+          options.baseUrl = _baseUrl;
+        }
+        return handler.next(options); // continue
+      },
+      onError: (DioError e, handler) {
+        // Optional: handle session errors or logging
+        if (e.response?.statusCode == 401) {
+          _handleSessionExpired();
+        } else if (e.response?.statusCode == 403 || e.response?.statusCode == 440) {
+          _handleInvalidToken(e.response?.data.toString());
+        }
+        return handler.next(e);
+      },
+    ));
   }
 
   void updateBaseUrl(String baseUrl) {

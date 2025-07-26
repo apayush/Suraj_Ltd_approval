@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/widgets/app_radio.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/common_text_field.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../controller/login_controller.dart';
@@ -28,6 +30,25 @@ class LoginTextFields extends GetView<LoginController> {
           controller: controller.passwordController,
         ),
         const SizedBox(height: 16.0),
+        Obx(
+              ()=> Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppRadioButton(onChanged: controller.ipTypeChanged, value: 1, groupValue: controller.ipType.value),
+              Expanded(
+                flex: 2,
+                child: AppText('Global',
+                    style: TextStyles.normal(context)),
+              ),
+              AppRadioButton(onChanged: controller.ipTypeChanged, value: 2, groupValue: controller.ipType.value),
+              Expanded(
+                flex: 2,
+                child: AppText('Local',
+                    style: TextStyles.normal(context)),
+              ),
+            ],
+          ),
+        ),
 
         AppButton(onPressed: (){
           Get.offAllNamed(AppRouter.dashboardScreen);

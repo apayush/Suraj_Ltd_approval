@@ -256,7 +256,7 @@ class LoginViewWeb extends StatelessWidget {
                               onPressed:
                                   controller.isLoading.value
                                       ? null
-                                      : controller.login,
+                                      : controller.getBaseUrl,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.blue,
                                 foregroundColor: Colors.white,

@@ -201,7 +201,7 @@ class SidebarController extends GetxController {
 
   bool isValidBaseUrl(String url) {
     final urlPattern =
-        r'^(https?:\/\/)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:\d+)?(\/.*)?$';
+        r'^(https?:\/\/)?(([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))(:\d+)?(\/.*)?$';
     final regex = RegExp(urlPattern);
     return regex.hasMatch(url);
   }

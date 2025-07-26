@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
+
+import '../../../../core/utills/app_module_container.dart';
+import '../../../../core/widgets/app_radio.dart';
+import '../../../../core/widgets/common_widgets.dart';
 
 class LoginViewMobile extends StatelessWidget {
   const LoginViewMobile({super.key});
@@ -148,8 +153,29 @@ class LoginViewMobile extends StatelessWidget {
                           )
                           : const SizedBox(),
                 ),
+                12.heightGap,
 
-                const SizedBox(height: 32),
+                Obx(
+                  ()=> Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppRadioButton(onChanged: controller.ipTypeChanged, value: 1, groupValue: controller.ipType.value),
+                      Expanded(
+                        flex: 2,
+                        child: AppText('Global',
+                            style: TextStyles.normal(context)),
+                      ),
+                      AppRadioButton(onChanged: controller.ipTypeChanged, value: 2, groupValue: controller.ipType.value),
+                      Expanded(
+                        flex: 2,
+                        child: AppText('Local',
+                            style: TextStyles.normal(context)),
+                      ),
+                    ],
+                  ),
+                ),
+
+                10.heightGap,
 
                 // Submit button
                 Obx(
@@ -157,7 +183,7 @@ class LoginViewMobile extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed:
-                          controller.isLoading.value ? null : controller.login,
+                          controller.isLoading.value ? null : controller.getBaseUrl,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.blue,
                         foregroundColor: Colors.white,

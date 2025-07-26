@@ -4,7 +4,7 @@ class ApiUrl {
 
   // ! LOGIN API
   static const String loginApi = '/Login';
-  static const String updateFCMId = '/LogOut';
+  static const String updateFCMId = '/UpdateNotificationLogs';
 
   // ! Common API
   static const String saveBaseURL = '/SaveBaseURL';

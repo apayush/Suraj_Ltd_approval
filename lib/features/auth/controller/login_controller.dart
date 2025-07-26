@@ -21,6 +21,8 @@ class LoginController extends GetxController {
   final RxBool isPasswordVisible = false.obs;
   final RxString errorMessage = ''.obs;
   final sessionController = Get.find<SessionController>();
+  RxInt ipType = 1.obs;
+  RxInt selectIPType = 1.obs;
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -47,7 +49,6 @@ class LoginController extends GetxController {
       if (isClosed) return;
       final data = response.data;
       if (data['status'] == 'success') {
-        getBaseUrl();
         AppUtils.showSnackBar('Login successful!');
         final userData = (data['data'] as Map);
         final jsonString = jsonEncode(userData);
@@ -67,11 +68,19 @@ class LoginController extends GetxController {
   }
 
   // ! GET Base URL
+  void ipTypeChanged(int? value) {
+    if (value != null) {
+      ipType.value = value;
+    }
+  }
   Future<void> getBaseUrl() async {
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
         ApiUrl.getBaseUrl,
+        queryParams: {
+          'mType': ipType.value == 1 ? 'Global': 'Local',
+        },
       );
       if (response.statusCode == 200) {
         final baseURL = (response.data);
@@ -79,7 +88,7 @@ class LoginController extends GetxController {
         await LocalDB.setString(AppConstants.baseUrl, jsonString);
         final newBase = baseURL['data']['mUrl'];
         ApiUrl.baseUrl = newBase;
-        print('Base URL updated: $newBase');
+        login();
       }
     } catch (e) {
       print(e);
