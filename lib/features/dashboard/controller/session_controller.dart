@@ -9,16 +9,13 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/device_type.dart';
-import '../../../core/utills/storage_utills.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/common_widgets.dart';
 
 class SessionController extends GetxController {
   Timer? _inactivityTimer;
   final RxBool isLoading = false.obs;
-  final int sessionTimeout = 30 * 60 * 1000; // 15 minutes for production
-  // final int sessionTimeout = 10 * 1000; // 10 seconds for testing
-  final storageUtils = Get.find<StorageUtils>();
+  final int sessionTimeout = 30 * 60 * 1000;
   final userModel = LocalDB.getUserModel();
 
   @override
@@ -62,7 +59,6 @@ class SessionController extends GetxController {
     updateFCM();
     stopSessionTimer(); // Stop the timer upon logout
     Get.back(); // Close the dialog
-    await storageUtils.clearUserData();
     Get.offAllNamed(AppRouter.login);
   }
 
@@ -91,7 +87,6 @@ class SessionController extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   // Show session expired dialog box
   void _showSessionExpiredDialog() {

@@ -1,4 +1,4 @@
-package com.example.suraj_approval
+package com.suraj.suraj_approval
 
 import io.flutter.embedding.android.FlutterActivity
 

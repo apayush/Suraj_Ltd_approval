@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../router/app_router.dart';
 import '../utills/app_module_container.dart';
-import '../utills/storage_utills.dart';
 import '../widgets/app_dialog.dart';
 import '../constants/app_strings.dart';
 
@@ -13,18 +11,7 @@ class ApiClient {
   late Dio _dio;
   late String _baseUrl;
 
-  final storageUtils = Get.find<StorageUtils>();
   final sessionController = Get.find<SessionController>();
-
-  final Logger logger = Logger(
-    filter: ProductionFilter(),
-    printer: PrettyPrinter(
-      methodCount: 0,
-      colors: true,
-      printEmojis: false,
-      noBoxingByDefault: true,
-    ),
-  );
 
   ApiClient(String initialBaseUrl) {
     _baseUrl = initialBaseUrl;
@@ -96,7 +83,6 @@ class ApiClient {
   void _logoutUser() async {
     sessionController.stopSessionTimer();
     Get.back(); // Close dialog
-    await storageUtils.clearUserData();
     Get.offAllNamed(AppRouter.login);
   }
 }

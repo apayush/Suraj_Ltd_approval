@@ -8,7 +8,6 @@ import 'core/router/app_router.dart';
 import 'core/service/api_client.dart';
 import 'core/service/local_db.dart';
 import 'core/theme/app_theme.dart';
-import 'core/utills/storage_utills.dart';
 import 'core/widgets/page_not_found.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/session_controller.dart';
@@ -42,7 +41,6 @@ class MyApp extends StatelessWidget {
       initialBinding: BindingsBuilder(() {
         Get.put(SidebarController(), permanent: true);
         Get.put(AppDrawerController(), permanent: true);
-        Get.lazyPut<StorageUtils>(() => StorageUtils());
         Get.put<SessionController>(SessionController());
         Get.lazyPut<SidebarController>(() => SidebarController());
         Get.lazyPut<ApiClient>(() => ApiClient(ApiUrl.baseUrl));
@@ -53,7 +51,7 @@ class MyApp extends StatelessWidget {
 
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.initialize();
 

@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCe6_gbPdrwxi4zyUlXhUJwEPq489sbG6I',
-    appId: '1:539741752470:android:8518cd8a99080aae5f06b7',
+    appId: '1:539741752470:android:eeb9aa05717cb8b75f06b7',
     messagingSenderId: '539741752470',
     projectId: 'suraj-erp-approval',
     storageBucket: 'suraj-erp-approval.firebasestorage.app',
@@ -63,11 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAZV3Uo5jhWAYt6yQWYDIW-9nJzEsskhWE',
-    appId: '1:539741752470:ios:18fa21292be7c6c65f06b7',
+    appId: '1:539741752470:ios:d91d9437b145406a5f06b7',
     messagingSenderId: '539741752470',
     projectId: 'suraj-erp-approval',
     storageBucket: 'suraj-erp-approval.firebasestorage.app',
-    iosBundleId: 'com.example.surajApproval',
+    iosBundleId: 'com.suraj.surajApproval',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
