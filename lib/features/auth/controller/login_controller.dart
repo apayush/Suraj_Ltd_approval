@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
@@ -10,7 +8,6 @@ import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
-
 import '../../../core/models/user_model.dart';
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
@@ -23,7 +20,7 @@ class LoginController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isPasswordVisible = false.obs;
   final RxString errorMessage = ''.obs;
-  final sessionController = GetIt.I<SessionController>();
+  final sessionController = Get.find<SessionController>();
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -57,8 +54,7 @@ class LoginController extends GetxController {
         await LocalDB.setString(AppConstants.currentUser, jsonString);
         final userModel = UserModel.fromJson(data['data']);
         Get.put(userModel, permanent: true);
-
-        GetIt.I<SessionController>().startSessionTimer();
+        Get.find<SessionController>().startSessionTimer();
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
         errorMessage.value = 'Invalid credentials. Please try again.';

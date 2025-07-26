@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
 
 class UserModel {
@@ -35,8 +34,8 @@ class UserModel {
   }
 
   UserDetails? getDetailFor(MenuType menu, SubMenuType submenu) {
-    return userDetails.firstWhereOrNull(
-      (e) => e.mainMenu == menu && e.subMenu == submenu,
+    return userDetails.firstWhere(
+      (e) => e.mainMenu == menu && e.subMenu == submenu,orElse: null
     );
   }
 }

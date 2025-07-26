@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'api_client.dart';
+import 'package:get/get.dart' as g;
 
 class ApiService {
-  static final _apiClient = GetIt.I<ApiClient>(); // Access shared AuthService
+  static final _apiClient = g.Get.find<ApiClient>();
 
   // Example GET request
   static Future<Response> getData(

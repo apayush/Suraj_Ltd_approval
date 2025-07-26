@@ -150,7 +150,7 @@ class NotificationService {
     Get.offAllNamed(result.route, arguments: result.argument);
   }
 
-  static void deleteFCMToken() {
-    FirebaseMessaging.instance.deleteToken();
+  static Future<void> deleteFCMToken() async {
+    await FirebaseMessaging.instance.deleteToken();
   }
 }

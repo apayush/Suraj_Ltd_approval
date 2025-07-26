@@ -6,6 +6,7 @@ import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
+import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
 
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_constants.dart';
@@ -13,6 +14,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
+import '../../../core/service/notification_service.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
 import '../../../core/widgets/app_dialog.dart';
@@ -42,6 +44,7 @@ class SidebarController extends GetxController {
   }
 
   void showAlertLogoutDialog(BuildContext context) {
+    final sessionController = Get.find<SessionController>();
     Get.dialog(
       GenericDialogBox(
         headerText: AppStrings.confirmation,
@@ -58,13 +61,35 @@ class SidebarController extends GetxController {
         onPrimaryButtonPressed: () async {
           await LocalDB.clearUser(); // clear any saved storage
           Get.delete<UserModel>();
-          Get.offAndToNamed(AppRouter.login);
+          sessionController.logout();
         },
         onSecondaryButtonPressed: () {
           Get.back();
         },
       ),
     );
+  }
+
+  Future<void> updateFCM() async {
+    isLoading.value = true;
+    try {
+      final fcmId = await NotificationService.getFcmId();
+      final response = await ApiService.postData(
+        ApiUrl.updateFCMId,
+        queryParams: {
+          'fcmid': '',
+          'mUser': 'userModel?.mUser,',
+          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
+        },
+      );
+      print('FCM ID updated: ${response.data}');
+      print('FCM ID: $fcmId');
+      if (isClosed) return;
+    } catch (e) {
+      print('Error updating FCM ID: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   TextEditingController baseUrlController = TextEditingController();
@@ -166,7 +191,6 @@ class SidebarController extends GetxController {
         await LocalDB.setString(AppConstants.baseUrl, jsonString);
         final newBase = baseURL['data']['mUrl'];
         ApiUrl.baseUrl = newBase;
-        print('Base URL updated: $newBase');
       }
     } catch (e) {
       print(e);

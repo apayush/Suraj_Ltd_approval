@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
 
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.initialize();
 

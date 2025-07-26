@@ -1,14 +1,10 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../router/app_router.dart';
 import '../utills/app_module_container.dart';
-import '../utills/app_utills.dart';
 import '../utills/storage_utills.dart';
 import '../widgets/app_dialog.dart';
 import '../constants/app_strings.dart';
@@ -17,8 +13,8 @@ class ApiClient {
   late Dio _dio;
   late String _baseUrl;
 
-  final storageUtils = GetIt.I<StorageUtils>();
-  final sessionController = GetIt.I<SessionController>();
+  final storageUtils = Get.find<StorageUtils>();
+  final sessionController = Get.find<SessionController>();
 
   final Logger logger = Logger(
     filter: ProductionFilter(),
