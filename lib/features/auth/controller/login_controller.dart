@@ -1,13 +1,20 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
+import 'package:suraj_approval/core/constants/app_strings.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
+import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/utills/app_utills.dart';
+import 'package:suraj_approval/core/widgets/app_dialog.dart';
+import 'package:suraj_approval/core/widgets/app_text_field.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
@@ -15,6 +22,7 @@ import '../../dashboard/controller/session_controller.dart';
 class LoginController extends GetxController {
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController baseUrlController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final RxBool isLoading = false.obs;
@@ -29,8 +37,6 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
-    if (!formKey.currentState!.validate()) return;
-
     isLoading.value = true;
     errorMessage.value = '';
 
@@ -60,6 +66,11 @@ class LoginController extends GetxController {
       } else {
         errorMessage.value = 'Invalid credentials. Please try again.';
       }
+    } on DioException catch (e) {
+      errorMessage.value = 'Connection not found, Config your environment';
+      if (e.type == DioExceptionType.connectionError) {
+        showSettingsDialog(Get.context!);
+      }
     } catch (e) {
       errorMessage.value = 'Login failed. Please try again.$e';
     } finally {
@@ -73,25 +84,36 @@ class LoginController extends GetxController {
       ipType.value = value;
     }
   }
-  Future<void> getBaseUrl() async {
+
+  Future<void> getBaseUrl(BuildContext context) async {
+    if (!formKey.currentState!.validate()) return;
+
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
         ApiUrl.getBaseUrl,
-        queryParams: {
-          'mType': ipType.value == 1 ? 'Global': 'Local',
-        },
+        queryParams: {'mType': ipType.value == 1 ? 'Global' : 'Local'},
       );
+      final data = (response.data);
+
       if (response.statusCode == 200) {
-        final baseURL = (response.data);
-        final jsonString = jsonEncode(baseURL);
-        await LocalDB.setString(AppConstants.baseUrl, jsonString);
-        final newBase = baseURL['data']['mUrl'];
-        ApiUrl.baseUrl = newBase;
+        final newBase = data['data']?['mUrl'] ?? '';
+        await LocalDB.setString(AppConstants.baseUrl, newBase);
+        ApiUrl.baseUrlGlobal = newBase;
+        ApiService.setBaseUrl(newBase);
+        print('ApiUrl.baseUrl:${ApiUrl.baseUrlGlobal}');
         login();
+      } else {
+        AppUtils.showSnackBar(data?['message'] ?? 'Failed to get URL');
+      }
+    } on DioException catch (e) {
+      errorMessage.value = 'Connection not found, Config your environment';
+
+      if (e.type == DioExceptionType.connectionError) {
+        showSettingsDialog(context);
       }
     } catch (e) {
-      print(e);
+      AppUtils.showSnackBar(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -122,5 +144,80 @@ class LoginController extends GetxController {
     userIdController.dispose();
     passwordController.dispose();
     super.onClose();
+  }
+
+  void showSettingsDialog(BuildContext context) async {
+    await Get.dialog(
+      GenericDialogBox(
+        headerText: 'Config Environment',
+        content: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child:
+              DeviceType.isMobile(context) || DeviceType.isTablet(context)
+                  ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        'Enter New Base URL:',
+                        style: TextStyles.medium(context),
+                      ),
+                      10.heightGap,
+                      AppTextField(
+                        hint: 'Base Url',
+                        controller: baseUrlController,
+                      ),
+                    ],
+                  )
+                  : Row(
+                    children: [
+                      AppText(
+                        'Enter New Base URL:',
+                        style: TextStyles.medium(context),
+                      ),
+                      10.widthGap,
+                      Flexible(
+                        child: AppTextField(
+                          hint: 'Base Url',
+                          controller: baseUrlController,
+                        ),
+                      ),
+                    ],
+                  ),
+        ),
+        primaryButtonText: AppStrings.confirm,
+        secondaryButtonText: AppStrings.cancel,
+        onPrimaryButtonPressed: () async {
+          final trimmedUrl = baseUrlController.text.trim();
+          if (trimmedUrl.isEmpty) {
+            AppUtils.showSnackBar(
+              'Base URL cannot be empty',
+              background: Colors.red,
+            );
+            return;
+          }
+
+          if (!isValidBaseUrl(trimmedUrl)) {
+            AppUtils.showSnackBar(
+              'Please enter a valid URL',
+              background: Colors.red,
+            );
+            return;
+          }
+          ApiService.setBaseUrl(baseUrlController.text.trim());
+          Get.back();
+        },
+        onSecondaryButtonPressed: () {
+          Get.back();
+        },
+      ),
+    );
+    baseUrlController.clear();
+  }
+
+  bool isValidBaseUrl(String url) {
+    final urlPattern =
+        r'^(https?:\/\/)?(([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))(:\d+)?(\/.*)?$';
+    final regex = RegExp(urlPattern);
+    return regex.hasMatch(url);
   }
 }

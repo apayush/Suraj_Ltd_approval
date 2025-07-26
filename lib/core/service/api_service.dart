@@ -22,6 +22,10 @@ class ApiService {
     }
   }
 
+  static void setBaseUrl(String baseUrl) {
+    _apiClient.updateBaseUrl(baseUrl);
+  }
+
   /// POST request
   static Future<Response> postData(
     String endpoint, {

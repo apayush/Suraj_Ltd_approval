@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/api_url.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../router/app_router.dart';
 import '../utills/app_module_container.dart';
@@ -13,8 +14,18 @@ class ApiClient {
 
   final sessionController = Get.find<SessionController>();
 
-  ApiClient(String initialBaseUrl) {
-    _baseUrl = initialBaseUrl;
+  void setBaseUrl(String baseUrl) {
+    _dio = _dio.clone(
+      options: BaseOptions(
+        baseUrl: _baseUrl,
+        connectTimeout: Duration(seconds: 45),
+        receiveTimeout: Duration(seconds: 45),
+      ),
+    );
+  }
+
+  ApiClient() {
+    _baseUrl = ApiUrl.baseUrlGlobal;
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
@@ -23,33 +34,30 @@ class ApiClient {
       ),
     );
 
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Ensure latest baseUrl is used
-        if (_baseUrl != options.baseUrl) {
-          options.baseUrl = _baseUrl;
-        }
-        return handler.next(options); // continue
-      },
-      onError: (DioError e, handler) {
-        // Optional: handle session errors or logging
-        if (e.response?.statusCode == 401) {
-          _handleSessionExpired();
-        } else if (e.response?.statusCode == 403 || e.response?.statusCode == 440) {
-          _handleInvalidToken(e.response?.data.toString());
-        }
-        return handler.next(e);
-      },
-    ));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Ensure latest baseUrl is used
+          if (_baseUrl != options.baseUrl) {
+            options.baseUrl = _baseUrl;
+          }
+
+          return handler.next(options); // continue
+        },
+        onError: (DioException e, handler) {
+          if (e.type == DioExceptionType.connectionError) {
+            if (Get.routing.current != AppRouter.login)
+              Get.find<SessionController>().logout();
+          }
+          return handler.next(e);
+        },
+      ),
+    );
   }
 
   void updateBaseUrl(String baseUrl) {
     _baseUrl = baseUrl;
     _dio.options.baseUrl = baseUrl;
-  }
-
-  void printBaseUrl() {
-    print('Current Base URL: $_baseUrl');
   }
 
   Dio get client => _dio;

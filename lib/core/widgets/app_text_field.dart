@@ -163,10 +163,11 @@ class AppTextField extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Center(
-                    child: TextField(
+                    child: TextFormField(
                       maxLines: maxLines,
                       minLines: minLines,
                       enabled: enabled ?? true,
+                      validator: validator,
                       onTapOutside: (focusNode) {
                         FocusManager.instance.primaryFocus?.unfocus();
                       },
@@ -180,7 +181,7 @@ class AppTextField extends StatelessWidget {
                             : null; // Updates state if validation is enabled
                       },
                       // onChanged: onChanged,
-                      onSubmitted: onSubmitted,
+                      // onSubmitted: onSubmitted,
                       autofillHints: autofillHints,
                       // onFieldSubmitted: onFieldSubmitted,
                       textCapitalization:
@@ -231,7 +232,7 @@ class AppTextField extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                       // onSaved: onSaved,
-                      // validator: validator,
+                      // : validator,
                       keyboardType: keyboardType,
                       obscureText: showPasswordType ?? false,
                       controller: controller,

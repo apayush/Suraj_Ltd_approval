@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
@@ -156,20 +158,25 @@ class LoginViewMobile extends StatelessWidget {
                 12.heightGap,
 
                 Obx(
-                  ()=> Row(
+                  () => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AppRadioButton(onChanged: controller.ipTypeChanged, value: 1, groupValue: controller.ipType.value),
                       Expanded(
-                        flex: 2,
-                        child: AppText('Global',
-                            style: TextStyles.normal(context)),
+                        child: AppRadioButton(
+                          onChanged: controller.ipTypeChanged,
+                          value: 1,
+                          groupValue: controller.ipType.value,
+                          title: 'Global',
+                        ),
                       ),
-                      AppRadioButton(onChanged: controller.ipTypeChanged, value: 2, groupValue: controller.ipType.value),
+
                       Expanded(
-                        flex: 2,
-                        child: AppText('Local',
-                            style: TextStyles.normal(context)),
+                        child: AppRadioButton(
+                          onChanged: controller.ipTypeChanged,
+                          value: 2,
+                          groupValue: controller.ipType.value,
+                          title: 'Local',
+                        ),
                       ),
                     ],
                   ),
@@ -183,7 +190,9 @@ class LoginViewMobile extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed:
-                          controller.isLoading.value ? null : controller.getBaseUrl,
+                          controller.isLoading.value
+                              ? null
+                              : () => controller.getBaseUrl(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.blue,
                         foregroundColor: Colors.white,

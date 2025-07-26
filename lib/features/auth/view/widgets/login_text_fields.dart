@@ -31,28 +31,36 @@ class LoginTextFields extends GetView<LoginController> {
         ),
         const SizedBox(height: 16.0),
         Obx(
-              ()=> Row(
+          () => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AppRadioButton(onChanged: controller.ipTypeChanged, value: 1, groupValue: controller.ipType.value),
               Expanded(
-                flex: 2,
-                child: AppText('Global',
-                    style: TextStyles.normal(context)),
+                child: AppRadioButton(
+                  title: 'Global',
+                  onChanged: controller.ipTypeChanged,
+                  value: 1,
+                  groupValue: controller.ipType.value,
+                ),
               ),
-              AppRadioButton(onChanged: controller.ipTypeChanged, value: 2, groupValue: controller.ipType.value),
+
               Expanded(
-                flex: 2,
-                child: AppText('Local',
-                    style: TextStyles.normal(context)),
+                child: AppRadioButton(
+                  title: 'Local',
+                  onChanged: controller.ipTypeChanged,
+                  value: 2,
+                  groupValue: controller.ipType.value,
+                ),
               ),
             ],
           ),
         ),
 
-        AppButton(onPressed: (){
-          Get.offAllNamed(AppRouter.dashboardScreen);
-        }, text:'Go To Dashboard')
+        AppButton(
+          onPressed: () {
+            Get.offAllNamed(AppRouter.dashboardScreen);
+          },
+          text: 'Go To Dashboard',
+        ),
       ],
     );
   }

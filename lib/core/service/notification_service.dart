@@ -9,7 +9,12 @@ import 'package:suraj_approval/prepare_initial_route.dart';
 
 @pragma('vm:entry-point')
 Future<void> handlerBackgroundMessage(RemoteMessage message) async {
-  //handle background notification when application is on terminat state.
+  print(
+    'handlerBackgroundMessagemessage .notification?.title:${message.notification?.title}',
+  );
+  print(
+    'handlerBackgroundMessage message.notification?.body:${message.notification?.body}',
+  ); //handle background notification when application is on terminat state.
 }
 
 @pragma('vm:entry-point')
@@ -110,10 +115,11 @@ class NotificationService {
     RemoteMessage message,
   ) async {
     print(message.data);
-    print(message.notification?.title);
-    print(message.notification?.body);
-    if (Platform.isAndroid) {
+    print('message.notification?.title:${message.notification?.title}');
+    print('message.notification?.body):${(message.notification?.body)}');
+    if (Platform.isAndroid || Platform.isIOS) {
       final notificationDetails = NotificationDetails(
+        iOS: DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
           'Suraj Approval',
           _notificationChannelName,
@@ -146,6 +152,8 @@ class NotificationService {
   static Future<void> setUpNotificationWeb() async {}
 
   static void onMessageOpenedApp(RemoteMessage message) {
+    print('message.notification?.title:${message.notification?.title}');
+    print('message.notification?.body:${message.notification?.body}');
     final result = prepareInitialRoute(message);
     Get.offAllNamed(result.route, arguments: result.argument);
   }

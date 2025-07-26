@@ -26,12 +26,11 @@ class NotificationController extends GetxController {
       pageState.value = PageState.loading;
 
       final user = LocalDB.getUserModel()?.mUser;
-      // Replace with your actual API endpoint
       final response = await ApiService.getData(
         ApiUrl.notificationsList + '?mUser=$user',
       );
       final data = response.data;
-
+print(data.toString());
       if (response.statusCode == 200) {
         notifications.value =
             (data as List)

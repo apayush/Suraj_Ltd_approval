@@ -36,7 +36,7 @@ class SidebarController extends GetxController {
   }
 
   void navigateToSettingDialog(BuildContext context) {
-    showSettingsDialog(context);
+    // showSettingsDialog(context);
   }
 
   void toggleProfileExpanded() {
@@ -59,9 +59,8 @@ class SidebarController extends GetxController {
         primaryButtonText: AppStrings.yes,
         secondaryButtonText: AppStrings.no,
         onPrimaryButtonPressed: () async {
-          await LocalDB.clearUser(); // clear any saved storage
-          Get.delete<UserModel>();
           sessionController.logout();
+          await LocalDB.clearUser(); // clear any saved storage
         },
         onSecondaryButtonPressed: () {
           Get.back();
@@ -70,31 +69,9 @@ class SidebarController extends GetxController {
     );
   }
 
-  Future<void> updateFCM() async {
-    isLoading.value = true;
-    try {
-      final fcmId = await NotificationService.getFcmId();
-      final response = await ApiService.postData(
-        ApiUrl.updateFCMId,
-        queryParams: {
-          'fcmid': '',
-          'mUser': 'userModel?.mUser,',
-          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
-        },
-      );
-      print('FCM ID updated: ${response.data}');
-      print('FCM ID: $fcmId');
-      if (isClosed) return;
-    } catch (e) {
-      print('Error updating FCM ID: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   TextEditingController baseUrlController = TextEditingController();
 
-  void showSettingsDialog(BuildContext context) async {
+  /*void showSettingsDialog(BuildContext context) async {
     Get.dialog(
       GenericDialogBox(
         headerText: AppStrings.confirmation,
@@ -153,7 +130,7 @@ class SidebarController extends GetxController {
         },
       ),
     );
-  }
+  }*/
 
   // ! Approve Reject Finance Voucher
   Future<void> postFinanceVoucher({required String newBaseUrl}) async {
@@ -182,15 +159,13 @@ class SidebarController extends GetxController {
   Future<void> getBaseUrl() async {
     isLoading.value = true;
     try {
-      final response = await ApiService.getData(
-        ApiUrl.getBaseUrl,
-      );
+      final response = await ApiService.getData(ApiUrl.getBaseUrl);
       if (response.statusCode == 200) {
         final baseURL = (response.data);
         final jsonString = jsonEncode(baseURL);
         await LocalDB.setString(AppConstants.baseUrl, jsonString);
         final newBase = baseURL['data']['mUrl'];
-        ApiUrl.baseUrl = newBase;
+        ApiUrl.baseUrlGlobal = newBase;
       }
     } catch (e) {
       print(e);
@@ -198,12 +173,4 @@ class SidebarController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  bool isValidBaseUrl(String url) {
-    final urlPattern =
-        r'^(https?:\/\/)?(([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))(:\d+)?(\/.*)?$';
-    final regex = RegExp(urlPattern);
-    return regex.hasMatch(url);
-  }
-
 }

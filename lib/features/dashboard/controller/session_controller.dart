@@ -16,7 +16,6 @@ class SessionController extends GetxController {
   Timer? _inactivityTimer;
   final RxBool isLoading = false.obs;
   final int sessionTimeout = 30 * 60 * 1000;
-  final userModel = LocalDB.getUserModel();
 
   @override
   void onInit() {
@@ -46,19 +45,17 @@ class SessionController extends GetxController {
     );
   }
 
-  // Reset the timer whenever the user interacts with the app
   void resetInactivityTimer() {
     if (Get.currentRoute != AppRouter.login) {
       _startInactivityTimer();
     }
   }
 
-  // Logout function that logs the user out and redirects to the login page
   Future<void> logout() async {
-    await NotificationService.deleteFCMToken();
     updateFCM();
-    stopSessionTimer(); // Stop the timer upon logout
-    Get.back(); // Close the dialog
+    await NotificationService.deleteFCMToken();
+    stopSessionTimer();
+    Get.back();
     Get.offAllNamed(AppRouter.login);
   }
 
@@ -70,6 +67,7 @@ class SessionController extends GetxController {
   }
 
   Future<void> updateFCM() async {
+    final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
       await ApiService.postData(

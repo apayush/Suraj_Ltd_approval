@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         Get.put(AppDrawerController(), permanent: true);
         Get.put<SessionController>(SessionController());
         Get.lazyPut<SidebarController>(() => SidebarController());
-        Get.lazyPut<ApiClient>(() => ApiClient(ApiUrl.baseUrl));
+        Get.lazyPut<ApiClient>(() => ApiClient());
       }),
     );
   }
@@ -62,6 +62,6 @@ Future<void> initializeApp() async {
   }
   final storedUrl = LocalDB.getBaseUrl();
   if (storedUrl != null) {
-    ApiUrl.baseUrl = storedUrl;
+    ApiUrl.baseUrlGlobal = storedUrl;
   }
 }

@@ -9,6 +9,7 @@ class LocalDB {
 
   static Future<void> init() async {
     _pref = await SharedPreferences.getInstance();
+    _pref.clear();
   }
 
   static Future<void> setString(String key, String value) async {
@@ -38,17 +39,18 @@ class LocalDB {
   static UserModel? getUserModel() {
     final userData = _pref.getString(AppConstants.currentUser);
     if (userData == null || userData.isEmpty) return null;
-    return UserModel.fromJson(jsonDecode(userData)); // ✅ Restore from SharedPreferences
+    return UserModel.fromJson(
+      jsonDecode(userData),
+    ); // ✅ Restore from SharedPreferences
   }
 
   static String? getBaseUrl() {
     final baseUrlData = _pref.getString(AppConstants.baseUrl);
     if (baseUrlData == null || baseUrlData.isEmpty) return null;
-
+    return baseUrlData;
     final decoded = jsonDecode(baseUrlData);
     return decoded['data']['mUrl']; // ✅ Extract actual base URL string
   }
-
 
   static Future<void> clearUser() async {
     await _pref.remove(AppConstants.currentUser);

@@ -236,9 +236,7 @@ class SidebarXDrawer extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: sideBarXController.isProfileExpanded,
       builder: (context, isExpanded, child) {
-        return Column(
-          children: [buildSetting(mContext), buildLogout(mContext)],
-        );
+        return Column(children: [buildLogout(mContext)]);
       },
     );
   }
