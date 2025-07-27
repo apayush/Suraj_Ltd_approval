@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
+import 'package:suraj_approval/features/auth/view/widgets/login_type_selection.dart';
 
 class LoginViewWeb extends StatelessWidget {
   const LoginViewWeb({super.key});
@@ -207,7 +208,7 @@ class LoginViewWeb extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 16),
-
+                        LoginTypeSelection(),
                         // Forgot password
                         const SizedBox(height: 16),
 

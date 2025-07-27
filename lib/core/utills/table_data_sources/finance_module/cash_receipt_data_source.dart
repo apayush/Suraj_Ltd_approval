@@ -10,8 +10,8 @@ import '../../app_module_container.dart';
 import '../../app_utills.dart';
 
 class CashReceiptDataSource extends DataGridSource {
-  List<BankPaymentModel> cashReceiptList = [];
-  List<BankPaymentModel> paginatedItems = [];
+  List<FinancePaymentModel> cashReceiptList = [];
+  List<FinancePaymentModel> paginatedItems = [];
   int rowsPerPage;
   int currentPageIndex = 0;
 
@@ -43,7 +43,7 @@ class CashReceiptDataSource extends DataGridSource {
         .toList(growable: false);
   }
 
-  List<DataGridCell<dynamic>> _buildDataGridCells(BankPaymentModel e) {
+  List<DataGridCell<dynamic>> _buildDataGridCells(FinancePaymentModel e) {
     List<DataGridCell<dynamic>> cells = [
       _createCell('', (e.sno ?? '').toString()),
       _createCell('Branch', (e.mBranch ?? '').toString()),
@@ -78,7 +78,9 @@ class CashReceiptDataSource extends DataGridSource {
       cells:
           row.getCells().map<Widget>((dataGridCell) {
             if (dataGridCell.columnName == 'Action') {
-              return buildActionIcons(dataGridCell.value as BankPaymentModel);
+              return buildActionIcons(
+                dataGridCell.value as FinancePaymentModel,
+              );
             } else {
               return Container(
                 padding: const EdgeInsets.all(8.0),
@@ -122,7 +124,7 @@ class CashReceiptDataSource extends DataGridSource {
     return true;
   }
 
-  Widget buildActionIcons(BankPaymentModel model) {
+  Widget buildActionIcons(FinancePaymentModel model) {
     final controller = Get.find<FinanceController>();
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -152,7 +154,7 @@ class CashReceiptDataSource extends DataGridSource {
     );
   }
 
-  void updateDataSource(List<BankPaymentModel> updateList) {
+  void updateDataSource(List<FinancePaymentModel> updateList) {
     cashReceiptList = updateList;
     currentPageIndex = 0;
     paginatedItems = cashReceiptList.take(rowsPerPage).toList();

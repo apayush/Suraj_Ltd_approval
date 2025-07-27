@@ -27,13 +27,14 @@ class AppStrings {
   static const String settings = 'Settings';
   static const String loginAgain = 'Log In Again';
   static const String youHaveLoggedOut = "You've been logged out";
-  static const String sessionHasExpired2 = "We notice that you aren't active in the session, so we logged you out for your safety. Please click on the button to log in again.";
+  static const String notAvailable = "N/A";
+  static const String sessionHasExpired2 =
+      "We notice that you aren't active in the session, so we logged you out for your safety. Please click on the button to log in again.";
 
-//   ! ========================= Dashboard ===============================
+  //   ! ========================= Dashboard ===============================
 
   static const String finance = 'Finance';
   static const String production = 'Production';
   static const String purchase = 'Purchase';
   static const String sales = 'Sales';
-
 }

@@ -9,7 +9,6 @@ class LocalDB {
 
   static Future<void> init() async {
     _pref = await SharedPreferences.getInstance();
-    _pref.clear();
   }
 
   static Future<void> setString(String key, String value) async {

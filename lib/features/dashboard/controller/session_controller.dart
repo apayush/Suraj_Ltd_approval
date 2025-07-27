@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
+
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/service/api_service.dart';
@@ -55,7 +57,6 @@ class SessionController extends GetxController {
     updateFCM();
     await NotificationService.deleteFCMToken();
     stopSessionTimer();
-    Get.back();
     Get.offAllNamed(AppRouter.login);
   }
 
@@ -78,7 +79,6 @@ class SessionController extends GetxController {
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
       );
-      if (isClosed) return;
     } catch (e) {
       print('Error updating FCM ID: $e');
     } finally {

@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
+import 'package:sidebarx/sidebarx.dart';
+import 'package:suraj_approval/core/service/local_db.dart';
+
 import '../../features/dashboard/controller/sidebarx_controller.dart';
-import '../models/user_model.dart';
-import '../utills/app_module_container.dart';
 import '../constants/app_strings.dart';
 import '../constants/radius_utils.dart';
 import '../theme/app_colors.dart';
+import '../utills/app_module_container.dart';
 
 class AppImageAssets extends StatelessWidget {
   final String assets;
@@ -140,95 +141,86 @@ class SidebarXDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SidebarX(
-          controller: controller,
-          animationDuration: Duration.zero,
-          // animationDuration: const Duration(milliseconds: 150),
-          showToggleButton: false,
-          theme: SidebarXTheme(
-            margin: EdgeInsets.zero,
-            padding: EdgeInsets.zero,
-            decoration: const BoxDecoration(
-              color: AppColors.darkDrawerBackgroundColor,
-            ),
-            iconTheme: const IconThemeData(color: Colors.grey, size: 20),
-            hoverColor: Colors.white,
-            hoverTextStyle: TextStyles.normal(context, textColor: Colors.white),
-            hoverIconTheme: const IconThemeData(color: Colors.white, size: 20),
-            selectedItemDecoration: BoxDecoration(
-              color: Colors.grey.shade900,
-              border: Border.all(color: Colors.grey, width: 0.5),
-              borderRadius: const BorderRadius.all(RadiusUtils.mediumRadius),
-            ),
-            selectedItemTextPadding: const EdgeInsets.only(left: 15),
-            itemTextPadding: const EdgeInsets.only(left: 15),
-            textStyle: TextStyles.normal(context, textColor: Colors.grey),
-            selectedTextStyle: TextStyles.normal(
-              context,
-              textColor: Colors.white,
-            ),
-            selectedIconTheme: const IconThemeData(
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          extendedTheme: const SidebarXTheme(width: 220),
-          headerBuilder: (context, extended) {
-            final userModel = Get.find<UserModel>();
-            final username = userModel.mUser ?? 'User';
-            return SizedBox(
-              height: 60.0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment:
-                      extended
-                          ? MainAxisAlignment.spaceBetween
-                          : MainAxisAlignment.center,
-                  children: [
-                    if (extended) ...[
-                      Expanded(
-                        child: AppText(
-                          '$username',
-                          style: TextStyles.medium(
-                            context,
-                            textColor: Colors.white,
-                          ),
+    return SidebarX(
+      controller: controller,
+      animationDuration: Duration.zero,
+      // animationDuration: const Duration(milliseconds: 150),
+      showToggleButton: false,
+      theme: SidebarXTheme(
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        decoration: const BoxDecoration(
+          color: AppColors.darkDrawerBackgroundColor,
+        ),
+        iconTheme: const IconThemeData(color: Colors.grey, size: 20),
+        hoverColor: Colors.white,
+        hoverTextStyle: TextStyles.normal(context, textColor: Colors.white),
+        hoverIconTheme: const IconThemeData(color: Colors.white, size: 20),
+        selectedItemDecoration: BoxDecoration(
+          color: Colors.grey.shade900,
+          border: Border.all(color: Colors.grey, width: 0.5),
+          borderRadius: const BorderRadius.all(RadiusUtils.mediumRadius),
+        ),
+        selectedItemTextPadding: const EdgeInsets.only(left: 15),
+        itemTextPadding: const EdgeInsets.only(left: 15),
+        textStyle: TextStyles.normal(context, textColor: Colors.grey),
+        selectedTextStyle: TextStyles.normal(context, textColor: Colors.white),
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 20),
+      ),
+      extendedTheme: const SidebarXTheme(width: 220),
+      headerBuilder: (context, extended) {
+        final userModel = LocalDB.getUserModel();
+        final username = userModel?.mUser ?? 'User';
+        return SafeArea(
+          child: SizedBox(
+            height: 60.0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisAlignment:
+                    extended
+                        ? MainAxisAlignment.spaceBetween
+                        : MainAxisAlignment.center,
+                children: [
+                  if (extended) ...[
+                    Expanded(
+                      child: AppText(
+                        '$username',
+                        style: TextStyles.medium(
+                          context,
+                          textColor: Colors.white,
                         ),
-                      ),
-                    ],
-                    IconButton(
-                      onPressed: () {
-                        controller.toggleExtended();
-                      },
-                      icon: const Icon(
-                        CupertinoIcons.bars,
-                        color: Colors.white,
                       ),
                     ),
                   ],
-                ),
+                  IconButton(
+                    onPressed: () {
+                      controller.toggleExtended();
+                    },
+                    icon: const Icon(CupertinoIcons.bars, color: Colors.white),
+                  ),
+                ],
               ),
-            );
-          },
-          items: items,
-          footerBuilder: (context, extended) {
-            final bottomPanel = buildDrawerBottomPanel(
-              context,
-              extended ? false : true,
-            );
-            return Column(
-              children: [
-                buildDivider(),
-                const SizedBox(height: 10),
-                Column(children: [bottomPanel]),
-              ],
-            );
-          },
-        ),
-      ],
+            ),
+          ),
+        );
+      },
+      items: items,
+      footerBuilder: (context, extended) {
+        final bottomPanel = buildDrawerBottomPanel(
+          context,
+          extended ? false : true,
+        );
+        return SafeArea(
+          child: Column(
+            children: [
+              buildDivider(),
+              const SizedBox(height: 10),
+              Column(children: [bottomPanel]),
+            ],
+          ),
+        );
+      },
     );
   }
 

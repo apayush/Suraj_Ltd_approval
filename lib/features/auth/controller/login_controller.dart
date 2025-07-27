@@ -1,7 +1,8 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/core/constants/app_strings.dart';
@@ -15,6 +16,7 @@ import 'package:suraj_approval/core/utills/app_utills.dart';
 import 'package:suraj_approval/core/widgets/app_dialog.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+
 import '../../../core/models/user_model.dart';
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
@@ -58,9 +60,8 @@ class LoginController extends GetxController {
         AppUtils.showSnackBar('Login successful!');
         final userData = (data['data'] as Map);
         final jsonString = jsonEncode(userData);
-        await LocalDB.setString(AppConstants.currentUser, jsonString);
+        LocalDB.setString(AppConstants.currentUser, jsonString);
         final userModel = UserModel.fromJson(data['data']);
-        Get.put(userModel, permanent: true);
         Get.find<SessionController>().startSessionTimer();
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
