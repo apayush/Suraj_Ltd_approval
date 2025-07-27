@@ -14,6 +14,8 @@ class NotificationController extends GetxController {
   Rx<PageState> pageState = PageState.loading.obs;
   var notifications = <NotificationModel>[].obs;
   var errorMessage = ''.obs;
+  RxInt unreadCount = 0.obs;
+
 
   @override
   void onInit() {
@@ -30,12 +32,12 @@ class NotificationController extends GetxController {
         ApiUrl.notificationsList + '?mUser=$user',
       );
       final data = response.data;
-print(data.toString());
       if (response.statusCode == 200) {
         notifications.value =
             (data as List)
                 .map((json) => NotificationModel.fromJson(json))
                 .toList();
+        unreadCount.value = notifications.length;
         pageState.value = PageState.idle;
       } else {
         pageState.value = PageState.error;
@@ -54,7 +56,7 @@ print(data.toString());
       await ApiService.postData(
         ApiUrl.updateFCMId,
         queryParams: {
-          'Nid' : notification?.nid
+          'Nid' : notification.nid
         },
       );
       if (isClosed) return;

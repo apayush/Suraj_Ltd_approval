@@ -177,7 +177,7 @@ class SidebarXDrawer extends StatelessWidget {
           extendedTheme: const SidebarXTheme(width: 220),
           headerBuilder: (context, extended) {
             final userModel = Get.find<UserModel>();
-            final username = userModel.mUser ?? 'User';
+            final username = userModel.mUser;
             return SizedBox(
               height: 60.0,
               child: Padding(
@@ -266,15 +266,6 @@ class SidebarXDrawer extends StatelessWidget {
     );
   }
 
-  Widget buildSetting(BuildContext context) {
-    return IconButton(
-      tooltip: AppStrings.settings,
-      icon: const Icon(CupertinoIcons.gear_solid, color: Colors.grey),
-      onPressed: () {
-        sideBarXController.navigateToSettingDialog(context);
-      },
-    );
-  }
 }
 
 class AppButton extends StatelessWidget {

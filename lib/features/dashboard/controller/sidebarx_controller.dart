@@ -1,20 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:suraj_approval/core/extentions/num_extention.dart';
-import 'package:suraj_approval/core/router/app_router.dart';
-import 'package:suraj_approval/core/utills/device_type.dart';
-import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
-
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/models/user_model.dart';
 import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
-import '../../../core/service/notification_service.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
 import '../../../core/widgets/app_dialog.dart';
@@ -33,10 +25,6 @@ class SidebarController extends GetxController {
   void navigateToLoginScreen(BuildContext context) {
     isProfileExpanded.value = false;
     showAlertLogoutDialog(context);
-  }
-
-  void navigateToSettingDialog(BuildContext context) {
-    // showSettingsDialog(context);
   }
 
   void toggleProfileExpanded() {

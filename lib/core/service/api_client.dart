@@ -1,12 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import '../../features/dashboard/controller/session_controller.dart';
 import '../router/app_router.dart';
-import '../utills/app_module_container.dart';
-import '../widgets/app_dialog.dart';
-import '../constants/app_strings.dart';
 
 class ApiClient {
   late Dio _dio;
@@ -61,55 +57,4 @@ class ApiClient {
   }
 
   Dio get client => _dio;
-
-  void _handleSessionExpired() {
-    if (Get.isDialogOpen != true) {
-      Get.dialog(
-        barrierDismissible: false,
-        GenericDialogBox(
-          headerText: AppStrings.youHaveLoggedOut,
-          content: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(
-              'Someone logged in with your credentials on another device. You will be logged out.',
-              style: TextStyles.medium(Get.context!),
-            ),
-          ),
-          primaryButtonText: AppStrings.loginAgain,
-          onPrimaryButtonPressed: () {
-            _logoutUser();
-          },
-        ),
-      );
-    }
-  }
-
-  void _handleInvalidToken(String? message) {
-    if (Get.isDialogOpen != true) {
-      Get.dialog(
-        barrierDismissible: false,
-        GenericDialogBox(
-          headerText: 'Invalid Token',
-          content: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(
-              message ??
-                  'Your session is no longer valid. Please log in again.',
-              style: TextStyles.medium(Get.context!),
-            ),
-          ),
-          primaryButtonText: AppStrings.close,
-          onPrimaryButtonPressed: () {
-            _logoutUser();
-          },
-        ),
-      );
-    }
-  }
-
-  void _logoutUser() async {
-    sessionController.stopSessionTimer();
-    Get.back(); // Close dialog
-    Get.offAllNamed(AppRouter.login);
-  }
 }

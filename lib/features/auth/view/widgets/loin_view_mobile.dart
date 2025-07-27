@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
-
-import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_radio.dart';
-import '../../../../core/widgets/common_widgets.dart';
 
 class LoginViewMobile extends StatelessWidget {
   const LoginViewMobile({super.key});

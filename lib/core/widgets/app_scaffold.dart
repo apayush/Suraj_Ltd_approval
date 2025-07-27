@@ -40,9 +40,9 @@ class AppScaffold extends StatelessWidget {
                         : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
                           return _buildListTile(
                             context: context,
-                            icon: _getMenuIcon(mainMenu.key ?? ''),
-                            title: mainMenu.key ?? '',
-                            route: _getRoute(mainMenu.key ?? ''),
+                            icon: _getMenuIcon(mainMenu.key),
+                            title: mainMenu.key,
+                            route: _getRoute(mainMenu.key),
                             index: i,
                           );
                         }).toList(),
@@ -59,9 +59,9 @@ class AppScaffold extends StatelessWidget {
                       : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
                         return _buildListTile(
                           context: context,
-                          icon: _getMenuIcon(mainMenu.key ?? ''),
-                          title: mainMenu.key ?? '',
-                          route: _getRoute(mainMenu.key ?? ''),
+                          icon: _getMenuIcon(mainMenu.key),
+                          title: mainMenu.key,
+                          route: _getRoute(mainMenu.key),
                           index: i,
                         );
                       }).toList(),

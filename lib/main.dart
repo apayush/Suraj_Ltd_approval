@@ -56,10 +56,7 @@ Future<void> initializeApp() async {
   await NotificationService.initialize();
 
   await LocalDB.init();
-  final user = LocalDB.getUserModel();
-  if (user != null) {
-    Get.put<UserModel>(user, permanent: true);
-  }
+
   final storedUrl = LocalDB.getBaseUrl();
   if (storedUrl != null) {
     ApiUrl.baseUrlGlobal = storedUrl;

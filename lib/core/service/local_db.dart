@@ -9,7 +9,6 @@ class LocalDB {
 
   static Future<void> init() async {
     _pref = await SharedPreferences.getInstance();
-    _pref.clear();
   }
 
   static Future<void> setString(String key, String value) async {
@@ -48,33 +47,9 @@ class LocalDB {
     final baseUrlData = _pref.getString(AppConstants.baseUrl);
     if (baseUrlData == null || baseUrlData.isEmpty) return null;
     return baseUrlData;
-    final decoded = jsonDecode(baseUrlData);
-    return decoded['data']['mUrl']; // ✅ Extract actual base URL string
   }
 
   static Future<void> clearUser() async {
     await _pref.remove(AppConstants.currentUser);
   }
-
-  // static UserModel? getUserModel() {
-  //   try {
-  //     final userData = _pref.getString(AppConstants.currentUser);
-  //     print('🟢 Raw userData from SharedPreferences: $userData');
-  //
-  //     if (userData == null || userData.isEmpty) {
-  //       print('🔴 No user data found in SharedPreferences');
-  //       return null;
-  //     }
-  //
-  //     final decodedData = jsonDecode(userData);
-  //     print('🟢 Decoded userData: $decodedData');
-  //
-  //     final userModel = UserModel.fromJson(decodedData);
-  //     print('🟢 UserModel created successfully: ${userModel.toJson()}');
-  //     return userModel;
-  //   } catch (e) {
-  //     print('🔴 Error in getUserModel(): $e');
-  //     return null;
-  //   }
-  // }
 }

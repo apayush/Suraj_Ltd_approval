@@ -7,7 +7,6 @@ class FireStoreService {
   /// 1. Initialize Firebase
   static Future<void> initialize() async {
     await Firebase.initializeApp();
-    print("✅ Firebase initialized");
   }
 
   /// 2. Get the base URL from Firestore

@@ -108,11 +108,12 @@ class LoginController extends GetxController {
       }
     } on DioException catch (e) {
       errorMessage.value = 'Connection not found, Config your environment';
-
+print('Error:'+(e.message??''));
       if (e.type == DioExceptionType.connectionError) {
         showSettingsDialog(context);
       }
     } catch (e) {
+      print('Error:'+e.toString());
       AppUtils.showSnackBar(e.toString());
     } finally {
       isLoading.value = false;

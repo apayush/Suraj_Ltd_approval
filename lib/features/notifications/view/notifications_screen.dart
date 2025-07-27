@@ -11,7 +11,6 @@ class NotificationsScreen extends GetView<NotificationController> {
 
   @override
   Widget build(BuildContext context) {
-    final notificationList = controller.notifications;
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
 
 class NotificationModel {
