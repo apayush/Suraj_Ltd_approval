@@ -5,7 +5,6 @@ import 'package:suraj_approval/features/notifications/controller/notification_co
 
 
 class NotificationBell extends StatefulWidget {
-
   const NotificationBell({
     super.key
   });
@@ -18,6 +17,7 @@ class _NotificationBellState extends State<NotificationBell> {
   final LayerLink _layerLink = LayerLink();
 
   void _toggleOverlay(NotificationController controller) {
+    controller.fetchNotifications();
     Get.toNamed(AppRouter.notification);
     controller.unreadCount.value = 0;
     return;
@@ -33,7 +33,7 @@ class _NotificationBellState extends State<NotificationBell> {
           onTap: ()=> _toggleOverlay(controller),
           child: Badge.count(
             count: controller.unreadCount.value,
-            isLabelVisible: controller. unreadCount.value > 0,
+            isLabelVisible: controller.unreadCount.value > 0,
             child: const Icon(Icons.notifications, color: Colors.black),
           ),
         ),

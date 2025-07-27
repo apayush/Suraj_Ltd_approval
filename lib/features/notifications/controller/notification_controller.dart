@@ -29,7 +29,7 @@ class NotificationController extends GetxController {
 
       final user = LocalDB.getUserModel()?.mUser;
       final response = await ApiService.getData(
-        ApiUrl.notificationsList + '?mUser=$user',
+        ApiUrl.getNotificationLogs + '?mUser=$user',
       );
       final data = response.data;
       if (response.statusCode == 200) {

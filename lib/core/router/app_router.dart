@@ -18,6 +18,7 @@ import '../../features/production/view/production_screen.dart';
 import '../../features/purchase/controller/purchase_controller.dart';
 import '../../features/purchase/view/purchase_screen.dart';
 import '../../features/splash/view/splash_screen.dart';
+import '../widgets/under_development_page.dart';
 
 class AppRouter {
   static const String splash = '/splash';
@@ -76,21 +77,24 @@ class AppRouter {
     ),
     GetPage(
       name: productionScreen,
-      page: () => ProductionScreen(),
+      page: () => UnderDevelopmentPage(),
+      // page: () => ProductionScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<ProductionController>(() => ProductionController());
       }),
     ),
     GetPage(
       name: purchaseScreen,
-      page: () => PurchaseScreen(),
+      page: () => UnderDevelopmentPage(),
+      // page: () => PurchaseScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<PurchaseController>(() => PurchaseController());
       }),
     ),
     GetPage(
       name: salesScreen,
-      page: () => SalesScreen(),
+      page: () => UnderDevelopmentPage(),
+      // page: () => SalesScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<SalesController>(() => SalesController());
       }),

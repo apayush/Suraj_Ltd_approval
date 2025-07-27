@@ -28,12 +28,14 @@ class FinanceSearchAndRefreshWidget extends GetView<FinanceController> {
   }
 
   Widget buildSearchTextField() {
-    return AppTextField(
-      hint: 'Search',
-      controller: controller.searchController,
-      onChanged: (value) {
-        controller.filterData(value);
-      },
+    return Flexible(
+      child: AppTextField(
+        hint: 'Search',
+        controller: controller.searchController,
+        onChanged: (value) {
+          controller.filterData(value);
+        },
+      ),
     );
   }
 
