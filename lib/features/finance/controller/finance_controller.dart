@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/bank_payment.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/cash_receipt.dart';
+import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/finance_view.dart';
 
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_enum.dart';
@@ -19,8 +18,6 @@ import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../model/bank_payment_model.dart';
-import '../view/widgets/tabs/widgets/bank_receipt.dart';
-import '../view/widgets/tabs/widgets/cash_payment.dart';
 
 class FinanceController extends GetxController
     with GetTickerProviderStateMixin {
@@ -37,20 +34,24 @@ class FinanceController extends GetxController
   final GlobalKey<FormState> rejectFormKey = GlobalKey<FormState>();
 
   // ! Two lists to hold the Api data and filtered data for Bank Payment
-  RxList<BankPaymentModel> bankPaymentList = <BankPaymentModel>[].obs;
-  RxList<BankPaymentModel> filteredBankPaymentList = <BankPaymentModel>[].obs;
+  RxList<FinancePaymentModel> bankPaymentList = <FinancePaymentModel>[].obs;
+  RxList<FinancePaymentModel> filteredBankPaymentList =
+      <FinancePaymentModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Bank Receipt
-  RxList<BankPaymentModel> bankReceiptList = <BankPaymentModel>[].obs;
-  RxList<BankPaymentModel> filteredBankReceiptList = <BankPaymentModel>[].obs;
+  RxList<FinancePaymentModel> bankReceiptList = <FinancePaymentModel>[].obs;
+  RxList<FinancePaymentModel> filteredBankReceiptList =
+      <FinancePaymentModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Payment
-  RxList<BankPaymentModel> cashPaymentList = <BankPaymentModel>[].obs;
-  RxList<BankPaymentModel> filteredCashPaymentList = <BankPaymentModel>[].obs;
+  RxList<FinancePaymentModel> cashPaymentList = <FinancePaymentModel>[].obs;
+  RxList<FinancePaymentModel> filteredCashPaymentList =
+      <FinancePaymentModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Receipt
-  RxList<BankPaymentModel> cashReceiptList = <BankPaymentModel>[].obs;
-  RxList<BankPaymentModel> filteredCashReceiptList = <BankPaymentModel>[].obs;
+  RxList<FinancePaymentModel> cashReceiptList = <FinancePaymentModel>[].obs;
+  RxList<FinancePaymentModel> filteredCashReceiptList =
+      <FinancePaymentModel>[].obs;
 
   //! DataGridSource for the SfDataGrid
   late BankPaymentDataSource bankPaymentDataSource;
@@ -77,10 +78,10 @@ class FinanceController extends GetxController
           ApiUrl.getAuthorisationListFilter,
           queryParams: param,
         );
+        print(response.data);
         if (response.statusCode == 200) {
-          List<BankPaymentModel> payment = BankPaymentModel.fromDecodedJsonList(
-            response.data ?? [],
-          );
+          List<FinancePaymentModel> payment =
+              FinancePaymentModel.fromDecodedJsonList(response.data ?? []);
           switch (mainType) {
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
@@ -115,7 +116,7 @@ class FinanceController extends GetxController
   }
 
   // ! GET PDF Report
-  Future<void> getBankpaymentReport(BankPaymentModel bankPayment) async {
+  Future<void> getBankpaymentReport(FinancePaymentModel bankPayment) async {
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
@@ -134,7 +135,7 @@ class FinanceController extends GetxController
 
   // ! Approve Reject Finance Voucher
   Future<void> postFinanceVoucher(
-    BankPaymentModel bankPayment, {
+    FinancePaymentModel bankPayment, {
     required String paymentStatus,
   }) async {
     isLoading.value = true;
@@ -180,8 +181,8 @@ class FinanceController extends GetxController
   void filterData(String searchText) {
     final query = searchText.toLowerCase().trim();
 
-    List<BankPaymentModel> sourceList;
-    RxList<BankPaymentModel> filteredList;
+    List<FinancePaymentModel> sourceList;
+    RxList<FinancePaymentModel> filteredList;
     dynamic dataSource;
 
     switch (currentSubMenu.value) {
@@ -262,7 +263,7 @@ class FinanceController extends GetxController
 
   Future<void> handleMenuSelection(
     String value,
-    BankPaymentModel bankPayment,
+    FinancePaymentModel bankPayment,
   ) async {
     if (value == 'View') {
       getBankpaymentReport(bankPayment);
@@ -358,22 +359,22 @@ class FinanceController extends GetxController
 
     if (subMenus.contains(SubMenuType.bankPayment)) {
       tabs.add(const Tab(text: 'Bank Payment'));
-      views.add(BankPayment());
+      views.add(FinanceView(subMenuType: SubMenuType.bankPayment));
     }
 
     if (subMenus.contains(SubMenuType.bankReceipt)) {
       tabs.add(const Tab(text: 'Bank Receipt'));
-      views.add(BankReceipt());
+      views.add(FinanceView(subMenuType: SubMenuType.bankReceipt));
     }
 
     if (subMenus.contains(SubMenuType.cashPayment)) {
       tabs.add(const Tab(text: 'Cash Payment'));
-      views.add(CashPayment());
+      views.add(FinanceView(subMenuType: SubMenuType.cashPayment));
     }
 
     if (subMenus.contains(SubMenuType.cashReceipt)) {
       tabs.add(const Tab(text: 'Cash Receipt'));
-      views.add(CashReceipt());
+      views.add(FinanceView(subMenuType: SubMenuType.cashReceipt));
     }
 
     myTabs = tabs;

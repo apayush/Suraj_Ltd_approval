@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/prepare_initial_route.dart';
 
 @pragma('vm:entry-point')
@@ -141,7 +142,11 @@ class NotificationService {
   static Future<String> getFcmId() async {
     String fcmId = '';
     try {
-      fcmId = await FirebaseMessaging.instance.getToken() ?? '';
+      fcmId =
+          await FirebaseMessaging.instance.getToken(
+            vapidKey: kIsWeb ? AppConstants.fcmWebKeyPair : null,
+          ) ??
+          '';
     } catch (e) {
       fcmId = '';
     }
@@ -159,6 +164,7 @@ class NotificationService {
   }
 
   static Future<void> deleteFCMToken() async {
+    if (kIsWeb) return;
     await FirebaseMessaging.instance.deleteToken();
   }
 }

@@ -1,5 +1,8 @@
-class BankPaymentModel {
+import 'package:get/get.dart';
+
+class FinancePaymentModel {
   final String? mainType;
+  final String? subType;
   final String? linkField;
   final String? type;
   final String? srl;
@@ -13,10 +16,12 @@ class BankPaymentModel {
   final String? authIds;
   final String? fcmid;
   final String? mBranch;
+  final RxBool? isPdfLoading;
 
-  BankPaymentModel({
+  FinancePaymentModel({
     this.mainType,
     this.linkField,
+    this.subType,
     this.type,
     this.srl,
     this.docDate,
@@ -28,11 +33,12 @@ class BankPaymentModel {
     this.narr,
     this.authIds,
     this.fcmid,
-    this.mBranch
+    this.mBranch,
+    this.isPdfLoading,
   });
 
-  factory BankPaymentModel.fromJson(Map<String, dynamic> json) {
-    return BankPaymentModel(
+  factory FinancePaymentModel.fromJson(Map<String, dynamic> json) {
+    return FinancePaymentModel(
       mainType: json['MainType'] as String?,
       linkField: json['LinkField'] as String?,
       type: json['Type'] as String?,
@@ -47,6 +53,8 @@ class BankPaymentModel {
       authIds: json['AuthIds'] as String?,
       fcmid: json['fcmid'] as String?,
       mBranch: json['mBranch'] as String?,
+      subType: json['SubType'] as String?,
+      isPdfLoading: false.obs,
     );
   }
 
@@ -66,9 +74,11 @@ class BankPaymentModel {
       'AuthIds': authIds,
       'fcmid': fcmid,
       'mBranch': mBranch,
+      'SubType': subType,
     };
   }
-  static List<BankPaymentModel> fromDecodedJsonList(List<dynamic> jsonList) {
-    return jsonList.map((item) => BankPaymentModel.fromJson(item)).toList();
+
+  static List<FinancePaymentModel> fromDecodedJsonList(List<dynamic> jsonList) {
+    return jsonList.map((item) => FinancePaymentModel.fromJson(item)).toList();
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
+import 'package:suraj_approval/features/auth/view/widgets/login_type_selection.dart';
 
 class LoginViewTablet extends StatelessWidget {
   const LoginViewTablet({super.key});
@@ -200,7 +201,9 @@ class LoginViewTablet extends StatelessWidget {
                                   : const SizedBox(),
                         ),
 
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
+                        LoginTypeSelection(),
+                        const SizedBox(height: 16),
 
                         // Submit button
                         Obx(

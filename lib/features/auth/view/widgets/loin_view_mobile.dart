@@ -4,7 +4,7 @@ import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/auth/controller/login_controller.dart';
-import '../../../../core/widgets/app_radio.dart';
+import 'package:suraj_approval/features/auth/view/widgets/login_type_selection.dart';
 
 class LoginViewMobile extends StatelessWidget {
   const LoginViewMobile({super.key});
@@ -152,30 +152,7 @@ class LoginViewMobile extends StatelessWidget {
                 ),
                 12.heightGap,
 
-                Obx(
-                  () => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: AppRadioButton(
-                          onChanged: controller.ipTypeChanged,
-                          value: 1,
-                          groupValue: controller.ipType.value,
-                          title: 'Global',
-                        ),
-                      ),
-
-                      Expanded(
-                        child: AppRadioButton(
-                          onChanged: controller.ipTypeChanged,
-                          value: 2,
-                          groupValue: controller.ipType.value,
-                          title: 'Local',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                LoginTypeSelection(),
 
                 10.heightGap,
 
