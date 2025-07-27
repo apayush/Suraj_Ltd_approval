@@ -34,6 +34,7 @@ class LoginController extends GetxController {
   final sessionController = Get.find<SessionController>();
   RxInt ipType = 1.obs;
   RxInt selectIPType = 1.obs;
+  final FocusNode keyboardFocusNode = FocusNode();
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
@@ -220,5 +221,11 @@ class LoginController extends GetxController {
         r'^(https?:\/\/)?(([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))(:\d+)?(\/.*)?$';
     final regex = RegExp(urlPattern);
     return regex.hasMatch(url);
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    keyboardFocusNode.requestFocus();
   }
 }

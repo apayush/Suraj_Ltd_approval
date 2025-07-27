@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
@@ -103,94 +104,59 @@ class LoginViewWeb extends StatelessWidget {
               child: Center(
                 child: Container(
                   constraints: const BoxConstraints(maxWidth: 400),
-                  child: Form(
-                    key: controller.formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Welcome text
-                        const Text(
-                          'Welcome Back',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        const Text(
-                          'Sign in to your ERP account',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-
-                        const SizedBox(height: 48),
-
-                        // User ID field
-                        TextFormField(
-                          controller: controller.userIdController,
-                          validator: controller.validateUserId,
-                          style: const TextStyle(fontSize: 16),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-
-                          decoration: InputDecoration(
-                            labelText: 'User ID',
-                            hintText: 'Enter your user ID',
-                            prefixIcon: const Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.grey[300]!),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: AppColors.blue,
-                                width: 2,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
+                  child: KeyboardListener(
+                    focusNode: controller.keyboardFocusNode,
+                    onKeyEvent: (KeyEvent event) {
+                      if (event is KeyDownEvent &&
+                          (event.logicalKey == LogicalKeyboardKey.enter ||
+                              event.logicalKey == LogicalKeyboardKey.numpadEnter)) {
+                        if (!controller.isLoading.value) {
+                          controller.getBaseUrl(context); // call your sign-in method
+                        }
+                      }
+                    },
+                    child: Form(
+                      key: controller.formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Welcome text
+                          const Text(
+                            'Welcome Back',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // Password field
-                        Obx(
-                          () => TextFormField(
-                            controller: controller.passwordController,
-                            validator: controller.validatePassword,
-                            obscureText: !controller.isPasswordVisible.value,
+                    
+                          const SizedBox(height: 8),
+                    
+                          const Text(
+                            'Sign in to your ERP account',
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
+                    
+                          const SizedBox(height: 48),
+                    
+                          // User ID field
+                          TextFormField(
+                            controller: controller.userIdController,
+                            validator: controller.validateUserId,
                             style: const TextStyle(fontSize: 16),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                    
                             decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: 'Enter your password',
-                              prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  controller.isPasswordVisible.value
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                ),
-                                onPressed: controller.togglePasswordVisibility,
-                              ),
+                              labelText: 'User ID',
+                              hintText: 'Enter your user ID',
+                              prefixIcon: const Icon(Icons.person_outline),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.grey[300]!,
-                                ),
+                                borderSide: BorderSide(color: Colors.grey[300]!),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -205,93 +171,140 @@ class LoginViewWeb extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 16),
-                        LoginTypeSelection(),
-                        // Forgot password
-                        const SizedBox(height: 16),
-
-                        // Error message
-                        Obx(
-                          () =>
-                              controller.errorMessage.value.isNotEmpty
-                                  ? Container(
-                                    padding: const EdgeInsets.all(16),
-                                    margin: const EdgeInsets.only(bottom: 16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red[50],
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Colors.red[200]!,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.error_outline,
-                                          color: Colors.red[700],
-                                          size: 20,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            controller.errorMessage.value,
-                                            style: TextStyle(
-                                              color: Colors.red[700],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                  : const SizedBox(),
-                        ),
-
-                        // Submit button
-                        Obx(
-                          () => SizedBox(
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed:
-                                  controller.isLoading.value
-                                      ? null
-                                      : () => controller.getBaseUrl(context),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.blue,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
+                    
+                          const SizedBox(height: 24),
+                    
+                          // Password field
+                          Obx(
+                            () => TextFormField(
+                              controller: controller.passwordController,
+                              validator: controller.validatePassword,
+                              obscureText: !controller.isPasswordVisible.value,
+                              style: const TextStyle(fontSize: 16),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                hintText: 'Enter your password',
+                                prefixIcon: const Icon(Icons.lock_outline),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.isPasswordVisible.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: controller.togglePasswordVisibility,
+                                ),
+                                border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                elevation: 0,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.blue,
+                                    width: 2,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
                               ),
-                              child:
-                                  controller.isLoading.value
-                                      ? const SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                Colors.white,
-                                              ),
-                                        ),
-                                      )
-                                      : const Text(
-                                        'Sign In',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 32),
-                      ],
+                    
+                          const SizedBox(height: 16),
+                          LoginTypeSelection(),
+                          // Forgot password
+                          const SizedBox(height: 16),
+                    
+                          // Error message
+                          Obx(
+                            () =>
+                                controller.errorMessage.value.isNotEmpty
+                                    ? Container(
+                                      padding: const EdgeInsets.all(16),
+                                      margin: const EdgeInsets.only(bottom: 16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red[50],
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: Colors.red[200]!,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red[700],
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              controller.errorMessage.value,
+                                              style: TextStyle(
+                                                color: Colors.red[700],
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                    : const SizedBox(),
+                          ),
+                    
+                          // Submit button
+                          Obx(
+                            () => SizedBox(
+                              height: 56,
+                              child: ElevatedButton(
+                                onPressed:
+                                    controller.isLoading.value
+                                        ? null
+                                        : () => controller.getBaseUrl(context),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.blue,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child:
+                                    controller.isLoading.value
+                                        ? const SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
+                                        )
+                                        : const Text(
+                                          'Sign In',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                              ),
+                            ),
+                          ),
+                    
+                          const SizedBox(height: 32),
+                        ],
+                      ),
                     ),
                   ),
                 ),
