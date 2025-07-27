@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/widgets/app_radio.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/widgets/common_text_field.dart';
-import '../../../../core/widgets/common_widgets.dart';
+import '../../../../core/widgets/common_widgets.dart' show AppButton;
 import '../../controller/login_controller.dart';
 
 class LoginTextFields extends GetView<LoginController> {
