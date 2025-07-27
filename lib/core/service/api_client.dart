@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
+
 import '../../features/dashboard/controller/session_controller.dart';
-import '../router/app_router.dart';
 
 class ApiClient {
   late Dio _dio;
@@ -42,8 +42,8 @@ class ApiClient {
         },
         onError: (DioException e, handler) {
           if (e.type == DioExceptionType.connectionError) {
-            if (Get.routing.current != AppRouter.login)
-              Get.find<SessionController>().logout();
+            // if (Get.routing.current != AppRouter.login)
+            // Get.find<SessionController>().logout();
           }
           return handler.next(e);
         },

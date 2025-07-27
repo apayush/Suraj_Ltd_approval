@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
+import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/finance_view.dart';
 
 import '../../../core/constants/api_url.dart';
@@ -85,21 +86,25 @@ class FinanceController extends GetxController
           switch (mainType) {
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
+              filteredBankPaymentList.value = (payment);
               bankPaymentDataSource.updateDataSource(bankPaymentList);
               print('bankPaymentList : ${bankPaymentList.length}');
               break;
             case SubMenuType.bankReceipt:
               bankReceiptList.assignAll(payment);
+              filteredBankReceiptList.value = (payment);
               bankReceiptDataSource.updateDataSource(bankReceiptList);
               print('bankReceiptList : ${bankReceiptList.length}');
               break;
             case SubMenuType.cashPayment:
               cashPaymentList.assignAll(payment);
+              filteredCashPaymentList.value = (payment);
               cashPaymentDataSource.updateDataSource(cashPaymentList);
               print('cashPaymentList : ${cashPaymentList.length}');
               break;
             case SubMenuType.cashReceipt:
               cashReceiptList.assignAll(payment);
+              filteredCashReceiptList.value = (payment);
               cashReceiptDataSource.updateDataSource(cashReceiptList);
               print('cashReceiptList : ${cashReceiptList.length}');
               break;
@@ -214,6 +219,9 @@ class FinanceController extends GetxController
     if (query.isEmpty) {
       filteredList.assignAll(sourceList);
     } else {
+      print(sourceList);
+      print(filteredList);
+      print(searchText);
       filteredList.assignAll(
         sourceList.where((item) {
           return [
@@ -232,8 +240,29 @@ class FinanceController extends GetxController
         }),
       );
     }
-
-    dataSource.updateDataSource(filteredList);
+    if (DeviceType.isMobile(Get.context!) ||
+        DeviceType.isTablet(Get.context!)) {
+      print("filteredList : ${filteredList.length}");
+      switch (currentSubMenu.value) {
+        case SubMenuType.bankPayment:
+          filteredBankPaymentList.value = filteredList.toList();
+          print("filteredBankPaymentList : ${filteredBankPaymentList.length}");
+          break;
+        case SubMenuType.bankReceipt:
+          filteredBankReceiptList.value = filteredList.toList();
+          break;
+        case SubMenuType.cashPayment:
+          filteredCashPaymentList.value = filteredList.toList();
+          break;
+        case SubMenuType.cashReceipt:
+          filteredCashReceiptList.value = filteredList.toList();
+          break;
+        default:
+          break;
+      }
+    } else {
+      dataSource.updateDataSource(filteredList);
+    }
   }
 
   // ! Grid Pagination

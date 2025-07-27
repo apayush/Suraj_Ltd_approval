@@ -20,8 +20,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Future.delayed(const Duration(milliseconds: 500), () async {
             final message =
                 await FirebaseMessaging.instance.getInitialMessage();
-            print("splas initial message${message?.notification?.title}");
-            print("splas initial message${message?.notification?.title}");
             final result = await prepareInitialRoute(message);
 
             Get.offAllNamed(result.route, arguments: result.argument);

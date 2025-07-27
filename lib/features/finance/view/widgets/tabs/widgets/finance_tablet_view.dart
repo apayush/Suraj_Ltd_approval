@@ -21,10 +21,10 @@ class FinanceTabletView extends GetView<FinanceController> {
         10.heightGap,
         Obx(() {
           List<FinancePaymentModel> financeDataList = switch (subMenuType) {
-            SubMenuType.bankPayment => controller.bankPaymentList,
-            SubMenuType.bankReceipt => controller.bankReceiptList,
-            SubMenuType.cashPayment => controller.cashPaymentList,
-            SubMenuType.cashReceipt => controller.cashReceiptList,
+            SubMenuType.bankPayment => controller.filteredBankPaymentList,
+            SubMenuType.bankReceipt => controller.filteredBankReceiptList,
+            SubMenuType.cashPayment => controller.filteredCashPaymentList,
+            SubMenuType.cashReceipt => controller.filteredCashReceiptList,
             _ => [],
           };
           return financeDataList.isNotEmpty

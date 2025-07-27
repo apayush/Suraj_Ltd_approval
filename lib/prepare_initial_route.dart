@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/app_constants.dart';
 
 import 'core/constants/app_enum.dart';
 import 'core/router/app_router.dart';
@@ -33,7 +34,11 @@ import 'features/finance/controller/finance_controller.dart';
       argument = subMenuType;
     }
   } else {
-    route = AppRouter.login;
+    if (LocalDB.getBool(AppConstants.isOnBoardingComplete)) {
+      route = AppRouter.login;
+    } else {
+      route = AppRouter.onboardingScreen;
+    }
   }
   return (route: route, argument: argument);
 }

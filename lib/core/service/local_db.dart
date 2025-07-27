@@ -23,8 +23,8 @@ class LocalDB {
     await _pref.setBool(key, value);
   }
 
-  static bool? getBool(String key) {
-    return _pref.getBool(key);
+  static bool getBool(String key) {
+    return _pref.getBool(key) ?? false;
   }
 
   static Future<void> setInt(String key, int value) async {
