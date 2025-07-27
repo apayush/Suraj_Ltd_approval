@@ -20,6 +20,7 @@ import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import '../../../core/models/user_model.dart';
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
+import '../../notifications/controller/notification_controller.dart';
 
 class LoginController extends GetxController {
   final TextEditingController userIdController = TextEditingController();
@@ -63,6 +64,7 @@ class LoginController extends GetxController {
         LocalDB.setString(AppConstants.currentUser, jsonString);
         final userModel = UserModel.fromJson(data['data']);
         Get.find<SessionController>().startSessionTimer();
+        await Get.find<NotificationController>().fetchNotifications();
         Get.offAllNamed(AppRouter.dashboardScreen);
       } else {
         errorMessage.value = 'Invalid credentials. Please try again.';
@@ -102,19 +104,16 @@ class LoginController extends GetxController {
         await LocalDB.setString(AppConstants.baseUrl, newBase);
         ApiUrl.baseUrlGlobal = newBase;
         ApiService.setBaseUrl(newBase);
-        print('ApiUrl.baseUrl:${ApiUrl.baseUrlGlobal}');
         login();
       } else {
         AppUtils.showSnackBar(data?['message'] ?? 'Failed to get URL');
       }
     } on DioException catch (e) {
       errorMessage.value = 'Connection not found, Config your environment';
-print('Error:'+(e.message??''));
       if (e.type == DioExceptionType.connectionError) {
         showSettingsDialog(context);
       }
     } catch (e) {
-      print('Error:'+e.toString());
       AppUtils.showSnackBar(e.toString());
     } finally {
       isLoading.value = false;

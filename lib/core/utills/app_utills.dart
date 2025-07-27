@@ -50,7 +50,7 @@ class AppUtils {
         margin: const EdgeInsets.all(16),
         isDismissible: true,
         borderRadius: 0,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

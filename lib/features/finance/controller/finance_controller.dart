@@ -156,10 +156,11 @@ class FinanceController extends GetxController
       );
       if (response.statusCode == 200) {
         Get.back();
-        if (response.data['Success'] == true) {
-          AppUtils.showSnackBar('Voucher Updated Successfully');
+        if (response.data['Success'] == 'Approve') {
+          AppUtils.showSnackBar('Voucher Approved Successfully');
+        } else if (response.data['Success'] == 'Reject') {
+          AppUtils.showSnackBar('Voucher Rejected Successfully');
         }
-        // formKey.currentState?.reset();
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
       }

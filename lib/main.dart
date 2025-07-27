@@ -12,6 +12,7 @@ import 'core/widgets/page_not_found.dart';
 import 'features/dashboard/controller/app_drawer_controller.dart';
 import 'features/dashboard/controller/session_controller.dart';
 import 'features/dashboard/controller/sidebarx_controller.dart';
+import 'features/notifications/controller/notification_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         Get.put(SidebarController(), permanent: true);
         Get.put(AppDrawerController(), permanent: true);
         Get.put<SessionController>(SessionController());
+        Get.put<NotificationController>(NotificationController());
         Get.lazyPut<SidebarController>(() => SidebarController());
         Get.lazyPut<ApiClient>(() => ApiClient());
       }),

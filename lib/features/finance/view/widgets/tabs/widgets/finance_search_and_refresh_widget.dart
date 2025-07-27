@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/core/constants/app_strings.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
+import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
@@ -16,7 +17,7 @@ class FinanceSearchAndRefreshWidget extends GetView<FinanceController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (screenType == DeviceScreenType.mobile)
+        if (screenType == DeviceType.isMobile(context))
           Expanded(child: buildSearchTextField())
         else
           buildSearchTextField(),

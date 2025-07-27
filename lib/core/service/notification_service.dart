@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/prepare_initial_route.dart';
 
+import '../../features/notifications/controller/notification_controller.dart';
+
 @pragma('vm:entry-point')
 Future<void> handlerBackgroundMessage(RemoteMessage message) async {
   print(
@@ -76,6 +78,7 @@ class NotificationService {
           enableVibration: true,
           playSound: true,
           showBadge: true,
+          // sound: RawResourceAndroidNotificationSound('notification'),
         );
 
         final initialSetting = InitializationSettings(
@@ -94,7 +97,12 @@ class NotificationService {
       }
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
-      FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        final controller = Get.find<NotificationController>();
+        onFirebaseNotificationReceived(message);
+        await controller.fetchNotifications();
+      });
+      // FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
       FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedApp);
 
       if (kIsWeb) {
@@ -115,9 +123,6 @@ class NotificationService {
   static Future<void> onFirebaseNotificationReceived(
     RemoteMessage message,
   ) async {
-    print(message.data);
-    print('message.notification?.title:${message.notification?.title}');
-    print('message.notification?.body):${(message.notification?.body)}');
     if (Platform.isAndroid || Platform.isIOS) {
       final notificationDetails = NotificationDetails(
         iOS: DarwinNotificationDetails(),

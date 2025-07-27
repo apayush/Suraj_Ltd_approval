@@ -67,15 +67,7 @@ class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: NotificationBell(
-              notifications: [
-                'Your Not Confirmed Booking #505 is rejected',
-                'Your Not Confirmed Booking #382 is awaiting for your confirmation',
-                'Your Not Confirmed Booking #515 is awaiting for your confirmation',
-                'Your Not Confirmed Booking #552 is awaiting for your confirmation',
-              ],
-              unreadCount: notificationCount ?? 0,
-            ),
+            child: NotificationBell(),
           ),
         ],
         centerTitle: false,

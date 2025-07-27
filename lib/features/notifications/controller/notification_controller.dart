@@ -37,6 +37,7 @@ class NotificationController extends GetxController {
             (data as List)
                 .map((json) => NotificationModel.fromJson(json))
                 .toList();
+        print('notifications.length : ${notifications.length}');
         unreadCount.value = notifications.length;
         pageState.value = PageState.idle;
       } else {
@@ -54,7 +55,7 @@ class NotificationController extends GetxController {
   Future<void> updateNotificationLogs({required NotificationModel notification}) async {
     try {
       await ApiService.postData(
-        ApiUrl.updateFCMId,
+        ApiUrl.updateNotificationLogs,
         queryParams: {
           'Nid' : notification.nid
         },
@@ -124,5 +125,7 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> markAsRead(String notificationId) async {}
+  Future<void> markAsRead(String notificationId) async {
+    unreadCount.value = 0;
+  }
 }
