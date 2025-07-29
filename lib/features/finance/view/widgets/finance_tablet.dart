@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/finance_tabbar_view.dart';
 
 import '../../../../core/constants/app_enum.dart';
+import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
+import '../../../../core/widgets/common_widgets.dart';
 import '../../controller/finance_controller.dart';
 
 class FinanceTablet extends GetView<FinanceController> {
@@ -12,7 +14,7 @@ class FinanceTablet extends GetView<FinanceController> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      title: Text('Finance', style: TextStyle(color: Colors.black)),
+      title: AppText('Finance', style: TextStyles.extraLarge(context)),
       bottom: TabBar(
         controller: controller.tabController,
         tabs: controller.myTabs,

@@ -47,6 +47,7 @@ class SidebarController extends GetxController {
         primaryButtonText: AppStrings.yes,
         secondaryButtonText: AppStrings.no,
         onPrimaryButtonPressed: () async {
+          isLoading.value = true;
           sessionController.logout();
           await LocalDB.clearUser(); // clear any saved storage
         },

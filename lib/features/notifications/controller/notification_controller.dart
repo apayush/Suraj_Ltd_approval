@@ -55,6 +55,11 @@ class NotificationController extends GetxController {
     try {
       pageState.value = PageState.loading;
       final nidListString = notifications.map((n) => n.nid).join(',');
+      if (nidListString.isEmpty) {
+        pageState.value = PageState.idle;
+        return;
+      }
+
       await ApiService.postData(
         ApiUrl.updateNotificationLogs,
         queryParams: {

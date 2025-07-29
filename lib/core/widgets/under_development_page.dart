@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
+import '../../features/dashboard/controller/app_drawer_controller.dart';
 import '../constants/radius_utils.dart';
 import '../router/app_router.dart';
 
@@ -176,6 +177,7 @@ class _UnderDevelopmentPageState extends State<UnderDevelopmentPage>{
                     ),
                     child: ElevatedButton(
                       onPressed: () {
+                        Get.find<AppDrawerController>().sideBarXController.selectIndex(0);
                         Get.offAllNamed(AppRouter.dashboardScreen);
                       },
                       style: ButtonStyle(

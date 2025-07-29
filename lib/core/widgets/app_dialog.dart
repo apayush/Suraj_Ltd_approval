@@ -57,85 +57,89 @@ class GenericDialogBox extends StatelessWidget {
                 color: Theme.of(context).canvasColor,
                 borderRadius: RadiusUtils.borderRadiusForButtons,
               ),
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Header
-                    Container(
-                      height: 45.0,
-                      // padding: const EdgeInsets.all(12.0),
-                      color: AppColors.blue,
-                      child: Stack(
-                        children: [
-                          AppText(
-                            headerText,
-                            alignment: Alignment.center,
-                            style: TextStyles.medium(
-                              context,
-                              textColor: Colors.white,
-                            ),
-                          ),
-                          if (showCloseIcon)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: IconButton(
-                                icon: const Icon(Icons.close, color: Colors.white),
-                                onPressed: Get.back,
-                              ),
-                            )
-                        ],
-                      ),
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    const SizedBox(height: 20),
-
-                    // Dynamic Content
-                    Padding(padding: const EdgeInsets.all(8.0), child: content),
-
-                    const SizedBox(height: 20),
-
-                    // Buttons at the bottom
-                    Row(
-                      mainAxisAlignment:
-                          secondaryButtonText != ''
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Secondary Button
-                        secondaryButtonText != '' &&
-                                onSecondaryButtonPressed != null
-                            ? Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: AppButton(
-                                onPressed: onSecondaryButtonPressed!,
-                                text: secondaryButtonText,
-                                isCancelButton: true,
+                        // Header
+                        Container(
+                          height: 45.0,
+                          // padding: const EdgeInsets.all(12.0),
+                          color: AppColors.blue,
+                          child: Stack(
+                            children: [
+                              AppText(
+                                headerText,
+                                alignment: Alignment.center,
+                                style: TextStyles.medium(
+                                  context,
+                                  textColor: Colors.white,
+                                ),
                               ),
-                            )
-                            : const SizedBox.shrink(),
+                              if (showCloseIcon)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.close, color: Colors.white),
+                                    onPressed: Get.back,
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
 
-                        // Primary Button
-                        onPrimaryButtonPressed != null
-                            ? Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: AppButton(
-                                onPressed: onPrimaryButtonPressed!,
-                                text: primaryButtonText,
-                                isLoading: isLoading?.value ?? false,
-                              ),
-                            )
-                            : const SizedBox.shrink(),
+                        // Dynamic Content
+                        Padding(padding: const EdgeInsets.all(8.0), child: content),
+
+                        const SizedBox(height: 20),
+
+                        // Buttons at the bottom
+                        Row(
+                          mainAxisAlignment:
+                              secondaryButtonText != ''
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            // Secondary Button
+                            secondaryButtonText != '' &&
+                                    onSecondaryButtonPressed != null
+                                ? Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: AppButton(
+                                    onPressed: onSecondaryButtonPressed!,
+                                    text: secondaryButtonText,
+                                    isCancelButton: true,
+                                  ),
+                                )
+                                : const SizedBox.shrink(),
+
+                            // Primary Button
+                            onPrimaryButtonPressed != null
+                                ? Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: AppButton(
+                                    onPressed: onPrimaryButtonPressed!,
+                                    text: primaryButtonText,
+                                    isLoading: isLoading?.value ?? false,
+                                  ),
+                                )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+
+                        const SizedBox(height: 20.0),
                       ],
                     ),
-
-                    const SizedBox(height: 20.0),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );

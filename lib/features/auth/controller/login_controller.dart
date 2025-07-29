@@ -59,14 +59,13 @@ class LoginController extends GetxController {
       if (isClosed) return;
       final data = response.data;
       if (data['status'] == 'success') {
-        AppUtils.showSnackBar('Login successful!');
         final userData = (data['data'] as Map);
         final jsonString = jsonEncode(userData);
         LocalDB.setString(AppConstants.currentUser, jsonString);
-        final userModel = UserModel.fromJson(data['data']);
         Get.find<SessionController>().startSessionTimer();
         await Get.find<NotificationController>().fetchNotifications();
         Get.offAllNamed(AppRouter.dashboardScreen);
+        AppUtils.showSnackBar('Login successful!');
       } else {
         errorMessage.value = 'Invalid credentials. Please try again.';
       }
