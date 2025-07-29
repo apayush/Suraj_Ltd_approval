@@ -14,6 +14,7 @@ class GenericDialogBox extends StatelessWidget {
   final VoidCallback? onSecondaryButtonPressed;
   final bool isFullScreen;
   final bool showCloseIcon;
+  final RxBool? isLoading;
 
   const GenericDialogBox({
     super.key,
@@ -25,6 +26,7 @@ class GenericDialogBox extends StatelessWidget {
     this.onSecondaryButtonPressed,
     this.isFullScreen = false,
     this.showCloseIcon = true,
+    this.isLoading,
   });
 
   @override
@@ -124,6 +126,7 @@ class GenericDialogBox extends StatelessWidget {
                               child: AppButton(
                                 onPressed: onPrimaryButtonPressed!,
                                 text: primaryButtonText,
+                                isLoading: isLoading?.value ?? false,
                               ),
                             )
                             : const SizedBox.shrink(),

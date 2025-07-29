@@ -35,9 +35,8 @@ class NotificationController extends GetxController {
       if (response.statusCode == 200) {
         notifications.value =
             (data as List)
-                .map((json) => NotificationModel.fromJson(json))
+                .map((json) => NotificationModel.fromJson(json)).where((e)=> e.isSuccess == true)
                 .toList();
-        print('notifications.length : ${notifications.length}');
         unreadCount.value = notifications.length;
         pageState.value = PageState.idle;
       } else {
@@ -52,18 +51,22 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> updateNotificationLogs({required NotificationModel notification}) async {
+  Future<void> updateNotificationLogs({NotificationModel? notification}) async {
     try {
+      pageState.value = PageState.loading;
+      final nidListString = notifications.map((n) => n.nid).join(',');
       await ApiService.postData(
         ApiUrl.updateNotificationLogs,
         queryParams: {
-          'Nid' : notification.nid
+          'NidList' : nidListString
         },
       );
       if (isClosed) return;
     } catch (e) {
-      print('Error updating FCM ID: $e');
+      print('Error updating notification logs: $e');
+      pageState.value = PageState.error;
     } finally {
+      pageState.value = PageState.idle;
     }
   }
 
@@ -125,7 +128,8 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> markAsRead(String notificationId) async {
+  Future<void> markAsRead() async {
     unreadCount.value = 0;
+    updateNotificationLogs();
   }
 }

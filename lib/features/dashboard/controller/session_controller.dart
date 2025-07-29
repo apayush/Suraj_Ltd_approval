@@ -28,7 +28,6 @@ class SessionController extends GetxController {
   // Start the session timer when user logs in
   void startSessionTimer() {
     if (!kIsWeb) return;
-    print('session timer started');
 
     _startInactivityTimer();
   }
@@ -57,7 +56,6 @@ class SessionController extends GetxController {
     updateFCM();
     await NotificationService.deleteFCMToken();
     stopSessionTimer();
-    Get.offAllNamed(AppRouter.login);
   }
 
   @override
@@ -71,7 +69,7 @@ class SessionController extends GetxController {
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
-      await ApiService.postData(
+      final response = await ApiService.postData(
         ApiUrl.updateFCMId,
         queryParams: {
           'fcmid': '',
@@ -79,6 +77,9 @@ class SessionController extends GetxController {
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
       );
+      if (response.statusCode == 200) {
+        Get.offAllNamed(AppRouter.login);
+      }
     } catch (e) {
       print('Error updating FCM ID: $e');
     } finally {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';

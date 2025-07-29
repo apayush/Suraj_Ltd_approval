@@ -155,15 +155,12 @@ class NotificationService {
     } catch (e) {
       fcmId = '';
     }
-    print('FCM ID: $fcmId');
     return fcmId;
   }
 
   static Future<void> setUpNotificationWeb() async {}
 
   static void onMessageOpenedApp(RemoteMessage message) {
-    print('message.notification?.title:${message.notification?.title}');
-    print('message.notification?.body:${message.notification?.body}');
     final result = prepareInitialRoute(message);
     Get.offAllNamed(result.route, arguments: result.argument);
   }

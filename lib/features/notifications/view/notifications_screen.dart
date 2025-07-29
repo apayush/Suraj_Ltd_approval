@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:suraj_approval/core/enum/page_state.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';
+
+import '../../../core/widgets/loading_widget.dart';
 
 class NotificationsScreen extends GetView<NotificationController> {
   NotificationsScreen({Key? key}) : super(key: key);
@@ -61,9 +64,10 @@ class NotificationsScreen extends GetView<NotificationController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00457A)),
-          ),
+          LoadingIndicator(),
+          // CircularProgressIndicator(
+          //   valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00457A)),
+          // ),
           SizedBox(height: 16),
           Text(
             'Loading notifications...',

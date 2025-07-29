@@ -53,72 +53,12 @@ class SidebarController extends GetxController {
         onSecondaryButtonPressed: () {
           Get.back();
         },
+        isLoading: isLoading,
       ),
     );
   }
 
   TextEditingController baseUrlController = TextEditingController();
-
-  /*void showSettingsDialog(BuildContext context) async {
-    Get.dialog(
-      GenericDialogBox(
-        headerText: AppStrings.confirmation,
-        content: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child:
-              DeviceType.isMobile(context) || DeviceType.isTablet(context)
-                  ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppText(
-                        'Enter New Base URL:',
-                        style: TextStyles.medium(context),
-                      ),
-                      10.heightGap,
-                      AppTextField(
-                        hint: 'Base Url',
-                        controller: baseUrlController,
-                      ),
-                    ],
-                  )
-                  : Row(
-                    children: [
-                      AppText(
-                        'Enter New Base URL:',
-                        style: TextStyles.medium(context),
-                      ),
-                      10.widthGap,
-                      Flexible(
-                        child: AppTextField(
-                          hint: 'Base Url',
-                          controller: baseUrlController,
-                        ),
-                      ),
-                    ],
-                  ),
-        ),
-        primaryButtonText: AppStrings.confirm,
-        secondaryButtonText: AppStrings.cancel,
-        onPrimaryButtonPressed: () async {
-          final trimmedUrl = baseUrlController.text.trim();
-          if (trimmedUrl.isEmpty) {
-            AppUtils.showSnackBar('Base URL cannot be empty');
-            return;
-          }
-
-          if (!isValidBaseUrl(trimmedUrl)) {
-            AppUtils.showSnackBar('Please enter a valid URL');
-            return;
-          }
-
-          await postFinanceVoucher(newBaseUrl: trimmedUrl);
-        },
-        onSecondaryButtonPressed: () {
-          Get.back();
-        },
-      ),
-    );
-  }*/
 
   // ! Approve Reject Finance Voucher
   Future<void> postFinanceVoucher({required String newBaseUrl}) async {

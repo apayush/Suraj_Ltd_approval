@@ -265,6 +265,7 @@ class AppButton extends StatelessWidget {
   final double? width;
   final Color backgroundColor;
   final bool isCancelButton;
+  final bool isLoading;
 
   const AppButton({
     super.key,
@@ -273,6 +274,7 @@ class AppButton extends StatelessWidget {
     this.width,
     this.backgroundColor = AppColors.blue,
     this.isCancelButton = false,
+    this.isLoading = false,
   });
 
   @override
@@ -300,7 +302,16 @@ class AppButton extends StatelessWidget {
             ),
           ),
         ),
-        child: AppText(
+        child:  isLoading
+            ? const SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: Colors.white,
+          ),
+        )
+            : AppText(
           text,
           alignment: Alignment.center,
           style: TextStyles.normal(

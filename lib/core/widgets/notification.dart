@@ -20,6 +20,7 @@ class _NotificationBellState extends State<NotificationBell> {
     controller.fetchNotifications();
     Get.toNamed(AppRouter.notification);
     controller.unreadCount.value = 0;
+    controller.markAsRead();
     return;
   }
 

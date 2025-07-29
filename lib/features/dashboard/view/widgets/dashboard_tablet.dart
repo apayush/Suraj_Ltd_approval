@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
-import '../../../../features/dashboard/controller/dashboard_controller.dart';
+import '../../controller/dashboard_controller.dart';
 
 class DashboardTablet extends StatelessWidget {
   DashboardTablet({super.key});
@@ -24,3 +23,4 @@ class DashboardTablet extends StatelessWidget {
     );
   }
 }
+

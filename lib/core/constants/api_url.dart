@@ -14,6 +14,7 @@ class ApiUrl {
   static const String updateNotificationLogs = '/UpdateNotificationLogs';
 
   // ! FINANCE MODULE API
+  static const String getVoucherApprovalDashboard = '/GetVoucherApprovalDashboard';
   static const String getAuthorisationList = '/GetAuthorisationList';
   static const String authoriseFinanceVoucher = '/AuthoriseFinanceVoucher';
   static const String getAuthorisationListFilter =
