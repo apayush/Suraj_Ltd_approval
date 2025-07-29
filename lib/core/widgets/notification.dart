@@ -16,11 +16,11 @@ class NotificationBell extends StatefulWidget {
 class _NotificationBellState extends State<NotificationBell> {
   final LayerLink _layerLink = LayerLink();
 
-  void _toggleOverlay(NotificationController controller) {
-    controller.fetchNotifications();
-    Get.toNamed(AppRouter.notification);
+  void _toggleOverlay(NotificationController controller) async {
+    await controller.fetchNotifications();
+    await controller.markAsRead();
     controller.unreadCount.value = 0;
-    controller.markAsRead();
+    Get.toNamed(AppRouter.notification);
     return;
   }
 
