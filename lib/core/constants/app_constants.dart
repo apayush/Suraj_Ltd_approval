@@ -18,6 +18,7 @@ class AppConstants {
   static const String currentUser = 'current_user';
   static const String baseUrl = 'baseUrl';
   static const String localBaseUrl = 'localBaseUrl';
+  static const String isOnBoardingComplete = 'isOnBoardingComplete';
   static const String fcmWebKeyPair =
       'BPvRP_b53z4qV1BDn2M0GAT402QzZTv2ykGNeKbVjhlXhV-HUd6V3CcG0DF2nCd8hHCv-nEfukkqDedw1hvv-ZI';
 }

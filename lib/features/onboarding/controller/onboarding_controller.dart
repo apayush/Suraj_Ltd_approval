@@ -1,7 +1,9 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
+import 'package:suraj_approval/core/service/local_db.dart';
 
 class OnboardingController extends GetxController {
   final PageController pageController = PageController();
@@ -35,6 +37,7 @@ class OnboardingController extends GetxController {
       );
     } else {
       // Navigate to login
+      LocalDB.setBool(AppConstants.isOnBoardingComplete, true);
       Get.offAllNamed(AppRouter.login);
     }
   }
@@ -50,6 +53,7 @@ class OnboardingController extends GetxController {
   }
 
   void skipOnboarding() {
+    LocalDB.setBool(AppConstants.isOnBoardingComplete, true);
     Get.offAllNamed(AppRouter.login);
   }
 
