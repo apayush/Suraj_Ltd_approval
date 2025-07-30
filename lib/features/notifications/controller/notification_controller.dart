@@ -16,7 +16,6 @@ class NotificationController extends GetxController {
   var errorMessage = ''.obs;
   RxInt unreadCount = 0.obs;
 
-
   @override
   void onInit() {
     super.onInit();
@@ -35,7 +34,8 @@ class NotificationController extends GetxController {
       if (response.statusCode == 200) {
         notifications.value =
             (data as List)
-                .map((json) => NotificationModel.fromJson(json)).where((e)=> e.isSuccess == true)
+                .map((json) => NotificationModel.fromJson(json))
+                .where((e) => e.isSuccess == true)
                 .toList();
         unreadCount.value = notifications.length;
         pageState.value = PageState.idle;
@@ -62,9 +62,7 @@ class NotificationController extends GetxController {
 
       await ApiService.postData(
         ApiUrl.updateNotificationLogs,
-        queryParams: {
-          'NidList' : nidListString
-        },
+        queryParams: {'NidList': nidListString},
       );
       if (isClosed) return;
     } catch (e) {

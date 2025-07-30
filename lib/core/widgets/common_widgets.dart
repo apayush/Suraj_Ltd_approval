@@ -143,7 +143,8 @@ class SidebarXDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SidebarX(
       controller: controller,
-      animationDuration: Duration.zero,
+      animationDuration: Duration(milliseconds: 300),
+
       // animationDuration: const Duration(milliseconds: 150),
       showToggleButton: false,
       theme: SidebarXTheme(
@@ -206,6 +207,7 @@ class SidebarXDrawer extends StatelessWidget {
         );
       },
       items: items,
+
       footerBuilder: (context, extended) {
         final bottomPanel = buildDrawerBottomPanel(
           context,
@@ -302,23 +304,24 @@ class AppButton extends StatelessWidget {
             ),
           ),
         ),
-        child:  isLoading
-            ? const SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: Colors.white,
-          ),
-        )
-            : AppText(
-          text,
-          alignment: Alignment.center,
-          style: TextStyles.normal(
-            context,
-            textColor: isCancelButton ? Colors.black : Colors.white,
-          ),
-        ),
+        child:
+            isLoading
+                ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+                : AppText(
+                  text,
+                  alignment: Alignment.center,
+                  style: TextStyles.normal(
+                    context,
+                    textColor: isCancelButton ? Colors.black : Colors.white,
+                  ),
+                ),
       ),
     );
   }

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/view/notifications_screen.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
+
 import '../../features/auth/controller/login_controller.dart';
 import '../../features/auth/view/login_screen.dart';
 import '../../features/dashboard/controller/dashboard_controller.dart';
@@ -95,12 +95,6 @@ class AppRouter {
         Get.lazyPut<SalesController>(() => SalesController());
       }),
     ),
-    GetPage(
-      name: notification,
-      page: () => NotificationsScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut<NotificationController>(() => NotificationController());
-      }),
-    ),
+    GetPage(name: notification, page: () => NotificationsScreen()),
   ];
 }

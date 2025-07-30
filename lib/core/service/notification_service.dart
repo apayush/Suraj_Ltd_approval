@@ -98,8 +98,8 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        final controller = Get.find<NotificationController>();
         onFirebaseNotificationReceived(message);
+        final controller = Get.find<NotificationController>();
         await controller.fetchNotifications();
       });
       // FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
@@ -167,6 +167,10 @@ class NotificationService {
 
   static Future<void> deleteFCMToken() async {
     if (kIsWeb) return;
-    await FirebaseMessaging.instance.deleteToken();
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

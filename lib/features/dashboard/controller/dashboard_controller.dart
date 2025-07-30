@@ -21,16 +21,15 @@ class DashboardController extends GetxController
     try {
       final response = await ApiService.getData(
         ApiUrl.getVoucherApprovalDashboard,
-        queryParams: {
-          'mUser': userModel?.mUser,
-        },
+        queryParams: {'mUser': userModel?.mUser},
       );
       if (response.statusCode == 200) {
         final jsonData = response.data;
-        dashboardData.value = (jsonData as List)
-            .cast<Map<String, dynamic>>()
-            .map((json) => DashboardModel.fromJson(json))
-            .toList();
+        dashboardData.value =
+            (jsonData as List)
+                .cast<Map<String, dynamic>>()
+                .map((json) => DashboardModel.fromJson(json))
+                .toList();
       }
     } catch (e) {
       print('Error Fetching Dashboard Data: $e');
@@ -48,5 +47,4 @@ class DashboardController extends GetxController
     super.onInit();
     getVoucherApprovalDashboard();
   }
-
 }

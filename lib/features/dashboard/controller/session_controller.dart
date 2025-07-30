@@ -53,7 +53,7 @@ class SessionController extends GetxController {
   }
 
   Future<void> logout() async {
-    updateFCM();
+    await updateFCM();
     await NotificationService.deleteFCMToken();
     stopSessionTimer();
   }

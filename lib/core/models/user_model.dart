@@ -35,7 +35,8 @@ class UserModel {
 
   UserDetails? getDetailFor(MenuType menu, SubMenuType submenu) {
     return userDetails.firstWhere(
-      (e) => e.mainMenu == menu && e.subMenu == submenu,orElse: null
+      (e) => e.mainMenu == menu && e.subMenu == submenu,
+      orElse: null,
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
+
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/app_strings.dart';
@@ -48,8 +50,9 @@ class SidebarController extends GetxController {
         secondaryButtonText: AppStrings.no,
         onPrimaryButtonPressed: () async {
           isLoading.value = true;
-          sessionController.logout();
+          await sessionController.logout();
           await LocalDB.clearUser(); // clear any saved storage
+          isLoading.value = false;
         },
         onSecondaryButtonPressed: () {
           Get.back();

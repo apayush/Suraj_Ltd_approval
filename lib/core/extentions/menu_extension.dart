@@ -27,8 +27,15 @@ extension SubMenuTypeExtension on SubMenuType {
 
 extension UserPermissionExtensions on UserModel {
   /// List of all allowed main menus (no duplicates)
-  List<MenuType> get allowedMenus =>
-      userDetails.map((e) => e.mainMenu).whereType<MenuType>().toSet().toList();
+  List<MenuType> get allowedMenus {
+    final menus =
+        userDetails.map((e) => e.mainMenu).whereType<MenuType>().toList();
+    if (menus.contains(MenuType.dashboard)) {
+      menus.remove(MenuType.dashboard);
+      menus.insert(0, MenuType.dashboard);
+    }
+    return menus.toSet().toList();
+  }
 
   /// Get submenus for a given main menu
   List<SubMenuType> getSubMenusFor(MenuType menu) =>

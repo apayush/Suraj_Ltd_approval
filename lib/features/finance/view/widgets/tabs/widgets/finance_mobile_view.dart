@@ -14,26 +14,35 @@ class FinanceMobileView extends GetView<FinanceController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FinanceSearchAndRefreshWidget(),
-        10.heightGap,
-        Obx(() {
-          List<FinancePaymentModel> financeDataList = switch (subMenuType) {
-            SubMenuType.bankPayment => controller.filteredBankPaymentList,
-            SubMenuType.bankReceipt => controller.filteredBankReceiptList,
-            SubMenuType.cashPayment => controller.filteredCashPaymentList,
-            SubMenuType.cashReceipt => controller.filteredCashReceiptList,
-            _ => [],
-          };
-          return financeDataList.isNotEmpty
-              ? Expanded(
+    return Obx(() {
+      List<FinancePaymentModel> financeDataList = switch (subMenuType) {
+        SubMenuType.bankPayment => controller.filteredBankPaymentList,
+        SubMenuType.bankReceipt => controller.filteredBankReceiptList,
+        SubMenuType.cashPayment => controller.filteredCashPaymentList,
+        SubMenuType.cashReceipt => controller.filteredCashReceiptList,
+        _ => [],
+      };
+      return financeDataList.isNotEmpty
+          ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FinanceSearchAndRefreshWidget(),
+              10.heightGap,
+              Expanded(
                 child: FinancePaymentList(financePaymentList: financeDataList),
-              )
-              : const Center(child: NoDataFound());
-        }),
-      ],
-    );
+              ),
+            ],
+          )
+          : SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FinanceSearchAndRefreshWidget(),
+                10.heightGap,
+                const Center(child: NoDataFound()),
+              ],
+            ),
+          );
+    });
   }
 }

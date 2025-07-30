@@ -23,6 +23,8 @@ import '../model/bank_payment_model.dart';
 class FinanceController extends GetxController
     with GetTickerProviderStateMixin {
   RxBool isLoading = false.obs;
+  RxBool isApproveLoading = false.obs;
+  RxBool isRejectLoading = false.obs;
 
   final userModel = LocalDB.getUserModel();
   MenuType currentMenu = MenuType.finance;
@@ -312,12 +314,15 @@ class FinanceController extends GetxController
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () async {
             if (approveFormKey.currentState!.validate()) {
+              isApproveLoading.value = true;
               await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
+              isApproveLoading.value = false;
             }
           },
           onSecondaryButtonPressed: () {
             Get.back();
           },
+          isLoading: isApproveLoading,
         ),
       );
     } else if (value == 'Reject') {
@@ -343,14 +348,17 @@ class FinanceController extends GetxController
           ),
           primaryButtonText: 'Reject',
           secondaryButtonText: 'Cancel',
-          onPrimaryButtonPressed: () {
+          onPrimaryButtonPressed: () async {
             if (rejectFormKey.currentState!.validate()) {
-              postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
+              isRejectLoading.value = true;
+              await postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
+              isRejectLoading.value = false;
             }
           },
           onSecondaryButtonPressed: () {
             Get.back();
           },
+          isLoading: isRejectLoading,
         ),
       );
     }

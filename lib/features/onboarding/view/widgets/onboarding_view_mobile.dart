@@ -113,7 +113,8 @@ class OnboardingViewMobile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         controller.onboardingPages.length,
-                        (index) => Container(
+                        (index) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
                           height: 8,
                           width: controller.currentPage.value == index ? 24 : 8,

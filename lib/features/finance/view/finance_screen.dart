@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:suraj_approval/core/constants/app_enum.dart';
 import 'package:suraj_approval/features/dashboard/controller/app_drawer_controller.dart';
 import 'package:suraj_approval/features/finance/view/widgets/finance_mobile.dart';
 import 'package:suraj_approval/features/finance/view/widgets/finance_tablet.dart';
@@ -21,7 +22,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.find<AppDrawerController>().setIndex(0);
+      Get.find<AppDrawerController>().setSelectedMenuDrawer(MenuType.finance);
     });
   }
 

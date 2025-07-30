@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../utills/app_module_container.dart';
+
 import '../constants/radius_utils.dart';
 import '../theme/app_colors.dart';
+import '../utills/app_module_container.dart';
 import 'common_widgets.dart';
 
 class GenericDialogBox extends StatelessWidget {
@@ -86,17 +87,23 @@ class GenericDialogBox extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: IconButton(
-                                    icon: const Icon(Icons.close, color: Colors.white),
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    ),
                                     onPressed: Get.back,
                                   ),
-                                )
+                                ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 20),
 
                         // Dynamic Content
-                        Padding(padding: const EdgeInsets.all(8.0), child: content),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: content,
+                        ),
 
                         const SizedBox(height: 20),
 
@@ -123,14 +130,16 @@ class GenericDialogBox extends StatelessWidget {
 
                             // Primary Button
                             onPrimaryButtonPressed != null
-                                ? Padding(
-                                  padding: const EdgeInsets.only(right: 20.0),
-                                  child: AppButton(
-                                    onPressed: onPrimaryButtonPressed!,
-                                    text: primaryButtonText,
-                                    isLoading: isLoading?.value ?? false,
-                                  ),
-                                )
+                                ? Obx(() {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 20.0),
+                                    child: AppButton(
+                                      onPressed: onPrimaryButtonPressed!,
+                                      text: primaryButtonText,
+                                      isLoading: isLoading?.value ?? false,
+                                    ),
+                                  );
+                                })
                                 : const SizedBox.shrink(),
                           ],
                         ),
