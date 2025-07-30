@@ -79,7 +79,6 @@ class FinanceController extends GetxController
           ApiUrl.getAuthorisationListFilter,
           queryParams: param,
         );
-        print(response.data);
         if (response.statusCode == 200) {
           List<FinancePaymentModel> payment =
               FinancePaymentModel.fromDecodedJsonList(response.data ?? []);
@@ -88,25 +87,21 @@ class FinanceController extends GetxController
               bankPaymentList.assignAll(payment);
               filteredBankPaymentList.value = (payment);
               bankPaymentDataSource.updateDataSource(bankPaymentList);
-              print('bankPaymentList : ${bankPaymentList.length}');
               break;
             case SubMenuType.bankReceipt:
               bankReceiptList.assignAll(payment);
               filteredBankReceiptList.value = (payment);
               bankReceiptDataSource.updateDataSource(bankReceiptList);
-              print('bankReceiptList : ${bankReceiptList.length}');
               break;
             case SubMenuType.cashPayment:
               cashPaymentList.assignAll(payment);
               filteredCashPaymentList.value = (payment);
               cashPaymentDataSource.updateDataSource(cashPaymentList);
-              print('cashPaymentList : ${cashPaymentList.length}');
               break;
             case SubMenuType.cashReceipt:
               cashReceiptList.assignAll(payment);
               filteredCashReceiptList.value = (payment);
               cashReceiptDataSource.updateDataSource(cashReceiptList);
-              print('cashReceiptList : ${cashReceiptList.length}');
               break;
             default:
               break;
@@ -219,9 +214,6 @@ class FinanceController extends GetxController
     if (query.isEmpty) {
       filteredList.assignAll(sourceList);
     } else {
-      print(sourceList);
-      print(filteredList);
-      print(searchText);
       filteredList.assignAll(
         sourceList.where((item) {
           return [
@@ -242,11 +234,9 @@ class FinanceController extends GetxController
     }
     if (DeviceType.isMobile(Get.context!) ||
         DeviceType.isTablet(Get.context!)) {
-      print("filteredList : ${filteredList.length}");
       switch (currentSubMenu.value) {
         case SubMenuType.bankPayment:
           filteredBankPaymentList.value = filteredList.toList();
-          print("filteredBankPaymentList : ${filteredBankPaymentList.length}");
           break;
         case SubMenuType.bankReceipt:
           filteredBankReceiptList.value = filteredList.toList();

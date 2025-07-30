@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,8 +15,6 @@ import 'package:suraj_approval/core/utills/app_utills.dart';
 import 'package:suraj_approval/core/widgets/app_dialog.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
-
-import '../../../core/models/user_model.dart';
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
 import '../../notifications/controller/notification_controller.dart';

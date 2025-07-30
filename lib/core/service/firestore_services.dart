@@ -19,7 +19,7 @@ class FireStoreService {
         return snapshot['baseUrl'] as String?;
       }
     } catch (e) {
-      print("❌ Error getting base URL: $e");
+      print('❌ Error getting base URL: $e');
     }
     return null;
   }
@@ -30,9 +30,9 @@ class FireStoreService {
       await _firestore.collection('config').doc('settings').set({
         'baseUrl': newUrl,
       }, SetOptions(merge: true));
-      print("✅ Base URL updated to: $newUrl");
+      print('✅ Base URL updated to: $newUrl');
     } catch (e) {
-      print("❌ Error updating base URL: $e");
+      print('❌ Error updating base URL: $e');
     }
   }
 }

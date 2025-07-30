@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
-import '../../../../core/models/dashboard_model.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../features/dashboard/controller/dashboard_controller.dart';
 
