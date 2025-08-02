@@ -32,12 +32,14 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
       data: data,
     ),
   );
+
   Future.microtask(() {
     if (Get.routing.current != result.route &&
         Get.routing.previous != result.route) {
       Get.offAllNamed(result.route, arguments: result.argument);
     } else if (Get.routing.previous == result.route) {
       Get.back();
+
       Future.microtask(() {
         gotToSubMenuFromRoute(
           result.route,
@@ -107,9 +109,10 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        print("message.data:${message.data}");
-        print("message.notification?.title:${message.notification?.title}");
-        print("message.notification?.body:${message.notification?.body}");
+        print(message.data);
+        print(message.notification?.title);
+        print(message.notification?.body);
+        print(Platform.isAndroid);
         onFirebaseNotificationReceived(message);
         final controller = Get.find<NotificationController>();
         await controller.fetchNotifications();
@@ -128,7 +131,7 @@ class NotificationService {
         }
       }
     } catch (e) {
-      print("error ${e.toString()}");
+      debugPrint('error ${e.toString()}');
     }
   }
 
@@ -151,7 +154,9 @@ class NotificationService {
         payload: jsonEncode({
           'title': message.notification?.title.toString(),
           'body': message.notification?.body.toString(),
-          'Srl': message.data['srl'] ?? '',
+          'mainType': message.data['mainType'],
+          'subType': message.data['subType'],
+          'Srl': message.data['Srl'] ?? '',
         }),
       );
     }

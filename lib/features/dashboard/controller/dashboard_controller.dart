@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 
 import '../../../core/constants/api_url.dart';
 import '../../../core/models/dashboard_model.dart';
@@ -46,5 +47,6 @@ class DashboardController extends GetxController
   void onInit() {
     super.onInit();
     getVoucherApprovalDashboard();
+    Get.find<NotificationController>().fetchNotifications();
   }
 }

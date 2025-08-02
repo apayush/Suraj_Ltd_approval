@@ -4,6 +4,7 @@ import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/features/finance/view/widgets/tabs/widgets/finance_view.dart';
+import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_enum.dart';
@@ -184,8 +185,8 @@ class FinanceController extends GetxController
   TextEditingController searchController = TextEditingController();
 
   void filterData(String searchText) {
+    print(searchText);
     final query = searchText.toLowerCase().trim();
-
     List<FinancePaymentModel> sourceList;
     RxList<FinancePaymentModel> filteredList;
     dynamic dataSource;
@@ -436,12 +437,13 @@ class FinanceController extends GetxController
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final data = Get.arguments;
-      if (data) return;
+      if (data == null) return;
       final subMenuType = data['subMenuType'];
       final srl = data['Srl'];
       goTOSubMenu(subMenuType, srl);
     });
     getAllData(mainType: currentSubMenu.value);
+    Get.find<NotificationController>().fetchNotifications();
   }
 
   Future<void> goTOSubMenu(SubMenuType? menuType, String srl) async {
@@ -465,7 +467,7 @@ class FinanceController extends GetxController
     }
 
     await getAllData(mainType: currentSubMenu.value);
-
+    searchController.text = srl;
     filterData(srl);
   }
 

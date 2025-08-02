@@ -86,8 +86,10 @@ class NotificationController extends GetxController {
     if (notification.mainType == MenuType.finance) {
       redirectToNotificationTypeScreen(
         route: AppRouter.financeScreen,
-        subMenuType: notification.subType,
-
+        arguments: {
+          'subMenuType': notification.subType,
+          'Srl': notification.srl,
+        },
         onExistingRouteNavigate: () {
           Get.find<FinanceController>().goTOSubMenu(
             notification.subType,
@@ -98,7 +100,10 @@ class NotificationController extends GetxController {
     } else if (notification.mainType == MenuType.production) {
       redirectToNotificationTypeScreen(
         route: AppRouter.productionScreen,
-        subMenuType: notification.subType,
+        arguments: {
+          'subMenuType': notification.subType,
+          'Srl': notification.srl,
+        },
         onExistingRouteNavigate: () {
           // Get.find<ProductionController>().goTOSubMenu(notification.subType);
         },
@@ -106,7 +111,10 @@ class NotificationController extends GetxController {
     } else if (notification.mainType == MenuType.purchase) {
       redirectToNotificationTypeScreen(
         route: AppRouter.purchaseScreen,
-        subMenuType: notification.subType,
+        arguments: {
+          'subMenuType': notification.subType,
+          'Srl': notification.srl,
+        },
         onExistingRouteNavigate: () {
           // Get.find<PurchaseController>().goTOSubMenu(notification.subType);
         },
@@ -114,7 +122,10 @@ class NotificationController extends GetxController {
     } else if (notification.mainType == MenuType.sales) {
       redirectToNotificationTypeScreen(
         route: AppRouter.salesScreen,
-        subMenuType: notification.subType,
+        arguments: {
+          'subMenuType': notification.subType,
+          'Srl': notification.srl,
+        },
         onExistingRouteNavigate: () {
           // Get.find<SalesController>().goTOSubMenu(notification.subType);
         },
@@ -124,7 +135,7 @@ class NotificationController extends GetxController {
 
   void redirectToNotificationTypeScreen({
     required String route,
-    SubMenuType? subMenuType,
+    Map? arguments,
     required VoidCallback onExistingRouteNavigate,
   }) {
     bool targetRouteExists = Get.routing.previous == route;
@@ -134,7 +145,7 @@ class NotificationController extends GetxController {
         onExistingRouteNavigate();
       });
     } else {
-      Get.offAllNamed(route, arguments: subMenuType);
+      Get.offAllNamed(route, arguments: arguments);
     }
   }
 
