@@ -183,6 +183,7 @@ class LoginController extends GetxController {
                     ],
                   ),
         ),
+        isLoading: isLoading,
         primaryButtonText: AppStrings.confirm,
         secondaryButtonText: AppStrings.cancel,
         onPrimaryButtonPressed: () async {
@@ -190,14 +191,6 @@ class LoginController extends GetxController {
           if (trimmedUrl.isEmpty) {
             AppUtils.showSnackBar(
               'Base URL cannot be empty',
-              background: Colors.red,
-            );
-            return;
-          }
-
-          if (!isValidBaseUrl(trimmedUrl)) {
-            AppUtils.showSnackBar(
-              'Please enter a valid URL',
               background: Colors.red,
             );
             return;

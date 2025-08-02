@@ -6,13 +6,11 @@ import 'notification.dart';
 
 class CustomHeader extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
-  final int? notificationCount;
   final Widget? title;
 
   const CustomHeader({
     super.key,
     this.bottom,
-    this.notificationCount,
     this.title,
   });
 

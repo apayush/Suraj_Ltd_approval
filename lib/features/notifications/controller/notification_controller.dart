@@ -54,16 +54,18 @@ class NotificationController extends GetxController {
   Future<void> updateNotificationLogs({NotificationModel? notification}) async {
     try {
       pageState.value = PageState.loading;
-      final nidListString = notifications.map((n) => n.nid).join(',');
-      if (nidListString.isEmpty) {
-        pageState.value = PageState.idle;
-        return;
-      }
-
-      await ApiService.postData(
+      // final nidListString = notifications.map((n) => n.nid).join(',');
+      // if (nidListString.isEmpty) {
+      //   pageState.value = PageState.idle;
+      //   return;
+      // }
+      final response = await ApiService.postData(
         ApiUrl.updateNotificationLogs,
-        queryParams: {'NidList': nidListString},
+        queryParams: {'NidList': notification?.nid},
       );
+      if (response.statusCode == 200) {
+        fetchNotifications();
+      }
       if (isClosed) return;
     } catch (e) {
       print('Error updating notification logs: $e');

@@ -155,6 +155,7 @@ class FinanceController extends GetxController
           'LinkField': bankPayment.linkField,
           'mAuthorise': paymentStatus,
           'mRemarks': remarkController.value.text,
+          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
       );
       if (response.statusCode == 200) {

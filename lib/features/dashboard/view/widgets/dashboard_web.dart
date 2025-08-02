@@ -136,8 +136,9 @@ class DashboardWeb extends StatelessWidget {
                         shrinkWrap: true,
                         padding: EdgeInsets.symmetric(vertical: 16),
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: DeviceType.isDesktop(context)?300:  400,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          // maxCrossAxisExten/t: DeviceType.isDesktop(context)?300:  400,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
