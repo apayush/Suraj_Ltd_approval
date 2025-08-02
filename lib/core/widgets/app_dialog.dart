@@ -130,7 +130,7 @@ class GenericDialogBox extends StatelessWidget {
 
                             // Primary Button
                             onPrimaryButtonPressed != null
-                                ? Obx(() {
+                                ?isLoading!=null? Obx(() {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 20.0),
                                     child: AppButton(
@@ -139,7 +139,14 @@ class GenericDialogBox extends StatelessWidget {
                                       isLoading: isLoading?.value ?? false,
                                     ),
                                   );
-                                })
+                                }):Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: AppButton(
+          onPressed: onPrimaryButtonPressed!,
+          text: primaryButtonText,
+          isLoading: isLoading?.value ?? false,
+          ),
+          )
                                 : const SizedBox.shrink(),
                           ],
                         ),

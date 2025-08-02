@@ -123,7 +123,7 @@ class NotificationService {
   static Future<void> onFirebaseNotificationReceived(
     RemoteMessage message,
   ) async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid) {
       final notificationDetails = NotificationDetails(
         iOS: DarwinNotificationDetails(),
         android: AndroidNotificationDetails(

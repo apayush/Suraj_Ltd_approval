@@ -4,6 +4,7 @@ import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
 
 import '../../../../core/widgets/app_scaffold.dart';
@@ -35,6 +36,9 @@ class DashboardWeb extends StatelessWidget {
             ),
           ),
           child: Obx(() {
+            if (controller.isLoading.value) {
+              return LoaderWidget(controller: controller);
+            }
             return RefreshIndicator(
               onRefresh: () async {
                 await controller.getVoucherApprovalDashboard();
@@ -165,7 +169,6 @@ class DashboardWeb extends StatelessWidget {
     IconData icon,
     Color textColor,
   ) {
-
     return Column(
       children: [
         Icon(icon, color: textColor, size: 32),

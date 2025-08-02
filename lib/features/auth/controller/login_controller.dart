@@ -43,6 +43,7 @@ class LoginController extends GetxController {
 
     try {
       final fcmId = await NotificationService.getFcmId();
+      print('fcmId:${fcmId}');
       final response = await ApiService.postData(
         ApiUrl.loginApi,
         queryParams: {
@@ -107,6 +108,7 @@ class LoginController extends GetxController {
         AppUtils.showSnackBar(data?['message'] ?? 'Failed to get URL');
       }
     } on DioException catch (e) {
+      print("e.toString():$e");
       errorMessage.value = 'Connection not found, Config your environment';
       if (e.type == DioExceptionType.connectionError) {
         showSettingsDialog(context);

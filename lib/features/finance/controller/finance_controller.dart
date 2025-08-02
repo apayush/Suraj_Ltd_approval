@@ -384,29 +384,33 @@ class FinanceController extends GetxController
     final userModel = LocalDB.getUserModel();
     super.onInit();
     final subMenus = userModel?.getSubMenusFor(MenuType.finance) ?? [];
-
     final tabs = <Tab>[];
     final views = <Widget>[];
 
-    if (subMenus.contains(SubMenuType.bankPayment)) {
-      tabs.add(const Tab(text: 'Bank Payment'));
-      views.add(FinanceView(subMenuType: SubMenuType.bankPayment));
-    }
+    subMenus.forEach((subMenu) {
+      tabs.add(Tab(text: subMenu.key));
+      views.add(FinanceView(subMenuType: subMenu));
+    });
 
-    if (subMenus.contains(SubMenuType.bankReceipt)) {
-      tabs.add(const Tab(text: 'Bank Receipt'));
-      views.add(FinanceView(subMenuType: SubMenuType.bankReceipt));
-    }
-
-    if (subMenus.contains(SubMenuType.cashPayment)) {
-      tabs.add(const Tab(text: 'Cash Payment'));
-      views.add(FinanceView(subMenuType: SubMenuType.cashPayment));
-    }
-
-    if (subMenus.contains(SubMenuType.cashReceipt)) {
-      tabs.add(const Tab(text: 'Cash Receipt'));
-      views.add(FinanceView(subMenuType: SubMenuType.cashReceipt));
-    }
+    // if (subMenus.contains(SubMenuType.bankPayment)) {
+    //   tabs.add(const Tab(text: 'Bank Payment'));
+    //   views.add(FinanceView(subMenuType: SubMenuType.bankPayment));
+    // }
+    //
+    // if (subMenus.contains(SubMenuType.bankReceipt)) {
+    //   tabs.add(const Tab(text: 'Bank Receipt'));
+    //   views.add(FinanceView(subMenuType: SubMenuType.bankReceipt));
+    // }
+    //
+    // if (subMenus.contains(SubMenuType.cashPayment)) {
+    //   tabs.add(const Tab(text: 'Cash Payment'));
+    //   views.add(FinanceView(subMenuType: SubMenuType.cashPayment));
+    // }
+    //
+    // if (subMenus.contains(SubMenuType.cashReceipt)) {
+    //   tabs.add(const Tab(text: 'Cash Receipt'));
+    //   views.add(FinanceView(subMenuType: SubMenuType.cashReceipt));
+    // }
 
     myTabs = tabs;
     tabViews = views;
@@ -438,20 +442,25 @@ class FinanceController extends GetxController
   }
 
   void goTOSubMenu(SubMenuType? menuType) {
+    if (menuType == null) return;
+    final subMenuTypeList =
+        LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
+    final index = subMenuTypeList.indexOf(menuType);
+
     if (menuType == SubMenuType.bankPayment) {
-      tabController.animateTo(0);
+      tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.bankPayment;
     } else if (menuType == SubMenuType.bankReceipt) {
-      tabController.animateTo(1);
+      tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.bankReceipt;
     } else if (menuType == SubMenuType.cashPayment) {
-      tabController.animateTo(2);
+      tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.cashPayment;
     } else if (menuType == SubMenuType.cashReceipt) {
-      tabController.animateTo(3);
+      tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.cashReceipt;
     }
-    if (menuType != null) getAllData(mainType: currentSubMenu.value);
+    getAllData(mainType: currentSubMenu.value);
   }
 
   @override

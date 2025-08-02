@@ -30,15 +30,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ScreenTypeLayout.builder(
-          mobile: (context) => DashboardMobile(),
-          tablet: (context) => DashboardTablet(),
-          desktop: (context) => DashboardWeb(),
-        ),
-        LoaderWidget(controller: controller),
-      ],
+    return ScreenTypeLayout.builder(
+      mobile: (context) => DashboardMobile(),
+      tablet: (context) => DashboardTablet(),
+      desktop: (context) => DashboardWeb(),
     );
   }
 }

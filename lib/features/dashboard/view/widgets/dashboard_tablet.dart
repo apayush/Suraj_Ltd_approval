@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
 
 import '../../../../core/utills/app_module_container.dart';
@@ -34,6 +35,9 @@ class DashboardTablet extends StatelessWidget {
             ),
           ),
           child: Obx(() {
+            if (controller.isLoading.value) {
+              return LoaderWidget(controller: controller);
+            }
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -69,10 +73,11 @@ class DashboardTablet extends StatelessWidget {
                             Expanded(
                               child: _buildSummaryItem(
                                 'Approved',
-                                controller.dashboardData.fold(
-                                  0,
-                                  (sum, item) => sum + item.approveCount,
-                                ),
+                                controller.dashboardData
+                                    .firstWhere(
+                                      (p0) => p0.period == 'ThisMonth',
+                                    )
+                                    .approveCount,
                                 Icons.verified_rounded,
                               ),
                             ),
@@ -84,10 +89,11 @@ class DashboardTablet extends StatelessWidget {
                             Expanded(
                               child: _buildSummaryItem(
                                 'Rejected',
-                                controller.dashboardData.fold(
-                                  0,
-                                  (sum, item) => sum + item.rejectCount,
-                                ),
+                                controller.dashboardData
+                                    .firstWhere(
+                                      (p0) => p0.period == 'ThisMonth',
+                                    )
+                                    .rejectCount,
                                 Icons.cancel_outlined,
                               ),
                             ),
@@ -99,13 +105,15 @@ class DashboardTablet extends StatelessWidget {
                             Expanded(
                               child: _buildSummaryItem(
                                 'Total Requests',
-                                controller.dashboardData.fold(
-                                  0,
-                                  (sum, item) =>
-                                      sum +
-                                      item.approveCount +
-                                      item.rejectCount,
-                                ),
+                                controller.dashboardData
+                                    .where((p0) => p0.period == 'ThisMonth')
+                                    .fold(
+                                      0,
+                                      (sum, item) =>
+                                          sum +
+                                          item.approveCount +
+                                          item.rejectCount,
+                                    ),
                                 Icons.assignment_turned_in_rounded,
                               ),
                             ),

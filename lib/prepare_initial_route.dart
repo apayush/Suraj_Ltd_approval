@@ -16,13 +16,17 @@ import 'features/finance/controller/finance_controller.dart';
     route = AppRouter.dashboardScreen;
     if (message != null) {
       final body = message.notification?.body ?? '';
+      final data = message.data;
 
-      final menuType = MenuType.values.firstWhereOrNull(
-        (element) => body.contains(element.key),
+      /*  final menuType = MenuType.values.firstWhereOrNull(
+        (element) => body.toLowerCase().contains(element.key.toLowerCase()),
       );
       final subMenuType = SubMenuType.values.firstWhereOrNull(
-        (element) => body.contains(element.key),
+        (element) => body.toLowerCase().contains(element.key.toLowerCase()),
       );
+*/
+      final menuType = MenuType.fromKey(data['mainType']);
+      final subMenuType = SubMenuType.fromKey(data['subType']);
 
       route = switch (menuType) {
         MenuType.finance => AppRouter.financeScreen,

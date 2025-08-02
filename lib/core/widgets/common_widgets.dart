@@ -230,14 +230,14 @@ class SidebarXDrawer extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: sideBarXController.isProfileExpanded,
       builder: (context, isExpanded, child) {
-        return Column(children: [buildSetting(context),buildLogout(mContext)]);
+        return Column(children: [buildSetting(context), buildLogout(mContext)]);
       },
     );
   }
 
   Widget buildSetting(BuildContext context) {
     return IconButton(
-      tooltip: AppStrings.logOut,
+      tooltip: AppStrings.settings,
       icon: const Icon(CupertinoIcons.gear_alt, color: Colors.grey),
       onPressed: () {
         sideBarXController.showUpdatePwdDialog(context);
