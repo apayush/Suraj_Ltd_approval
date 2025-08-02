@@ -26,7 +26,6 @@ class FinanceController extends GetxController
   RxBool isApproveLoading = false.obs;
   RxBool isRejectLoading = false.obs;
 
-  final userModel = LocalDB.getUserModel();
   MenuType currentMenu = MenuType.finance;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.bankPayment.obs;
 
@@ -64,6 +63,7 @@ class FinanceController extends GetxController
 
   // ! Get All Finance Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
+    final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
       final matchedUserDetail = userModel?.getDetailFor(
@@ -140,6 +140,7 @@ class FinanceController extends GetxController
     FinancePaymentModel bankPayment, {
     required String paymentStatus,
   }) async {
+    final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
       final matchedUserDetail = userModel?.getDetailFor(
@@ -379,6 +380,7 @@ class FinanceController extends GetxController
 
   @override
   void onInit() {
+    final userModel = LocalDB.getUserModel();
     super.onInit();
     final subMenus = userModel?.getSubMenusFor(MenuType.finance) ?? [];
 

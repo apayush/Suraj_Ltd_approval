@@ -131,8 +131,8 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> markAsRead() async {
-    unreadCount.value = 0;
-    updateNotificationLogs();
-  }
+  // Future<void> markAsRead() async {
+  //   unreadCount.value = 0;
+  //   updateNotificationLogs();
+  // }
 }

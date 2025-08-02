@@ -230,23 +230,18 @@ class SidebarXDrawer extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: sideBarXController.isProfileExpanded,
       builder: (context, isExpanded, child) {
-        return Column(children: [buildLogout(mContext)]);
+        return Column(children: [buildSetting(context),buildLogout(mContext)]);
       },
     );
   }
 
-  Widget buildVersion(BuildContext context) {
-    return Flexible(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Obx(() {
-          return AppText(
-            '(${sideBarXController.appVersion})',
-            alignment: Alignment.centerRight,
-            style: TextStyles.small(context, textColor: Colors.white),
-          );
-        }),
-      ),
+  Widget buildSetting(BuildContext context) {
+    return IconButton(
+      tooltip: AppStrings.logOut,
+      icon: const Icon(CupertinoIcons.gear_alt, color: Colors.grey),
+      onPressed: () {
+        sideBarXController.showUpdatePwdDialog(context);
+      },
     );
   }
 

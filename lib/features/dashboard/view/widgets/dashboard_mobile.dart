@@ -65,37 +65,31 @@ class DashboardMobile extends StatelessWidget {
                             Expanded(
                               child: _buildQuickStat(
                                 'Approved',
-                                controller.dashboardData.fold(
-                                  0,
-                                  (sum, item) => sum + item.approveCount,
-                                ),
+                                controller.dashboardData.firstWhere((p0) => p0.period=='ThisMonth',).approveCount,
                                 Icons.verified_rounded,
                               ),
                             ),
                             Container(
                               height: 40,
                               width: 1,
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                             ),
                             Expanded(
                               child: _buildQuickStat(
                                 'Rejected',
-                                controller.dashboardData.fold(
-                                  0,
-                                  (sum, item) => sum + item.rejectCount,
-                                ),
+                                controller.dashboardData.firstWhere((p0) => p0.period=='ThisMonth',).rejectCount,
                                 Icons.cancel_outlined,
                               ),
                             ),
                             Container(
                               height: 40,
                               width: 1,
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                             ),
                             Expanded(
                               child: _buildQuickStat(
                                 'Total Requests',
-                                controller.dashboardData.fold(
+                                controller.dashboardData.where((p0) => p0.period=='ThisMonth',).fold(
                                   0,
                                   (sum, item) =>
                                       sum +

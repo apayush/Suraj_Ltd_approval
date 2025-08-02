@@ -45,7 +45,7 @@ class AppUtils {
             ),
           ),
         ),
-        snackPosition: position ?? SnackPosition.BOTTOM,
+        snackPosition: position ?? SnackPosition.TOP,
         backgroundColor: Colors.transparent,
         margin: const EdgeInsets.all(16),
         isDismissible: true,

@@ -5,11 +5,12 @@ class ApiUrl {
   // ! LOGIN API
   static const String loginApi = '/Login';
   static const String updateFCMId = '/LogOut';
+  static const String updatePwd = '/UpdatePwd';
 
   // ! Common API
   static const String saveBaseURL = '/SaveBaseURL';
   // SaveBaseUrl?mUrlString=http://124.123.122.112:7081/Report&mUser=Admin
-  static const String getBaseUrl = '/GetBaseUrl';
+  static const String getBaseUrl = 'http://124.123.122.112:7081/Report/GetBaseUrl';
   static const String getNotificationLogs = '/GetNotificationLogs';
   static const String updateNotificationLogs = '/UpdateNotificationLogs';
 

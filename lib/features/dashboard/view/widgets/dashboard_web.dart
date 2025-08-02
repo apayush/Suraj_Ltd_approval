@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
+import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
 
@@ -136,7 +137,7 @@ class DashboardWeb extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 16),
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 400,
+                          maxCrossAxisExtent: DeviceType.isDesktop(context)?300:  400,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
@@ -163,6 +164,7 @@ class DashboardWeb extends StatelessWidget {
     IconData icon,
     Color textColor,
   ) {
+
     return Column(
       children: [
         Icon(icon, color: textColor, size: 32),

@@ -15,7 +15,7 @@ class _NotificationBellState extends State<NotificationBell> {
 
   void onTap(NotificationController controller) async {
     await controller.fetchNotifications();
-    await controller.markAsRead();
+    // await controller.markAsRead();
     controller.unreadCount.value = 0;
     Get.toNamed(AppRouter.notification);
     return;

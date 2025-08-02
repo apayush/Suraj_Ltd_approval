@@ -91,7 +91,8 @@ class LoginController extends GetxController {
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
-        ApiUrl.getBaseUrl,
+        // ApiUrl.getBaseUrl,
+        'http://124.123.122.112:7081/Report/GetBaseUrl',
         queryParams: {'mType': ipType.value == 1 ? 'Global' : 'Local'},
       );
       final data = (response.data);
