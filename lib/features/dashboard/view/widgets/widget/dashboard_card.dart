@@ -200,8 +200,4 @@ class DashboardCard extends StatelessWidget {
         return Icons.analytics_rounded;
     }
   }
-
-  int _calculatePending() {
-    return (model.approveCount + model.rejectCount) ~/ 10;
-  }
 }

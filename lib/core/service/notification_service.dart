@@ -29,6 +29,7 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
         title: data['title'] ?? '',
         body: data['body'] ?? '',
       ),
+      data: data,
     ),
   );
   Future.microtask(() {
@@ -38,10 +39,18 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
     } else if (Get.routing.previous == result.route) {
       Get.back();
       Future.microtask(() {
-        gotToSubMenuFromRoute(result.route, result.argument);
+        gotToSubMenuFromRoute(
+          result.route,
+          result.argument['subMenuType'],
+          result.argument['Srl'],
+        );
       });
     } else if (Get.routing.current == result.route) {
-      gotToSubMenuFromRoute(result.route, result.argument);
+      gotToSubMenuFromRoute(
+        result.route,
+        result.argument['subMenuType'],
+        result.argument['Srl'],
+      );
     }
   });
 }
@@ -98,6 +107,9 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        print("message.data:${message.data}");
+        print("message.notification?.title:${message.notification?.title}");
+        print("message.notification?.body:${message.notification?.body}");
         onFirebaseNotificationReceived(message);
         final controller = Get.find<NotificationController>();
         await controller.fetchNotifications();
@@ -139,6 +151,7 @@ class NotificationService {
         payload: jsonEncode({
           'title': message.notification?.title.toString(),
           'body': message.notification?.body.toString(),
+          'Srl': message.data['srl'] ?? '',
         }),
       );
     }

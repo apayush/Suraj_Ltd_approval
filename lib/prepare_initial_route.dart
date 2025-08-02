@@ -15,9 +15,7 @@ import 'features/finance/controller/finance_controller.dart';
   if (isLoggedIn) {
     route = AppRouter.dashboardScreen;
     if (message != null) {
-      final body = message.notification?.body ?? '';
       final data = message.data;
-
       /*  final menuType = MenuType.values.firstWhereOrNull(
         (element) => body.toLowerCase().contains(element.key.toLowerCase()),
       );
@@ -35,7 +33,7 @@ import 'features/finance/controller/finance_controller.dart';
         MenuType.sales => AppRouter.salesScreen,
         _ => AppRouter.dashboardScreen,
       };
-      argument = subMenuType;
+      argument = {'subMenuType': subMenuType, 'Srl': data['Srl'] ?? ''};
     }
   } else {
     if (LocalDB.getBool(AppConstants.isOnBoardingComplete)) {
@@ -47,10 +45,14 @@ import 'features/finance/controller/finance_controller.dart';
   return (route: route, argument: argument);
 }
 
-void gotToSubMenuFromRoute(String routeName, SubMenuType? subMenuType) {
+void gotToSubMenuFromRoute(
+  String routeName,
+  SubMenuType? subMenuType,
+  String srl,
+) {
   switch (routeName) {
     case AppRouter.financeScreen:
-      Get.find<FinanceController>().goTOSubMenu(subMenuType);
+      Get.find<FinanceController>().goTOSubMenu(subMenuType, srl);
       break;
     case AppRouter.purchaseScreen:
       // Get.find<PurchaseController>().goTOSubMenu(subMenuType);

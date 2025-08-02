@@ -7,7 +7,6 @@ import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_mobile.
 import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_tablet.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/dashboard_web.dart';
 
-import '../../../core/widgets/loading_widget.dart';
 import '../controller/dashboard_controller.dart';
 
 class DashboardScreen extends StatefulWidget {

@@ -6,6 +6,7 @@ class NotificationModel {
   final MenuType? mainType;
   final SubMenuType? subType;
   final String? sent;
+  final String? srl;
   final int? nid;
   final bool? isSuccess;
 
@@ -17,6 +18,7 @@ class NotificationModel {
     this.sent,
     this.nid,
     this.isSuccess,
+    this.srl,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class NotificationModel {
       sent: json['SentAt'],
       nid: json['Nid'],
       isSuccess: json['IsSuccess'],
+      srl: json['Srl'],
     );
   }
 
@@ -40,6 +43,7 @@ class NotificationModel {
       'SentAt': sent,
       'Nid': nid,
       'IsSuccess': isSuccess,
+      'Srl': srl,
     };
   }
 }

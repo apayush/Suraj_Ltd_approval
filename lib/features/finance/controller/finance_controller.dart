@@ -435,13 +435,16 @@ class FinanceController extends GetxController
     );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final menuType = Get.arguments as SubMenuType?;
-      goTOSubMenu(menuType);
+      final data = Get.arguments;
+      if (data) return;
+      final subMenuType = data['subMenuType'];
+      final srl = data['Srl'];
+      goTOSubMenu(subMenuType, srl);
     });
     getAllData(mainType: currentSubMenu.value);
   }
 
-  void goTOSubMenu(SubMenuType? menuType) {
+  Future<void> goTOSubMenu(SubMenuType? menuType, String srl) async {
     if (menuType == null) return;
     final subMenuTypeList =
         LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
@@ -460,7 +463,10 @@ class FinanceController extends GetxController
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.cashReceipt;
     }
-    getAllData(mainType: currentSubMenu.value);
+
+    await getAllData(mainType: currentSubMenu.value);
+
+    filterData(srl);
   }
 
   @override

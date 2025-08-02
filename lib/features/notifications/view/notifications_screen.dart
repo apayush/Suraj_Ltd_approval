@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:suraj_approval/core/enum/page_state.dart';
-import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';

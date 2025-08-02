@@ -31,6 +31,7 @@ class NotificationController extends GetxController {
         ApiUrl.getNotificationLogs + '?mUser=$user',
       );
       final data = response.data;
+      print(response.data);
       if (response.statusCode == 200) {
         notifications.value =
             (data as List)
@@ -86,8 +87,12 @@ class NotificationController extends GetxController {
       redirectToNotificationTypeScreen(
         route: AppRouter.financeScreen,
         subMenuType: notification.subType,
+
         onExistingRouteNavigate: () {
-          Get.find<FinanceController>().goTOSubMenu(notification.subType);
+          Get.find<FinanceController>().goTOSubMenu(
+            notification.subType,
+            notification.srl ?? '',
+          );
         },
       );
     } else if (notification.mainType == MenuType.production) {

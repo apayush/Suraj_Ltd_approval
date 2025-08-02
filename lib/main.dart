@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
-import 'core/models/user_model.dart';
 import 'core/router/app_router.dart';
 import 'core/service/api_client.dart';
 import 'core/service/local_db.dart';

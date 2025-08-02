@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
-import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';

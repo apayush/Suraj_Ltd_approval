@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as AppUtil;
 import 'package:get/get.dart';
 import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
 
@@ -110,7 +109,6 @@ class SidebarController extends GetxController {
 
   // ! Update Password
   void showUpdatePwdDialog(BuildContext context) {
-    final TextEditingController usernameController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController confirmPasswordController =
         TextEditingController();

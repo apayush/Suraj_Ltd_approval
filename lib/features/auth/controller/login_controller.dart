@@ -67,6 +67,7 @@ class LoginController extends GetxController {
       } else {
         errorMessage.value = 'Invalid credentials. Please try again.';
       }
+      isLoading.value = false;
     } on DioException catch (e) {
       errorMessage.value = 'Connection not found, Config your environment';
       if (e.type == DioExceptionType.connectionError) {
@@ -74,7 +75,6 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Login failed. Please try again.$e';
-    } finally {
       isLoading.value = false;
     }
   }
