@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class FinancePaymentModel {
+class VoucherModel {
   final String? mainType;
   final String? subType;
   final String? linkField;
@@ -18,7 +18,7 @@ class FinancePaymentModel {
   final String? mBranch;
   final RxBool? isPdfLoading;
 
-  FinancePaymentModel({
+  VoucherModel({
     this.mainType,
     this.linkField,
     this.subType,
@@ -37,8 +37,8 @@ class FinancePaymentModel {
     this.isPdfLoading,
   });
 
-  factory FinancePaymentModel.fromJson(Map<String, dynamic> json) {
-    return FinancePaymentModel(
+  factory VoucherModel.fromJson(Map<String, dynamic> json) {
+    return VoucherModel(
       mainType: json['MainType'] as String?,
       linkField: json['LinkField'] as String?,
       type: json['Type'] as String?,
@@ -78,7 +78,7 @@ class FinancePaymentModel {
     };
   }
 
-  static List<FinancePaymentModel> fromDecodedJsonList(List<dynamic> jsonList) {
-    return jsonList.map((item) => FinancePaymentModel.fromJson(item)).toList();
+  static List<VoucherModel> fromDecodedJsonList(List<dynamic> jsonList) {
+    return jsonList.map((item) => VoucherModel.fromJson(item)).toList();
   }
 }

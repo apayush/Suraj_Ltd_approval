@@ -103,7 +103,7 @@ class SidebarController extends GetxController {
     } catch (e) {
       print(e);
     } finally {
-      isLoading.value = false;
+      // isLoading.value = false;
     }
   }
 

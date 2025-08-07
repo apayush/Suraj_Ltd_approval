@@ -3,12 +3,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/finance/model/bank_payment_model.dart';
+import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
+import '../../../../../finance/view/widgets/tabs/widgets/finance_payment_card.dart';
 
-import '../../../../controller/finance_controller.dart';
-import 'finance_payment_card.dart';
-
-class FinancePaymentList extends GetView<FinanceController> {
-  const FinancePaymentList({super.key, required this.financePaymentList});
+class PurchaseVoucherList extends GetView<PurchaseController> {
+  const PurchaseVoucherList({super.key, required this.financePaymentList});
   final List<VoucherModel> financePaymentList;
 
   @override
@@ -16,7 +15,7 @@ class FinancePaymentList extends GetView<FinanceController> {
     return RefreshIndicator(
       onRefresh:
           () async =>
-              controller.getAllData(mainType: controller.currentSubMenu.value),
+          controller.getAllData(mainType: controller.currentSubMenu.value),
       child: AnimationLimiter(
         child: ListView.builder(
           itemCount: financePaymentList.length,

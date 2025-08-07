@@ -22,7 +22,7 @@ class FinanceWebView extends GetView<FinanceController> {
         FinanceSearchAndRefreshWidget(),
         10.heightGap,
         Obx(() {
-          List<FinancePaymentModel> financeDataList = switch (subMenuType) {
+          List<VoucherModel> financeDataList = switch (subMenuType) {
             SubMenuType.bankPayment => controller.bankPaymentList,
             SubMenuType.bankReceipt => controller.bankReceiptList,
             SubMenuType.cashPayment => controller.cashPaymentList,

@@ -6,10 +6,10 @@ import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
-import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
+import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
 
-class FinanceSearchAndRefreshWidget extends GetView<FinanceController> {
-  const FinanceSearchAndRefreshWidget({super.key});
+class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
+  const PurchaseSearchAndRefreshWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

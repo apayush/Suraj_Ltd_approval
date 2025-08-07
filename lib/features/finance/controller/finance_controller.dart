@@ -37,24 +37,24 @@ class FinanceController extends GetxController
   final GlobalKey<FormState> rejectFormKey = GlobalKey<FormState>();
 
   // ! Two lists to hold the Api data and filtered data for Bank Payment
-  RxList<FinancePaymentModel> bankPaymentList = <FinancePaymentModel>[].obs;
-  RxList<FinancePaymentModel> filteredBankPaymentList =
-      <FinancePaymentModel>[].obs;
+  RxList<VoucherModel> bankPaymentList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredBankPaymentList =
+      <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Bank Receipt
-  RxList<FinancePaymentModel> bankReceiptList = <FinancePaymentModel>[].obs;
-  RxList<FinancePaymentModel> filteredBankReceiptList =
-      <FinancePaymentModel>[].obs;
+  RxList<VoucherModel> bankReceiptList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredBankReceiptList =
+      <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Payment
-  RxList<FinancePaymentModel> cashPaymentList = <FinancePaymentModel>[].obs;
-  RxList<FinancePaymentModel> filteredCashPaymentList =
-      <FinancePaymentModel>[].obs;
+  RxList<VoucherModel> cashPaymentList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredCashPaymentList =
+      <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Receipt
-  RxList<FinancePaymentModel> cashReceiptList = <FinancePaymentModel>[].obs;
-  RxList<FinancePaymentModel> filteredCashReceiptList =
-      <FinancePaymentModel>[].obs;
+  RxList<VoucherModel> cashReceiptList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredCashReceiptList =
+      <VoucherModel>[].obs;
 
   //! DataGridSource for the SfDataGrid
   late BankPaymentDataSource bankPaymentDataSource;
@@ -76,15 +76,71 @@ class FinanceController extends GetxController
         final param = {
           'mUser': userModel?.mUser,
           'MainType': mainType.key,
-          'mDeviceType': '',
+          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
           queryParams: param,
         );
         if (response.statusCode == 200) {
-          List<FinancePaymentModel> payment =
-              FinancePaymentModel.fromDecodedJsonList(response.data ?? []);
+          List<VoucherModel> payment =
+              VoucherModel.fromDecodedJsonList(response.data ?? []);
+          switch (mainType) {
+            case SubMenuType.bankPayment:
+              bankPaymentList.assignAll(payment);
+              filteredBankPaymentList.value = (payment);
+              bankPaymentDataSource.updateDataSource(bankPaymentList);
+              break;
+            case SubMenuType.bankReceipt:
+              bankReceiptList.assignAll(payment);
+              filteredBankReceiptList.value = (payment);
+              bankReceiptDataSource.updateDataSource(bankReceiptList);
+              break;
+            case SubMenuType.cashPayment:
+              cashPaymentList.assignAll(payment);
+              filteredCashPaymentList.value = (payment);
+              cashPaymentDataSource.updateDataSource(cashPaymentList);
+              break;
+            case SubMenuType.cashReceipt:
+              cashReceiptList.assignAll(payment);
+              filteredCashReceiptList.value = (payment);
+              cashReceiptDataSource.updateDataSource(cashReceiptList);
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! Get Finance Module Hold Data Table
+  Future<void> getAllHoldData({required SubMenuType mainType}) async {
+    final userModel = LocalDB.getUserModel();
+    isLoading.value = true;
+    try {
+      final matchedUserDetail = userModel?.getDetailFor(
+        currentMenu,
+        currentSubMenu.value,
+      );
+
+      if (matchedUserDetail != null) {
+        final param = {
+          'mUser': userModel?.mUser,
+          'mUserLevel': matchedUserDetail.userLevel,
+          'MainType': mainType.key,
+        };
+        final response = await ApiService.getData(
+          ApiUrl.getHoldVoucher,
+          queryParams: param,
+        );
+        if (response.statusCode == 200) {
+          List<VoucherModel> payment =
+              VoucherModel.fromDecodedJsonList(response.data ?? []);
           switch (mainType) {
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
@@ -119,11 +175,11 @@ class FinanceController extends GetxController
   }
 
   // ! GET PDF Report
-  Future<void> getBankpaymentReport(FinancePaymentModel bankPayment) async {
+  Future<void> getBankpaymentReport(VoucherModel bankPayment) async {
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
-        ApiUrl.getBankpaymentReport,
+        ApiUrl.getVoucherReport,
         queryParams: {'mLinkField': bankPayment.linkField},
       );
       if (response.statusCode == 200) {
@@ -138,7 +194,7 @@ class FinanceController extends GetxController
 
   // ! Approve Reject Finance Voucher
   Future<void> postFinanceVoucher(
-    FinancePaymentModel bankPayment, {
+    VoucherModel bankPayment, {
     required String paymentStatus,
   }) async {
     final userModel = LocalDB.getUserModel();
@@ -149,7 +205,7 @@ class FinanceController extends GetxController
         currentSubMenu.value,
       );
       final response = await ApiService.postData(
-        ApiUrl.authoriseFinanceVoucher,
+        ApiUrl.authoriseVoucher,
         queryParams: {
           'mUser': userModel?.mUser,
           'mUserLevel': matchedUserDetail?.userLevel,
@@ -181,14 +237,19 @@ class FinanceController extends GetxController
     getAllData(mainType: currentSubMenu.value);
   }
 
+  // ! Hold Voucher
+  getHoldVoucher() {
+    getAllHoldData(mainType: currentSubMenu.value);
+  }
+
   // ! Search Functionality
   TextEditingController searchController = TextEditingController();
 
   void filterData(String searchText) {
     print(searchText);
     final query = searchText.toLowerCase().trim();
-    List<FinancePaymentModel> sourceList;
-    RxList<FinancePaymentModel> filteredList;
+    List<VoucherModel> sourceList;
+    RxList<VoucherModel> filteredList;
     dynamic dataSource;
 
     switch (currentSubMenu.value) {
@@ -288,14 +349,14 @@ class FinanceController extends GetxController
 
   Future<void> handleMenuSelection(
     String value,
-    FinancePaymentModel bankPayment,
+    VoucherModel bankPayment,
   ) async {
     if (value == 'View') {
       getBankpaymentReport(bankPayment);
     } else if (value == 'Approve') {
       await Get.dialog(
         GenericDialogBox(
-          headerText: 'Approve Bank Payment',
+          headerText: 'Approve',
           content: Form(
             key: approveFormKey,
             child: Container(
@@ -316,9 +377,45 @@ class FinanceController extends GetxController
           primaryButtonText: 'Approve',
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () async {
+            // if (approveFormKey.currentState!.validate()) {
+            isApproveLoading.value = true;
+            await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
+            isApproveLoading.value = false;
+            // }
+          },
+          onSecondaryButtonPressed: () {
+            Get.back();
+          },
+          isLoading: isApproveLoading,
+        ),
+      );
+    } else if (value == 'Hold') {
+      await Get.dialog(
+        GenericDialogBox(
+          headerText: 'Hold',
+          content: Form(
+            key: approveFormKey,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                children: [
+                  AppText(
+                    'Are you sure you want to Hold?',
+                    softWrap: true,
+                    style: TextStyles.medium(Get.context!),
+                  ),
+                  20.heightGap,
+                  buildRemarkField(),
+                ],
+              ),
+            ),
+          ),
+          primaryButtonText: 'Hold',
+          secondaryButtonText: 'Cancel',
+          onPrimaryButtonPressed: () async {
             if (approveFormKey.currentState!.validate()) {
               isApproveLoading.value = true;
-              await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
+              await postFinanceVoucher(bankPayment, paymentStatus: 'Hold');
               isApproveLoading.value = false;
             }
           },
@@ -331,7 +428,7 @@ class FinanceController extends GetxController
     } else if (value == 'Reject') {
       await Get.dialog(
         GenericDialogBox(
-          headerText: 'Reject Bank Payment',
+          headerText: 'Reject',
           content: Form(
             key: rejectFormKey,
             child: Container(
@@ -392,26 +489,7 @@ class FinanceController extends GetxController
       tabs.add(Tab(text: subMenu.key));
       views.add(FinanceView(subMenuType: subMenu));
     });
-
-    // if (subMenus.contains(SubMenuType.bankPayment)) {
-    //   tabs.add(const Tab(text: 'Bank Payment'));
-    //   views.add(FinanceView(subMenuType: SubMenuType.bankPayment));
-    // }
-    //
-    // if (subMenus.contains(SubMenuType.bankReceipt)) {
-    //   tabs.add(const Tab(text: 'Bank Receipt'));
-    //   views.add(FinanceView(subMenuType: SubMenuType.bankReceipt));
-    // }
-    //
-    // if (subMenus.contains(SubMenuType.cashPayment)) {
-    //   tabs.add(const Tab(text: 'Cash Payment'));
-    //   views.add(FinanceView(subMenuType: SubMenuType.cashPayment));
-    // }
-    //
-    // if (subMenus.contains(SubMenuType.cashReceipt)) {
-    //   tabs.add(const Tab(text: 'Cash Receipt'));
-    //   views.add(FinanceView(subMenuType: SubMenuType.cashReceipt));
-    // }
+    currentSubMenu.value = subMenus.first;
 
     myTabs = tabs;
     tabViews = views;
@@ -421,7 +499,6 @@ class FinanceController extends GetxController
       bankPaymentList,
       rowsPerPage: rowsPerPage.value,
     );
-
     bankReceiptDataSource = BankReceiptDataSource(
       bankReceiptList,
       rowsPerPage: rowsPerPage.value,
@@ -434,15 +511,17 @@ class FinanceController extends GetxController
       cashReceiptList,
       rowsPerPage: rowsPerPage.value,
     );
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final data = Get.arguments;
-      if (data == null) return;
-      final subMenuType = data['subMenuType'];
-      final srl = data['Srl'];
-      goTOSubMenu(subMenuType, srl);
-    });
-    getAllData(mainType: currentSubMenu.value);
+    if (Get.arguments != null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        final data = Get.arguments;
+        if (data == null) return;
+        final subMenuType = data['subMenuType'];
+        final srl = data['Srl'];
+        goTOSubMenu(subMenuType, srl);
+      });
+    } else {
+      getAllData(mainType: currentSubMenu.value);
+    }
     Get.find<NotificationController>().fetchNotifications();
   }
 

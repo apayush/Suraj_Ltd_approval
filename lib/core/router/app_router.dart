@@ -12,7 +12,9 @@ import '../../features/dashboard/view/dashboard_screen.dart';
 import '../../features/finance/controller/finance_controller.dart';
 import '../../features/finance/view/finance_screen.dart';
 import '../../features/production/controller/production_controller.dart';
+import '../../features/production/view/production_screen.dart';
 import '../../features/purchase/controller/purchase_controller.dart';
+import '../../features/purchase/view/purchase_screen.dart';
 import '../../features/splash/view/splash_screen.dart';
 import '../widgets/under_development_page.dart';
 
@@ -81,8 +83,8 @@ class AppRouter {
     ),
     GetPage(
       name: purchaseScreen,
-      page: () => UnderDevelopmentPage(),
-      // page: () => PurchaseScreen(),
+      // page: () => UnderDevelopmentPage(),
+      page: () => PurchaseScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<PurchaseController>(() => PurchaseController());
       }),

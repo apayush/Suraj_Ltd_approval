@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
+import '../../../controller/purchase_controller.dart';
 
-import '../../../controller/finance_controller.dart';
-
-class FinanceTabView extends GetView<FinanceController> {
-  FinanceTabView({super.key});
+class PurchaseTabBarView extends GetView<PurchaseController> {
+  PurchaseTabBarView({super.key});
 
   @override
   Widget build(BuildContext context) {

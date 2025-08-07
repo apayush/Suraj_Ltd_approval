@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../../features/finance/controller/finance_controller.dart';
 import '../../../../features/finance/model/bank_payment_model.dart';
 import '../../../widgets/common_widgets.dart';
 import '../../app_module_container.dart';
 import '../../app_utills.dart';
 
-class BankReceiptDataSource extends DataGridSource {
-  List<VoucherModel> bankReceiptList = [];
+class PurchaseInvoiceDataSource extends DataGridSource {
+  List<VoucherModel> bankPaymentList = [];
   List<VoucherModel> paginatedItems = [];
   int rowsPerPage;
   int currentPageIndex = 0;
 
-  BankReceiptDataSource(this.bankReceiptList, {required this.rowsPerPage}) {
+  PurchaseInvoiceDataSource(this.bankPaymentList, {required this.rowsPerPage}) {
     _loadInitialPage();
   }
 
   List<DataGridRow> _dataGridRows = [];
 
   void _loadInitialPage() {
-    paginatedItems = bankReceiptList.take(rowsPerPage).toList();
+    paginatedItems = bankPaymentList.take(rowsPerPage).toList();
     _buildDataGridRows();
   }
 
@@ -38,8 +37,8 @@ class BankReceiptDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-          return DataGridRow(cells: _buildDataGridCells(e));
-        })
+      return DataGridRow(cells: _buildDataGridCells(e));
+    })
         .toList(growable: false);
   }
 
@@ -51,8 +50,6 @@ class BankReceiptDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Debit', e.debit?.toString() ?? '0'),
-      _createCell('Credit', e.credit?.toString() ?? '0'),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];
@@ -76,24 +73,24 @@ class BankReceiptDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-          row.getCells().map<Widget>((dataGridCell) {
-            if (dataGridCell.columnName == 'Action') {
-              return buildActionIcons(
-                dataGridCell.value as VoucherModel,
-              );
-            } else {
-              return Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: AppText(
-                  dataGridCell.value.toString(),
-                  style: TextStyles.small(Get.context!),
-                  overflow: TextOverflow.ellipsis,
-                  alignment: Alignment.centerLeft,
-                ),
-              );
-            }
-          }).toList(),
+      row.getCells().map<Widget>((dataGridCell) {
+        if (dataGridCell.columnName == 'Action') {
+          return buildActionIcons(
+            dataGridCell.value as VoucherModel,
+          );
+        } else {
+          return Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.center,
+            child: AppText(
+              dataGridCell.value.toString(),
+              style: TextStyles.small(Get.context!),
+              overflow: TextOverflow.ellipsis,
+              alignment: Alignment.centerLeft,
+            ),
+          );
+        }
+      }).toList(),
     );
   }
 
@@ -103,15 +100,15 @@ class BankReceiptDataSource extends DataGridSource {
     int startIndex = newPageIndex * rowsPerPage;
     int endIndex = startIndex + rowsPerPage;
 
-    if (startIndex < bankReceiptList.length) {
+    if (startIndex < bankPaymentList.length) {
       paginatedItems =
-          bankReceiptList
+          bankPaymentList
               .getRange(
-                startIndex,
-                endIndex > bankReceiptList.length
-                    ? bankReceiptList.length
-                    : endIndex,
-              )
+            startIndex,
+            endIndex > bankPaymentList.length
+                ? bankPaymentList.length
+                : endIndex,
+          )
               .toList();
 
       _buildDataGridRows();
@@ -125,7 +122,7 @@ class BankReceiptDataSource extends DataGridSource {
   }
 
   Widget buildActionIcons(VoucherModel model) {
-    final controller = Get.find<FinanceController>();
+    final controller = Get.find<PurchaseController>();
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -162,9 +159,9 @@ class BankReceiptDataSource extends DataGridSource {
   }
 
   void updateDataSource(List<VoucherModel> updateList) {
-    bankReceiptList = updateList;
+    bankPaymentList = updateList;
     currentPageIndex = 0;
-    paginatedItems = bankReceiptList.take(rowsPerPage).toList();
+    paginatedItems = updateList.take(rowsPerPage).toList();
     _buildDataGridRows();
     notifyListeners();
   }

@@ -17,7 +17,9 @@ import '../../../core/widgets/common_widgets.dart';
 class SessionController extends GetxController {
   Timer? _inactivityTimer;
   final RxBool isLoading = false.obs;
-  final int sessionTimeout = 30 * 60 * 1000;
+
+  // final int sessionTimeout = 30 * 60 * 1000;  // 30 mins
+  final int sessionTimeout = 24 * 60 * 60 * 1000; // 24 hrs
 
   @override
   void onInit() {
@@ -39,17 +41,12 @@ class SessionController extends GetxController {
 
   // Start the inactivity timer
   void _startInactivityTimer() {
+    if (!kIsWeb) return;
     _inactivityTimer?.cancel(); // Cancel any existing timer
     _inactivityTimer = Timer(
       Duration(milliseconds: sessionTimeout),
       _showSessionExpiredDialog,
     );
-  }
-
-  void resetInactivityTimer() {
-    if (Get.currentRoute != AppRouter.login) {
-      _startInactivityTimer();
-    }
   }
 
   Future<void> logout() async {

@@ -7,20 +7,22 @@ import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/finance/model/bank_payment_model.dart';
 
-class FinancePaymentCard extends StatelessWidget {
-  final FinancePaymentModel payment;
+class VoucherCard extends StatelessWidget {
+  final VoucherModel payment;
   final Color primaryColor;
   final VoidCallback? onTap;
   final VoidCallback onApprove;
   final VoidCallback onReject;
+  final VoidCallback onHold;
 
-  const FinancePaymentCard({
+  const VoucherCard({
     Key? key,
     required this.payment,
     required this.primaryColor,
     this.onTap,
     required this.onApprove,
     required this.onReject,
+    required this.onHold,
   }) : super(key: key);
 
   @override
@@ -63,7 +65,8 @@ class FinancePaymentCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Row(
+              if (payment.debit?.toInt() != 0 || payment.credit != 0)
+                Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -98,17 +101,7 @@ class FinancePaymentCard extends StatelessWidget {
                   ),
                 ],
               ),
-              /*  const SizedBox(height: 12),
 
-              // Title
-              Text(
-                '${payment.type ?? AppStrings.notAvailable}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),*/
               const SizedBox(height: 16),
 
               // Bottom Info Section
@@ -206,6 +199,29 @@ class FinancePaymentCard extends StatelessWidget {
                       ),
                       child: const Text(
                         'Reject',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onHold();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade600,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Hold',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

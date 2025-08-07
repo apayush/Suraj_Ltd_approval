@@ -109,7 +109,7 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        print(message.data);
+        print('msg listen from firebase ${message.data}');
         print(message.notification?.title);
         print(message.notification?.body);
         print(Platform.isAndroid);

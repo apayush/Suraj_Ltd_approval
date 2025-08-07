@@ -14,6 +14,9 @@ class ApiClient {
     _dio = _dio.clone(
       options: BaseOptions(
         baseUrl: _baseUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         connectTimeout: Duration(seconds: 45),
         receiveTimeout: Duration(seconds: 45),
       ),
@@ -25,6 +28,9 @@ class ApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         connectTimeout: Duration(seconds: 45),
         receiveTimeout: Duration(seconds: 45),
       ),

@@ -17,11 +17,13 @@ class ApiUrl {
   // ! FINANCE MODULE API
   static const String getVoucherApprovalDashboard = '/GetVoucherApprovalDashboard';
   static const String getAuthorisationList = '/GetAuthorisationList';
-  static const String authoriseFinanceVoucher = '/AuthoriseFinanceVoucher';
+  static const String authoriseVoucher = '/AuthoriseFinanceVoucher';
   static const String getAuthorisationListFilter =
       '/GetAuthorisationListFilter';
   static const String getAllAuthorisationList = '/GetAllAuthorisationList';
+  static const String getHoldVoucher = '/GetHoldFinance';
+  // http://124.123.122.112:7081/Report/GetHoldFinance?mUser=Mihir&mUserLevel=3&MainType=Bank Payment
 
   // ! Get PDF Report
-  static const String getBankpaymentReport = '/getBankpaymentReport';
+  static const String getVoucherReport = '/getBankpaymentReport';
 }

@@ -15,6 +15,7 @@ class AppStrings {
   static const String reject = 'Reject';
   static const String search = 'Search';
   static const String reset = 'Reset';
+  static const String hold = 'Hold';
   static const String filters = 'Filters';
   static const String submit = 'Submit';
   static const String confirm = 'Confirm';

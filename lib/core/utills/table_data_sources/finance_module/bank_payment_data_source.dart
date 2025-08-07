@@ -10,8 +10,8 @@ import '../../app_module_container.dart';
 import '../../app_utills.dart';
 
 class BankPaymentDataSource extends DataGridSource {
-  List<FinancePaymentModel> bankPaymentList = [];
-  List<FinancePaymentModel> paginatedItems = [];
+  List<VoucherModel> bankPaymentList = [];
+  List<VoucherModel> paginatedItems = [];
   int rowsPerPage;
   int currentPageIndex = 0;
 
@@ -43,7 +43,7 @@ class BankPaymentDataSource extends DataGridSource {
         .toList(growable: false);
   }
 
-  List<DataGridCell<dynamic>> _buildDataGridCells(FinancePaymentModel e) {
+  List<DataGridCell<dynamic>> _buildDataGridCells(VoucherModel e) {
     List<DataGridCell<dynamic>> cells = [
       _createCell('', (e.sno ?? '').toString()),
       _createCell('Branch', (e.mBranch ?? '').toString()),
@@ -79,7 +79,7 @@ class BankPaymentDataSource extends DataGridSource {
           row.getCells().map<Widget>((dataGridCell) {
             if (dataGridCell.columnName == 'Action') {
               return buildActionIcons(
-                dataGridCell.value as FinancePaymentModel,
+                dataGridCell.value as VoucherModel,
               );
             } else {
               return Container(
@@ -124,7 +124,7 @@ class BankPaymentDataSource extends DataGridSource {
     return true;
   }
 
-  Widget buildActionIcons(FinancePaymentModel model) {
+  Widget buildActionIcons(VoucherModel model) {
     final controller = Get.find<FinanceController>();
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -145,6 +145,13 @@ class BankPaymentDataSource extends DataGridSource {
         ),
         Flexible(
           child: IconButton(
+            icon: const Icon(Icons.pause_circle_outline, color: Colors.orange),
+            tooltip: 'Hold',
+            onPressed: () => controller.handleMenuSelection('Hold', model),
+          ),
+        ),
+        Flexible(
+          child: IconButton(
             icon: const Icon(Icons.cancel_outlined, color: Colors.red),
             tooltip: 'Reject',
             onPressed: () => controller.handleMenuSelection('Reject', model),
@@ -154,7 +161,7 @@ class BankPaymentDataSource extends DataGridSource {
     );
   }
 
-  void updateDataSource(List<FinancePaymentModel> updateList) {
+  void updateDataSource(List<VoucherModel> updateList) {
     bankPaymentList = updateList;
     currentPageIndex = 0;
     paginatedItems = updateList.take(rowsPerPage).toList();

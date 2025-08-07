@@ -20,7 +20,7 @@ class FinanceTabletView extends GetView<FinanceController> {
         FinanceSearchAndRefreshWidget(),
         10.heightGap,
         Obx(() {
-          List<FinancePaymentModel> financeDataList = switch (subMenuType) {
+          List<VoucherModel> financeDataList = switch (subMenuType) {
             SubMenuType.bankPayment => controller.filteredBankPaymentList,
             SubMenuType.bankReceipt => controller.filteredBankReceiptList,
             SubMenuType.cashPayment => controller.filteredCashPaymentList,
