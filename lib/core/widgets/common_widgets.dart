@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -131,19 +132,30 @@ Widget appGridLabel(String label, {Alignment align = Alignment.centerLeft}) {
   );
 }
 
-class SidebarXDrawer extends StatelessWidget {
+class SidebarXDrawer extends StatefulWidget {
   final List<SidebarXItem> items;
   final SidebarXController controller;
 
   SidebarXDrawer({super.key, required this.items, required this.controller});
 
+  @override
+  State<SidebarXDrawer> createState() => _SidebarXDrawerState();
+}
+
+class _SidebarXDrawerState extends State<SidebarXDrawer> {
   final sideBarXController = Get.find<SidebarController>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb) widget.controller.setExtended(true);
+  }
 
   @override
   Widget build(BuildContext context) {
     return SidebarX(
-      controller: controller,
-      animationDuration: Duration(milliseconds: 300),
+      controller: widget.controller,
+      animationDuration: Duration.zero,
 
       // animationDuration: const Duration(milliseconds: 150),
       showToggleButton: false,
@@ -196,7 +208,7 @@ class SidebarXDrawer extends StatelessWidget {
                   ],
                   IconButton(
                     onPressed: () {
-                      controller.toggleExtended();
+                      widget.controller.toggleExtended();
                     },
                     icon: const Icon(CupertinoIcons.bars, color: Colors.white),
                   ),
@@ -206,7 +218,7 @@ class SidebarXDrawer extends StatelessWidget {
           ),
         );
       },
-      items: items,
+      items: widget.items,
 
       footerBuilder: (context, extended) {
         final bottomPanel = buildDrawerBottomPanel(

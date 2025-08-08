@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/finance/model/bank_payment_model.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
+
 import '../../../../../finance/view/widgets/tabs/widgets/finance_payment_card.dart';
 
 class PurchaseVoucherList extends GetView<PurchaseController> {
@@ -15,7 +16,7 @@ class PurchaseVoucherList extends GetView<PurchaseController> {
     return RefreshIndicator(
       onRefresh:
           () async =>
-          controller.getAllData(mainType: controller.currentSubMenu.value),
+              controller.getAllData(mainType: controller.currentSubMenu.value),
       child: AnimationLimiter(
         child: ListView.builder(
           itemCount: financePaymentList.length,

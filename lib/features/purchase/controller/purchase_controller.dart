@@ -4,6 +4,7 @@ import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
+
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_enum.dart';
 import '../../../core/service/api_service.dart';
@@ -23,6 +24,7 @@ class PurchaseController extends GetxController
 
   RxBool isApproveLoading = false.obs;
   RxBool isRejectLoading = false.obs;
+  RxBool isHoldVoucherModelEnabled = false.obs;
 
   MenuType currentMenu = MenuType.purchase;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.purchaseInvoice.obs;
@@ -36,14 +38,17 @@ class PurchaseController extends GetxController
 
   // ! Two lists to hold the Api data and filtered data for Purchase Invoice
   RxList<VoucherModel> purchaseInvoiceList = <VoucherModel>[].obs;
-  RxList<VoucherModel> filteredPurchaseInvoiceList =
-      <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredPurchaseInvoiceList = <VoucherModel>[].obs;
 
   //! DataGridSource for the SfDataGrid
   late PurchaseInvoiceDataSource purchaseInvoiceDataSource;
 
   // ! Get All Purchase Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
+    if (isHoldVoucherModelEnabled.value) {
+      getAllHoldData(mainType: mainType);
+      return;
+    }
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
@@ -63,8 +68,9 @@ class PurchaseController extends GetxController
           queryParams: param,
         );
         if (response.statusCode == 200) {
-          List<VoucherModel> voucher =
-          VoucherModel.fromDecodedJsonList(response.data ?? []);
+          List<VoucherModel> voucher = VoucherModel.fromDecodedJsonList(
+            response.data ?? [],
+          );
           switch (mainType) {
             case SubMenuType.purchaseInvoice:
               purchaseInvoiceList.assignAll(voucher);
@@ -99,13 +105,15 @@ class PurchaseController extends GetxController
           'mUserLevel': matchedUserDetail.userLevel,
           'MainType': mainType.key,
         };
+
         final response = await ApiService.getData(
           ApiUrl.getHoldVoucher,
           queryParams: param,
         );
         if (response.statusCode == 200) {
-          List<VoucherModel> voucher =
-          VoucherModel.fromDecodedJsonList(response.data ?? []);
+          List<VoucherModel> voucher = VoucherModel.fromDecodedJsonList(
+            response.data ?? [],
+          );
           switch (mainType) {
             case SubMenuType.purchaseInvoice:
               purchaseInvoiceList.assignAll(voucher);
@@ -117,7 +125,7 @@ class PurchaseController extends GetxController
           }
         }
       }
-    } catch (e) {
+    } catch (e, s) {
       print(e);
     } finally {
       isLoading.value = false;
@@ -144,9 +152,9 @@ class PurchaseController extends GetxController
 
   // ! Approve Reject Purchase Voucher
   Future<void> postVoucher(
-      VoucherModel voucher, {
-        required String voucherStatus,
-      }) async {
+    VoucherModel voucher, {
+    required String voucherStatus,
+  }) async {
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
@@ -189,16 +197,22 @@ class PurchaseController extends GetxController
     getAllData(mainType: currentSubMenu.value);
   }
 
-  // ! Hold Voucher
-  getHoldVoucher() {
-    getAllHoldData(mainType: currentSubMenu.value);
+  void toggleHoldMode() {
+    isHoldVoucherModelEnabled.value = !isHoldVoucherModelEnabled.value;
+    if (isHoldVoucherModelEnabled.value) {
+      getAllHoldData(mainType: currentSubMenu.value);
+    } else {
+      getAllData(mainType: currentSubMenu.value);
+    }
   }
 
   // ! Search Functionality
   TextEditingController searchController = TextEditingController();
+  RxBool isSearchActive = false.obs;
 
   void filterData(String searchText) {
     print(searchText);
+    isSearchActive.value = searchText.trim().isNotEmpty;
     final query = searchText.toLowerCase().trim();
     List<VoucherModel> sourceList;
     RxList<VoucherModel> filteredList;
@@ -220,16 +234,16 @@ class PurchaseController extends GetxController
       filteredList.assignAll(
         sourceList.where((item) {
           return [
-            item.mBranch,
-            item.type,
-            item.srl,
-            item.docDate,
-            item.party,
-            item.debit,
-            item.credit,
-            item.authIds,
-            item.mainType,
-          ]
+                item.mBranch,
+                item.type,
+                item.srl,
+                item.docDate,
+                item.party,
+                item.debit,
+                item.credit,
+                item.authIds,
+                item.mainType,
+              ]
               .map((e) => e?.toString().toLowerCase() ?? '')
               .any((field) => field.contains(query));
         }),
@@ -252,6 +266,12 @@ class PurchaseController extends GetxController
   // ! Grid Pagination
   final RxInt rowsPerPage = 10.obs;
 
+  void clearSearch() {
+    searchController.clear();
+    isSearchActive.value = false;
+    filterData('');
+  }
+
   void changeRowsPerPage(int newRowsPerPage) {
     rowsPerPage.value = newRowsPerPage;
     switch (currentSubMenu.value) {
@@ -266,10 +286,7 @@ class PurchaseController extends GetxController
   // ! Handle Action Menu Selection
   TextEditingController remarkController = TextEditingController();
 
-  Future<void> handleMenuSelection(
-      String value,
-      VoucherModel voucher,
-      ) async {
+  Future<void> handleMenuSelection(String value, VoucherModel voucher) async {
     if (value == 'View') {
       getVoucherReport(voucher);
     } else if (value == 'Approve') {
@@ -441,28 +458,29 @@ class PurchaseController extends GetxController
     if (menuType == SubMenuType.purchaseInvoice) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.purchaseInvoice;
-    // } else if (menuType == SubMenuType.purchaseIndent) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.purchaseIndent;
-    // } else if (menuType == SubMenuType.purchaseOrder) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.purchaseOrder;
-    // } else if (menuType == SubMenuType.gateInward) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.gateInward;
-    // } else if (menuType == SubMenuType.goodsReceiptNote) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.goodsReceiptNote;
-    // } else if (menuType == SubMenuType.purchaseCreditNote) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.purchaseCreditNote;
-    // } else if (menuType == SubMenuType.purchaseDebitNote) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.purchaseDebitNote;
+      // } else if (menuType == SubMenuType.purchaseIndent) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.purchaseIndent;
+      // } else if (menuType == SubMenuType.purchaseOrder) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.purchaseOrder;
+      // } else if (menuType == SubMenuType.gateInward) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.gateInward;
+      // } else if (menuType == SubMenuType.goodsReceiptNote) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.goodsReceiptNote;
+      // } else if (menuType == SubMenuType.purchaseCreditNote) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.purchaseCreditNote;
+      // } else if (menuType == SubMenuType.purchaseDebitNote) {
+      //   tabController.animateTo(index);
+      //   currentSubMenu.value = SubMenuType.purchaseDebitNote;
     }
 
     await getAllData(mainType: currentSubMenu.value);
     searchController.text = srl;
+    isSearchActive.value = true;
     filterData(srl);
   }
 

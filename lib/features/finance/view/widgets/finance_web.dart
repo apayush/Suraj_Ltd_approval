@@ -26,6 +26,7 @@ class FinanceWeb extends GetView<FinanceController> {
 
           SubMenuType type = subMenuTypeList[index];
 
+          controller.isHoldVoucherModelEnabled.value = false;
           controller.searchController.clear();
           controller.currentSubMenu.value = type;
           controller.getAllData(mainType: type);

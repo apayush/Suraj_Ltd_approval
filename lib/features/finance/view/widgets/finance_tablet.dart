@@ -25,6 +25,7 @@ class FinanceTablet extends GetView<FinanceController> {
               LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
 
           SubMenuType type = subMenuTypeList[index];
+          controller.isHoldVoucherModelEnabled.value = false;
           controller.searchController.clear();
           controller.currentSubMenu.value = type;
           controller.getAllData(mainType: type);

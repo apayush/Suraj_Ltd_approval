@@ -36,7 +36,7 @@ class VoucherModel {
     this.fcmid,
     this.mBranch,
     this.isPdfLoading,
-    this.isHold
+    this.isHold,
   });
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) {
@@ -46,7 +46,10 @@ class VoucherModel {
       type: json['Type'] as String?,
       srl: json['Srl'] as String?,
       docDate: json['DocDate'] as String?,
-      sno: json['Sno'] == '' || json['Sno'] == null ? 0 : int.tryParse(json['Sno'].toString()) ?? 0,
+      sno:
+          json['Sno'] == '' || json['Sno'] == null
+              ? 0
+              : int.tryParse(json['Sno'].toString()) ?? 0,
       party: json['Party'] as String?,
       debit: (json['Debit'] as num?)?.toDouble(),
       credit: (json['Credit'] as num?)?.toDouble(),

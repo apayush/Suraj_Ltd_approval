@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:suraj_approval/core/constants/app_strings.dart';
@@ -24,10 +25,7 @@ class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
         10.widthGap,
         Row(
           spacing: 10,
-          children: [
-            buildHoldVoucherButton(),
-            buildClearFilterButton(),
-          ],
+          children: [buildHoldVoucherButton(), buildClearFilterButton()],
         ),
       ],
     );
@@ -46,11 +44,16 @@ class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
   }
 
   Widget buildHoldVoucherButton() {
-    return AppIconButton(
-      tooltip: AppStrings.hold,
-      onPressed: controller.getHoldVoucher,
-      icon: CupertinoIcons.pause_circle,
-    );
+    return Obx(() {
+      final isHoldVoucher = controller.isHoldVoucherModelEnabled.value;
+      return AppIconButton(
+        tooltip: AppStrings.hold,
+        onPressed: controller.toggleHoldMode,
+        icon: CupertinoIcons.pause_circle,
+        backgroundColor: isHoldVoucher ? Colors.orange.shade50 : null,
+        iconColor: isHoldVoucher ? Colors.orange.shade600 : null,
+      );
+    });
   }
 
   Widget buildClearFilterButton() {

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/features/purchase/view/widgets/tabs/purchase_tabbar_view.dart';
+
 import '../../../../core/constants/app_enum.dart';
 import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
@@ -24,6 +25,7 @@ class PurchaseWeb extends GetView<PurchaseController> {
               LocalDB.getUserModel()?.getSubMenusFor(MenuType.purchase) ?? [];
           SubMenuType type = subMenuTypeList[index];
           controller.searchController.clear();
+          controller.isHoldVoucherModelEnabled.value = false;
           controller.currentSubMenu.value = type;
           controller.getAllData(mainType: type);
         },

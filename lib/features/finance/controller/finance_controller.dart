@@ -26,6 +26,7 @@ class FinanceController extends GetxController
   RxBool isLoading = false.obs;
   RxBool isApproveLoading = false.obs;
   RxBool isRejectLoading = false.obs;
+  RxBool isHoldVoucherModelEnabled = false.obs;
 
   MenuType currentMenu = MenuType.finance;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.bankPayment.obs;
@@ -38,23 +39,19 @@ class FinanceController extends GetxController
 
   // ! Two lists to hold the Api data and filtered data for Bank Payment
   RxList<VoucherModel> bankPaymentList = <VoucherModel>[].obs;
-  RxList<VoucherModel> filteredBankPaymentList =
-      <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredBankPaymentList = <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Bank Receipt
   RxList<VoucherModel> bankReceiptList = <VoucherModel>[].obs;
-  RxList<VoucherModel> filteredBankReceiptList =
-      <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredBankReceiptList = <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Payment
   RxList<VoucherModel> cashPaymentList = <VoucherModel>[].obs;
-  RxList<VoucherModel> filteredCashPaymentList =
-      <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredCashPaymentList = <VoucherModel>[].obs;
 
   // ! Two lists to hold the Api data and filtered data for Cash Receipt
   RxList<VoucherModel> cashReceiptList = <VoucherModel>[].obs;
-  RxList<VoucherModel> filteredCashReceiptList =
-      <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredCashReceiptList = <VoucherModel>[].obs;
 
   //! DataGridSource for the SfDataGrid
   late BankPaymentDataSource bankPaymentDataSource;
@@ -64,6 +61,10 @@ class FinanceController extends GetxController
 
   // ! Get All Finance Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
+    if (isHoldVoucherModelEnabled.value) {
+      getAllHoldData(mainType: mainType);
+      return;
+    }
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
@@ -83,8 +84,9 @@ class FinanceController extends GetxController
           queryParams: param,
         );
         if (response.statusCode == 200) {
-          List<VoucherModel> payment =
-              VoucherModel.fromDecodedJsonList(response.data ?? []);
+          List<VoucherModel> payment = VoucherModel.fromDecodedJsonList(
+            response.data ?? [],
+          );
           switch (mainType) {
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
@@ -139,8 +141,9 @@ class FinanceController extends GetxController
           queryParams: param,
         );
         if (response.statusCode == 200) {
-          List<VoucherModel> payment =
-              VoucherModel.fromDecodedJsonList(response.data ?? []);
+          List<VoucherModel> payment = VoucherModel.fromDecodedJsonList(
+            response.data ?? [],
+          );
           switch (mainType) {
             case SubMenuType.bankPayment:
               bankPaymentList.assignAll(payment);
@@ -239,7 +242,12 @@ class FinanceController extends GetxController
 
   // ! Hold Voucher
   getHoldVoucher() {
-    getAllHoldData(mainType: currentSubMenu.value);
+    isHoldVoucherModelEnabled.value = !isHoldVoucherModelEnabled.value;
+    if (isHoldVoucherModelEnabled.value) {
+      getAllHoldData(mainType: currentSubMenu.value);
+    } else {
+      getAllData(mainType: currentSubMenu.value);
+    }
   }
 
   // ! Search Functionality

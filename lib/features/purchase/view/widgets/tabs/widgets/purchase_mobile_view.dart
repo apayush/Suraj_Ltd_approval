@@ -10,36 +10,37 @@ import 'package:suraj_approval/features/purchase/view/widgets/tabs/widgets/purch
 
 class PurchaseMobileView extends GetView<PurchaseController> {
   PurchaseMobileView({super.key, required this.subMenuType});
+
   final SubMenuType subMenuType;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      List<VoucherModel> financeDataList = switch (subMenuType) {
+      RxList<VoucherModel> financeDataList = switch (subMenuType) {
         SubMenuType.purchaseInvoice => controller.filteredPurchaseInvoiceList,
-        _ => [],
+        _ => RxList<VoucherModel>.empty(),
       };
       return financeDataList.isNotEmpty
           ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PurchaseSearchAndRefreshWidget(),
-          10.heightGap,
-          Expanded(
-            child: PurchaseVoucherList(financePaymentList: financeDataList),
-          ),
-        ],
-      )
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PurchaseSearchAndRefreshWidget(),
+              10.heightGap,
+              Expanded(
+                child: PurchaseVoucherList(financePaymentList: financeDataList),
+              ),
+            ],
+          )
           : SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            PurchaseSearchAndRefreshWidget(),
-            10.heightGap,
-            const Center(child: NoDataFound()),
-          ],
-        ),
-      );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PurchaseSearchAndRefreshWidget(),
+                10.heightGap,
+                const Center(child: NoDataFound()),
+              ],
+            ),
+          );
     });
   }
 }
