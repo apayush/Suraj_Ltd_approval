@@ -9,19 +9,22 @@ import '../../app_module_container.dart';
 import '../../app_utills.dart';
 
 class PurchaseInvoiceDataSource extends DataGridSource {
-  List<VoucherModel> bankPaymentList = [];
+  List<VoucherModel> purchaseInvoiceList = [];
   List<VoucherModel> paginatedItems = [];
   int rowsPerPage;
   int currentPageIndex = 0;
 
-  PurchaseInvoiceDataSource(this.bankPaymentList, {required this.rowsPerPage}) {
+  PurchaseInvoiceDataSource(
+    this.purchaseInvoiceList, {
+    required this.rowsPerPage,
+  }) {
     _loadInitialPage();
   }
 
   List<DataGridRow> _dataGridRows = [];
 
   void _loadInitialPage() {
-    paginatedItems = bankPaymentList.take(rowsPerPage).toList();
+    paginatedItems = purchaseInvoiceList.take(rowsPerPage).toList();
     _buildDataGridRows();
   }
 
@@ -37,14 +40,13 @@ class PurchaseInvoiceDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-      return DataGridRow(cells: _buildDataGridCells(e));
-    })
+          return DataGridRow(cells: _buildDataGridCells(e));
+        })
         .toList(growable: false);
   }
 
   List<DataGridCell<dynamic>> _buildDataGridCells(VoucherModel e) {
     List<DataGridCell<dynamic>> cells = [
-      _createCell('', (e.sno ?? '').toString()),
       _createCell('Branch', (e.mBranch ?? '').toString()),
       _createCell('Type', (e.type ?? '').toString()),
       _createCell('Srl', e.srl ?? ''),
@@ -68,29 +70,32 @@ class PurchaseInvoiceDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     Color backgroundColor;
     final int rowIndex = _dataGridRows.indexOf(row);
-    backgroundColor = AppUtils.getDataGridRowColor(rowIndex);
+    VoucherModel model = purchaseInvoiceList[rowIndex];
+    if (model.isHold == true) {
+      backgroundColor = Colors.yellow.shade200;
+    } else {
+      backgroundColor = AppUtils.getDataGridRowColor(rowIndex);
+    }
 
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-      row.getCells().map<Widget>((dataGridCell) {
-        if (dataGridCell.columnName == 'Action') {
-          return buildActionIcons(
-            dataGridCell.value as VoucherModel,
-          );
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: AppText(
-              dataGridCell.value.toString(),
-              style: TextStyles.small(Get.context!),
-              overflow: TextOverflow.ellipsis,
-              alignment: Alignment.centerLeft,
-            ),
-          );
-        }
-      }).toList(),
+          row.getCells().map<Widget>((dataGridCell) {
+            if (dataGridCell.columnName == 'Action') {
+              return buildActionIcons(dataGridCell.value as VoucherModel);
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                child: AppText(
+                  dataGridCell.value.toString(),
+                  style: TextStyles.small(Get.context!),
+                  overflow: TextOverflow.ellipsis,
+                  alignment: Alignment.centerLeft,
+                ),
+              );
+            }
+          }).toList(),
     );
   }
 
@@ -100,15 +105,15 @@ class PurchaseInvoiceDataSource extends DataGridSource {
     int startIndex = newPageIndex * rowsPerPage;
     int endIndex = startIndex + rowsPerPage;
 
-    if (startIndex < bankPaymentList.length) {
+    if (startIndex < purchaseInvoiceList.length) {
       paginatedItems =
-          bankPaymentList
+          purchaseInvoiceList
               .getRange(
-            startIndex,
-            endIndex > bankPaymentList.length
-                ? bankPaymentList.length
-                : endIndex,
-          )
+                startIndex,
+                endIndex > purchaseInvoiceList.length
+                    ? purchaseInvoiceList.length
+                    : endIndex,
+              )
               .toList();
 
       _buildDataGridRows();
@@ -140,13 +145,17 @@ class PurchaseInvoiceDataSource extends DataGridSource {
             onPressed: () => controller.handleMenuSelection('Approve', model),
           ),
         ),
-        Flexible(
-          child: IconButton(
-            icon: const Icon(Icons.pause_circle_outline, color: Colors.orange),
-            tooltip: 'Hold',
-            onPressed: () => controller.handleMenuSelection('Hold', model),
+        if (model.isHold == false)
+          Flexible(
+            child: IconButton(
+              icon: const Icon(
+                Icons.pause_circle_outline,
+                color: Colors.orange,
+              ),
+              tooltip: 'Hold',
+              onPressed: () => controller.handleMenuSelection('Hold', model),
+            ),
           ),
-        ),
         Flexible(
           child: IconButton(
             icon: const Icon(Icons.cancel_outlined, color: Colors.red),
@@ -159,7 +168,7 @@ class PurchaseInvoiceDataSource extends DataGridSource {
   }
 
   void updateDataSource(List<VoucherModel> updateList) {
-    bankPaymentList = updateList;
+    purchaseInvoiceList = updateList;
     currentPageIndex = 0;
     paginatedItems = updateList.take(rowsPerPage).toList();
     _buildDataGridRows();

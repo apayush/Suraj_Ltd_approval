@@ -17,6 +17,7 @@ class VoucherModel {
   final String? fcmid;
   final String? mBranch;
   final RxBool? isPdfLoading;
+  final bool? isHold;
 
   VoucherModel({
     this.mainType,
@@ -35,6 +36,7 @@ class VoucherModel {
     this.fcmid,
     this.mBranch,
     this.isPdfLoading,
+    this.isHold
   });
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) {
@@ -44,7 +46,7 @@ class VoucherModel {
       type: json['Type'] as String?,
       srl: json['Srl'] as String?,
       docDate: json['DocDate'] as String?,
-      sno: json['Sno'] as int?,
+      sno: json['Sno'] == '' || json['Sno'] == null ? 0 : int.tryParse(json['Sno'].toString()) ?? 0,
       party: json['Party'] as String?,
       debit: (json['Debit'] as num?)?.toDouble(),
       credit: (json['Credit'] as num?)?.toDouble(),
@@ -54,6 +56,7 @@ class VoucherModel {
       fcmid: json['fcmid'] as String?,
       mBranch: json['mBranch'] as String?,
       subType: json['SubType'] as String?,
+      isHold: json['isHold'] as bool?,
       isPdfLoading: false.obs,
     );
   }
@@ -75,6 +78,7 @@ class VoucherModel {
       'fcmid': fcmid,
       'mBranch': mBranch,
       'SubType': subType,
+      'isHold': isHold,
     };
   }
 

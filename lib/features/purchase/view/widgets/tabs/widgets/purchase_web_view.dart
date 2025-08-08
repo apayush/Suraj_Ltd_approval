@@ -41,12 +41,6 @@ class PurchaseWebView extends GetView<PurchaseController> {
                 rowsPerPage: controller.rowsPerPage.value,
                 dynamicColumns: [
                   GridColumn(
-                    columnName: '',
-                    columnWidthMode: ColumnWidthMode.auto,
-                    label: appGridLabel(''),
-                    allowSorting: false,
-                  ),
-                  GridColumn(
                     columnName: 'Branch',
                     columnWidthMode: ColumnWidthMode.auto,
                     label: appGridLabel('Branch'),
@@ -72,7 +66,7 @@ class PurchaseWebView extends GetView<PurchaseController> {
                   ),
                   GridColumn(
                     columnName: 'Party',
-                    columnWidthMode: ColumnWidthMode.fill,
+                    columnWidthMode: ColumnWidthMode.auto,
                     label: appGridLabel('Party'),
                     allowSorting: false,
                   ),

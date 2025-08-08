@@ -71,16 +71,19 @@ class BankPaymentDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     Color backgroundColor;
     final int rowIndex = _dataGridRows.indexOf(row);
-    backgroundColor = AppUtils.getDataGridRowColor(rowIndex);
+    VoucherModel model = bankPaymentList[rowIndex];
+    if (model.isHold == true) {
+      backgroundColor = Colors.yellow.shade200;
+    } else {
+      backgroundColor = AppUtils.getDataGridRowColor(rowIndex);
+    }
 
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
           row.getCells().map<Widget>((dataGridCell) {
             if (dataGridCell.columnName == 'Action') {
-              return buildActionIcons(
-                dataGridCell.value as VoucherModel,
-              );
+              return buildActionIcons(dataGridCell.value as VoucherModel);
             } else {
               return Container(
                 padding: const EdgeInsets.all(8.0),
@@ -143,13 +146,17 @@ class BankPaymentDataSource extends DataGridSource {
             onPressed: () => controller.handleMenuSelection('Approve', model),
           ),
         ),
-        Flexible(
-          child: IconButton(
-            icon: const Icon(Icons.pause_circle_outline, color: Colors.orange),
-            tooltip: 'Hold',
-            onPressed: () => controller.handleMenuSelection('Hold', model),
+        if (model.isHold == false)
+          Flexible(
+            child: IconButton(
+              icon: const Icon(
+                Icons.pause_circle_outline,
+                color: Colors.orange,
+              ),
+              tooltip: 'Hold',
+              onPressed: () => controller.handleMenuSelection('Hold', model),
+            ),
           ),
-        ),
         Flexible(
           child: IconButton(
             icon: const Icon(Icons.cancel_outlined, color: Colors.red),
