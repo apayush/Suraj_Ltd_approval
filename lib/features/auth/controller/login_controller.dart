@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ import 'package:suraj_approval/core/utills/app_utills.dart';
 import 'package:suraj_approval/core/widgets/app_dialog.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+
 import '../../../core/utills/device_type.dart';
 import '../../dashboard/controller/session_controller.dart';
 import '../../notifications/controller/notification_controller.dart';
@@ -88,7 +90,6 @@ class LoginController extends GetxController {
 
   Future<void> getBaseUrl(BuildContext context) async {
     if (!formKey.currentState!.validate()) return;
-
     isLoading.value = true;
     try {
       final response = await ApiService.getData(
@@ -106,16 +107,16 @@ class LoginController extends GetxController {
         login();
       } else {
         AppUtils.showSnackBar(data?['message'] ?? 'Failed to get URL');
+        isLoading.value = false;
       }
     } on DioException catch (e) {
-      print("e.toString():$e");
       errorMessage.value = 'Connection not found, Config your environment';
       if (e.type == DioExceptionType.connectionError) {
         showSettingsDialog(context);
       }
+      isLoading.value = false;
     } catch (e) {
       AppUtils.showSnackBar(e.toString());
-    } finally {
       isLoading.value = false;
     }
   }

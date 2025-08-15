@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
+import 'package:suraj_approval/core/utills/table_data_sources/purchase_module/purchase_order_data_source.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
 
 import '../../../core/constants/api_url.dart';
@@ -40,8 +41,12 @@ class PurchaseController extends GetxController
   RxList<VoucherModel> purchaseInvoiceList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredPurchaseInvoiceList = <VoucherModel>[].obs;
 
+  RxList<VoucherModel> purchaseOrderList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredPurchaseOrderListList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late PurchaseInvoiceDataSource purchaseInvoiceDataSource;
+  late PurchaseOrderDataSource purchaseOrderDataSource;
 
   // ! Get All Purchase Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -76,6 +81,11 @@ class PurchaseController extends GetxController
               purchaseInvoiceList.assignAll(voucher);
               filteredPurchaseInvoiceList.value = (voucher);
               purchaseInvoiceDataSource.updateDataSource(purchaseInvoiceList);
+              break;
+            case SubMenuType.purchaseOrder:
+              purchaseOrderList.assignAll(voucher);
+              filteredPurchaseOrderListList.value = (voucher);
+              purchaseOrderDataSource.updateDataSource(purchaseOrderList);
               break;
             default:
               break;
@@ -119,6 +129,11 @@ class PurchaseController extends GetxController
               purchaseInvoiceList.assignAll(voucher);
               filteredPurchaseInvoiceList.value = (voucher);
               purchaseInvoiceDataSource.updateDataSource(purchaseInvoiceList);
+              break;
+            case SubMenuType.purchaseOrder:
+              purchaseOrderList.assignAll(voucher);
+              filteredPurchaseOrderListList.value = (voucher);
+              purchaseOrderDataSource.updateDataSource(purchaseOrderList);
               break;
             default:
               break;
@@ -224,6 +239,11 @@ class PurchaseController extends GetxController
         filteredList = filteredPurchaseInvoiceList;
         dataSource = purchaseInvoiceDataSource;
         break;
+      case SubMenuType.purchaseOrder:
+        sourceList = purchaseOrderList;
+        filteredList = filteredPurchaseOrderListList;
+        dataSource = purchaseOrderDataSource;
+        break;
       default:
         return;
     }
@@ -255,6 +275,9 @@ class PurchaseController extends GetxController
         case SubMenuType.purchaseInvoice:
           filteredPurchaseInvoiceList.value = filteredList.toList();
           break;
+        case SubMenuType.purchaseOrder:
+          filteredPurchaseOrderListList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -277,6 +300,9 @@ class PurchaseController extends GetxController
     switch (currentSubMenu.value) {
       case SubMenuType.purchaseInvoice:
         purchaseInvoiceDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.purchaseOrder:
+        purchaseOrderDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -435,6 +461,11 @@ class PurchaseController extends GetxController
       purchaseInvoiceList,
       rowsPerPage: rowsPerPage.value,
     );
+    purchaseOrderDataSource = PurchaseOrderDataSource(
+      purchaseOrderList,
+      rowsPerPage: rowsPerPage.value,
+    );
+
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         final data = Get.arguments;
@@ -464,7 +495,8 @@ class PurchaseController extends GetxController
       // } else if (menuType == SubMenuType.purchaseOrder) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.purchaseOrder;
-      // } else if (menuType == SubMenuType.gateInward) {
+      // }
+      // else if (menuType == SubMenuType.gateInward) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.gateInward;
       // } else if (menuType == SubMenuType.goodsReceiptNote) {
@@ -476,6 +508,9 @@ class PurchaseController extends GetxController
       // } else if (menuType == SubMenuType.purchaseDebitNote) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.purchaseDebitNote;
+    } else if (menuType == SubMenuType.purchaseOrder) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.purchaseOrder;
     }
 
     await getAllData(mainType: currentSubMenu.value);

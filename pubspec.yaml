@@ -1,6 +1,6 @@
 name: suraj_approval
 description: "freelancing project for Suraj Ltd. to manage approval requests"
-version: 0.0.1+1
+version: 1.0.3+1
 publish_to: none
 
 environment:
@@ -35,6 +35,7 @@ dependencies:
   syncfusion_flutter_pdfviewer:
   path_provider:
   flutter_staggered_animations:
+  connectivity_plus:
 
 dev_dependencies:
   flutter_test:

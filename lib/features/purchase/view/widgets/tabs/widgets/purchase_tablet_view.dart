@@ -6,6 +6,7 @@ import 'package:suraj_approval/core/widgets/no_data_found.dart';
 import 'package:suraj_approval/features/finance/model/bank_payment_model.dart';
 import 'package:suraj_approval/features/purchase/view/widgets/tabs/widgets/purchase_search_and_refresh_widget.dart';
 import 'package:suraj_approval/features/purchase/view/widgets/tabs/widgets/purchase_voucher_list.dart';
+
 import '../../../../controller/purchase_controller.dart';
 
 class PurchaseTabletView extends GetView<PurchaseController> {
@@ -21,13 +22,18 @@ class PurchaseTabletView extends GetView<PurchaseController> {
         10.heightGap,
         Obx(() {
           List<VoucherModel> purchaseDataList = switch (subMenuType) {
-            SubMenuType.bankPayment => controller.filteredPurchaseInvoiceList,
+            SubMenuType.purchaseInvoice =>
+              controller.filteredPurchaseInvoiceList,
+            SubMenuType.purchaseOrder =>
+              controller.filteredPurchaseOrderListList,
             _ => [],
           };
           return purchaseDataList.isNotEmpty
               ? Expanded(
-            child: PurchaseVoucherList(financePaymentList: purchaseDataList),
-          )
+                child: PurchaseVoucherList(
+                  financePaymentList: purchaseDataList,
+                ),
+              )
               : const Center(child: NoDataFound());
         }),
       ],

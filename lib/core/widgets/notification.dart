@@ -32,7 +32,11 @@ class _NotificationBellState extends State<NotificationBell> {
           child: Badge.count(
             count: controller.unreadCount.value,
             isLabelVisible: controller.unreadCount.value > 0,
-            child: const Icon(Icons.notifications, color: Colors.black),
+            child: const Icon(
+              Icons.notifications,
+              color: Colors.black,
+              size: 30,
+            ),
           ),
         ),
       ),

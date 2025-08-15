@@ -30,7 +30,7 @@ enum SubMenuType {
   // Purchase
   purchaseInvoice('Purchase Invoice'),
   // purchaseIndent('Purchase Indent'),
-  // purchaseOrder('Purchase Order'),
+  purchaseOrder('Purchase Order'),
   // gateInward('Gate Inward'),
   // goodsReceiptNote('Goods Receipts Note'),
   // purchaseCreditNote('Purchase Credit Note'),

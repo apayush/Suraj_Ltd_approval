@@ -16,6 +16,13 @@ class DashboardModel {
       rejectCount: json['RejectCount'] ?? 0,
     );
   }
+  factory DashboardModel.empty() {
+    return DashboardModel(
+      period: '',
+      approveCount: 0,
+      rejectCount: 0,
+    );
+  }
 
   int get totalCount => approveCount + rejectCount;
 

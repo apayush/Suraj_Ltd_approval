@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/models/dashboard_model.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
+import 'package:suraj_approval/core/widgets/no_data_found.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
 
 import '../../../../core/utills/app_module_container.dart';
@@ -76,6 +78,7 @@ class DashboardTablet extends StatelessWidget {
                                 controller.dashboardData
                                     .firstWhere(
                                       (p0) => p0.period == 'ThisMonth',
+                                      orElse: () => DashboardModel.empty(),
                                     )
                                     .approveCount,
                                 Icons.verified_rounded,
@@ -92,6 +95,7 @@ class DashboardTablet extends StatelessWidget {
                                 controller.dashboardData
                                     .firstWhere(
                                       (p0) => p0.period == 'ThisMonth',
+                                      orElse: () => DashboardModel.empty(),
                                     )
                                     .rejectCount,
                                 Icons.cancel_outlined,
@@ -131,21 +135,24 @@ class DashboardTablet extends StatelessWidget {
                       color: AppColors.blue,
                     ),
                   ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 300,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+                  if (controller.dashboardData.isEmpty)
+                    const Center(child: NoDataFound())
+                  else
+                    GridView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 300,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: controller.dashboardData.length,
+                      itemBuilder: (context, index) {
+                        final item = controller.dashboardData[index];
+                        return DashboardCard(model: item);
+                      },
                     ),
-                    itemCount: controller.dashboardData.length,
-                    itemBuilder: (context, index) {
-                      final item = controller.dashboardData[index];
-                      return DashboardCard(model: item);
-                    },
-                  ),
                 ],
               ),
             );

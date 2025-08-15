@@ -18,6 +18,7 @@ class PurchaseMobileView extends GetView<PurchaseController> {
     return Obx(() {
       RxList<VoucherModel> financeDataList = switch (subMenuType) {
         SubMenuType.purchaseInvoice => controller.filteredPurchaseInvoiceList,
+        SubMenuType.purchaseOrder => controller.filteredPurchaseOrderListList,
         _ => RxList<VoucherModel>.empty(),
       };
       return financeDataList.isNotEmpty

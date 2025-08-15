@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
+import 'package:suraj_approval/core/service/network_service.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
+
 import 'core/router/app_router.dart';
 import 'core/service/api_client.dart';
 import 'core/service/local_db.dart';
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
       initialBinding: BindingsBuilder(() {
         Get.put(SidebarController(), permanent: true);
         Get.put(AppDrawerController(), permanent: true);
+        Get.put(NetworkController(), permanent: true);
         Get.put<SessionController>(SessionController());
         Get.put<NotificationController>(NotificationController());
         Get.lazyPut<SidebarController>(() => SidebarController());

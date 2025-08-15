@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/models/dashboard_model.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
+import 'package:suraj_approval/core/widgets/no_data_found.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
 
 import '../../../../core/widgets/app_scaffold.dart';
@@ -77,10 +79,12 @@ class DashboardWeb extends StatelessWidget {
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Approved',
-                                  controller.dashboardData.fold(
-                                    0,
-                                    (sum, item) => sum + item.approveCount,
-                                  ),
+                                  controller.dashboardData
+                                      .firstWhere(
+                                        (p0) => p0.period == 'ThisMonth',
+                                        orElse: () => DashboardModel.empty(),
+                                      )
+                                      .approveCount,
                                   Icons.verified_rounded,
                                   Colors.white,
                                 ),
@@ -93,10 +97,12 @@ class DashboardWeb extends StatelessWidget {
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Rejected',
-                                  controller.dashboardData.fold(
-                                    0,
-                                    (sum, item) => sum + item.rejectCount,
-                                  ),
+                                  controller.dashboardData
+                                      .firstWhere(
+                                        (p0) => p0.period == 'ThisMonth',
+                                        orElse: () => DashboardModel.empty(),
+                                      )
+                                      .rejectCount,
                                   Icons.cancel_outlined,
                                   Colors.white,
                                 ),
@@ -109,13 +115,15 @@ class DashboardWeb extends StatelessWidget {
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Total Requests',
-                                  controller.dashboardData.fold(
-                                    0,
-                                    (sum, item) =>
-                                        sum +
-                                        item.approveCount +
-                                        item.rejectCount,
-                                  ),
+                                  controller.dashboardData
+                                      .where((p0) => p0.period == 'ThisMonth')
+                                      .fold(
+                                        0,
+                                        (sum, item) =>
+                                            sum +
+                                            item.approveCount +
+                                            item.rejectCount,
+                                      ),
                                   Icons.assignment_turned_in_rounded,
                                   Colors.white,
                                 ),
@@ -134,24 +142,27 @@ class DashboardWeb extends StatelessWidget {
                         color: AppColors.blue,
                       ),
                     ),
-                    Center(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          // maxCrossAxisExten/t: DeviceType.isDesktop(context)?300:  400,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
+                    if (controller.dashboardData.isEmpty)
+                      const Center(child: NoDataFound())
+                    else
+                      Center(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            // maxCrossAxisExten/t: DeviceType.isDesktop(context)?300:  400,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                          ),
+                          itemCount: controller.dashboardData.length,
+                          itemBuilder: (context, index) {
+                            final item = controller.dashboardData[index];
+                            return DashboardCard(model: item);
+                          },
                         ),
-                        itemCount: controller.dashboardData.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.dashboardData[index];
-                          return DashboardCard(model: item);
-                        },
                       ),
-                    ),
                   ],
                 ),
               ),

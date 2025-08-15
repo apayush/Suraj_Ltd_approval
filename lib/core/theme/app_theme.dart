@@ -12,9 +12,7 @@ class AppTheme {
     canvasColor: AppColors.lightSurface,
     drawerTheme: const DrawerThemeData(
       surfaceTintColor: AppColors.lightDrawerBackgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       backgroundColor: AppColors.lightDrawerBackgroundColor,
     ),
     appBarTheme: AppBarTheme(
@@ -39,25 +37,25 @@ class AppTheme {
       bodyMedium: TextStyle(color: Colors.black54),
       titleLarge: TextStyle(color: Colors.black),
     ),
-    buttonTheme: const ButtonThemeData(
-      buttonColor: AppColors.lightButtonColor,
-    ),
+    buttonTheme: const ButtonThemeData(buttonColor: AppColors.lightButtonColor),
     elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          textStyle: const TextStyle(color: Colors.white),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // <-- Radius
-          ),
-        )),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
+        textStyle: const TextStyle(color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // <-- Radius
+        ),
+      ),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.lightButtonColor,
         textStyle: const TextStyle(color: Colors.white),
       ),
     ),
-    progressIndicatorTheme:
-    const ProgressIndicatorThemeData(color: AppColors.lightButtonColor),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.lightButtonColor,
+    ),
   );
 
   static final darkTheme = ThemeData(
@@ -78,9 +76,7 @@ class AppTheme {
     ),
     drawerTheme: const DrawerThemeData(
       surfaceTintColor: AppColors.darkDrawerBackgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       backgroundColor: AppColors.darkDrawerBackgroundColor,
     ),
     tabBarTheme: TabBarTheme(
@@ -95,25 +91,24 @@ class AppTheme {
       bodyMedium: TextStyle(color: Colors.white70),
       titleLarge: TextStyle(color: Colors.white),
     ),
-    buttonTheme: const ButtonThemeData(
-      buttonColor: AppColors.darkButtonColor,
-    ),
+    buttonTheme: const ButtonThemeData(buttonColor: AppColors.darkButtonColor),
     elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          textStyle: const TextStyle(color: Colors.black),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // <-- Radius
-          ),
-        )),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        textStyle: const TextStyle(color: Colors.black),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // <-- Radius
+        ),
+      ),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.darkButtonColor,
         textStyle: const TextStyle(color: Colors.white),
       ),
     ),
-    progressIndicatorTheme:
-    const ProgressIndicatorThemeData(color: AppColors.darkButtonColor),
-
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.darkButtonColor,
+    ),
   );
 }

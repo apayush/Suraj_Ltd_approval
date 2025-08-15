@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
@@ -215,7 +216,7 @@ class FinanceController extends GetxController
           'LinkField': bankPayment.linkField,
           'mAuthorise': paymentStatus,
           'mRemarks': remarkController.value.text,
-          'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
+          'mDeviceType': kIsWeb ? 'web' : 'mobile',
         },
       );
       if (response.statusCode == 200) {
