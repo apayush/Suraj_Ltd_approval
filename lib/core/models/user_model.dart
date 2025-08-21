@@ -45,7 +45,6 @@ class UserDetails {
   final String branch;
   final String type;
   final String ids;
-  final String userLevel;
   final MenuType? mainMenu;
   final SubMenuType? subMenu;
 
@@ -53,7 +52,6 @@ class UserDetails {
     required this.branch,
     required this.type,
     required this.ids,
-    required this.userLevel,
     required this.mainMenu,
     required this.subMenu,
   });
@@ -67,7 +65,6 @@ class UserDetails {
       branch: json['Branch'] ?? json['branch'],
       type: json['Type'] ?? json['type'],
       ids: json['IDs'] ?? json['ids'],
-      userLevel: json['UserLevel'] ?? json['userLevel'],
       mainMenu: MenuType.fromKey(mainMenuStr),
       subMenu: SubMenuType.fromKey(subMenuStr),
     );
@@ -78,7 +75,6 @@ class UserDetails {
       'Branch': branch,
       'Type': type,
       'IDs': ids,
-      'UserLevel': userLevel,
       'MainMenu': mainMenu?.key,
       'SubMenu': subMenu?.key,
     };

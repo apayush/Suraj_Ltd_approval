@@ -130,11 +130,7 @@ class PurchaseController extends GetxController
       );
 
       if (matchedUserDetail != null) {
-        final param = {
-          'mUser': userModel?.mUser,
-          'mUserLevel': matchedUserDetail.userLevel,
-          'MainType': mainType.key,
-        };
+        final param = {'mUser': userModel?.mUser, 'MainType': mainType.key};
 
         final response = await ApiService.getData(
           ApiUrl.getHoldVoucher,
@@ -207,15 +203,11 @@ class PurchaseController extends GetxController
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
-      final matchedUserDetail = userModel?.getDetailFor(
-        currentMenu,
-        currentSubMenu.value,
-      );
       final response = await ApiService.postData(
         ApiUrl.authoriseVoucher,
         queryParams: {
           'mUser': userModel?.mUser,
-          'mUserLevel': matchedUserDetail?.userLevel,
+          'mUserLevel': voucher.userLevel,
           'LinkField': voucher.linkField,
           'mAuthorise': voucherStatus,
           'mRemarks': remarkController.value.text,
@@ -553,20 +545,20 @@ class PurchaseController extends GetxController
     if (menuType == SubMenuType.purchaseInvoice) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.purchaseInvoice;
-      } else if (menuType == SubMenuType.purchaseIndent) {
-        tabController.animateTo(index);
-        currentSubMenu.value = SubMenuType.purchaseIndent;
-      } else if (menuType == SubMenuType.purchaseOrder) {
-        tabController.animateTo(index);
-        currentSubMenu.value = SubMenuType.purchaseOrder;
-      }
-      // else if (menuType == SubMenuType.gateInward) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.gateInward;
-      // }
-      else if (menuType == SubMenuType.goodsReceiptNote) {
-        tabController.animateTo(index);
-        currentSubMenu.value = SubMenuType.goodsReceiptNote;
+    } else if (menuType == SubMenuType.purchaseIndent) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.purchaseIndent;
+    } else if (menuType == SubMenuType.purchaseOrder) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.purchaseOrder;
+    }
+    // else if (menuType == SubMenuType.gateInward) {
+    //   tabController.animateTo(index);
+    //   currentSubMenu.value = SubMenuType.gateInward;
+    // }
+    else if (menuType == SubMenuType.goodsReceiptNote) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.goodsReceiptNote;
       // } else if (menuType == SubMenuType.purchaseCreditNote) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.purchaseCreditNote;

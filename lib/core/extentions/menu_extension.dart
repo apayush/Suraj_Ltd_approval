@@ -43,6 +43,7 @@ extension UserPermissionExtensions on UserModel {
           .where((e) => e.mainMenu == menu)
           .map((e) => e.subMenu)
           .whereType<SubMenuType>()
+          .toSet()
           .toList();
 
   bool hasMenu(MenuType menu) => allowedMenus.contains(menu);

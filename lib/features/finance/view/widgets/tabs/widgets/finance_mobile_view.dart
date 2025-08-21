@@ -15,12 +15,12 @@ class FinanceMobileView extends GetView<FinanceController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      List<VoucherModel> financeDataList = switch (subMenuType) {
+      RxList<VoucherModel> financeDataList = switch (subMenuType) {
         SubMenuType.bankPayment => controller.filteredBankPaymentList,
         SubMenuType.bankReceipt => controller.filteredBankReceiptList,
         SubMenuType.cashPayment => controller.filteredCashPaymentList,
         SubMenuType.cashReceipt => controller.filteredCashReceiptList,
-        _ => [],
+        _ => <VoucherModel>[].obs,
       };
       return financeDataList.isNotEmpty
           ? Column(

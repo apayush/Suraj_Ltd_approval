@@ -132,11 +132,7 @@ class FinanceController extends GetxController
       );
 
       if (matchedUserDetail != null) {
-        final param = {
-          'mUser': userModel?.mUser,
-          'mUserLevel': matchedUserDetail.userLevel,
-          'MainType': mainType.key,
-        };
+        final param = {'mUser': userModel?.mUser, 'MainType': mainType.key};
         final response = await ApiService.getData(
           ApiUrl.getHoldVoucher,
           queryParams: param,
@@ -189,7 +185,7 @@ class FinanceController extends GetxController
       if (response.statusCode == 200) {
         final data = response.data;
         if (data.containsKey('Error')) {
-          AppUtils.showSnackBar('${data['Error']}',background: Colors.red);
+          AppUtils.showSnackBar('${data['Error']}', background: Colors.red);
         }
         AppUtils.openPdf(data['Base64Pdf']);
       }
@@ -202,22 +198,18 @@ class FinanceController extends GetxController
 
   // ! Approve Reject Finance Voucher
   Future<void> postFinanceVoucher(
-    VoucherModel bankPayment, {
+    VoucherModel voucher, {
     required String paymentStatus,
   }) async {
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
-      final matchedUserDetail = userModel?.getDetailFor(
-        currentMenu,
-        currentSubMenu.value,
-      );
       final response = await ApiService.postData(
         ApiUrl.authoriseVoucher,
         queryParams: {
           'mUser': userModel?.mUser,
-          'mUserLevel': matchedUserDetail?.userLevel,
-          'LinkField': bankPayment.linkField,
+          'mUserLevel': voucher.userLevel,
+          'LinkField': voucher.linkField,
           'mAuthorise': paymentStatus,
           'mRemarks': remarkController.value.text,
           'mDeviceType': kIsWeb ? 'web' : 'mobile',

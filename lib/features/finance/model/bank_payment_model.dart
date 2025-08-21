@@ -18,6 +18,7 @@ class VoucherModel {
   final String? mBranch;
   final RxBool? isPdfLoading;
   final bool? isHold;
+  final String? userLevel;
 
   VoucherModel({
     this.mainType,
@@ -37,6 +38,7 @@ class VoucherModel {
     this.mBranch,
     this.isPdfLoading,
     this.isHold,
+    this.userLevel,
   });
 
   factory VoucherModel.fromJson(Map<String, dynamic> json) {
@@ -60,6 +62,7 @@ class VoucherModel {
       mBranch: json['mBranch'] as String?,
       subType: json['SubType'] as String?,
       isHold: json['isHold'] as bool?,
+      userLevel: json['UserLevel']?.toString() ?? '',
       isPdfLoading: false.obs,
     );
   }
@@ -82,6 +85,7 @@ class VoucherModel {
       'mBranch': mBranch,
       'SubType': subType,
       'isHold': isHold,
+      'UserLevel': userLevel,
     };
   }
 
