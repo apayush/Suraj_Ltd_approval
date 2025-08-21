@@ -25,6 +25,7 @@ class FinanceTabletView extends GetView<FinanceController> {
             SubMenuType.bankReceipt => controller.filteredBankReceiptList,
             SubMenuType.cashPayment => controller.filteredCashPaymentList,
             SubMenuType.cashReceipt => controller.filteredCashReceiptList,
+            SubMenuType.journalVoucher => controller.filteredJournalVoucherList,
             _ => [],
           };
           return financeDataList.isNotEmpty

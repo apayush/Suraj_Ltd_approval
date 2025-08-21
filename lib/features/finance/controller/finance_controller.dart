@@ -17,6 +17,7 @@ import '../../../core/utills/table_data_sources/finance_module/bank_payment_data
 import '../../../core/utills/table_data_sources/finance_module/bank_receipt_data_source.dart';
 import '../../../core/utills/table_data_sources/finance_module/cash_payment_data_source.dart';
 import '../../../core/utills/table_data_sources/finance_module/cash_receipt_data_source.dart';
+import '../../../core/utills/table_data_sources/finance_module/journal_voucher_data_source.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
@@ -54,11 +55,16 @@ class FinanceController extends GetxController
   RxList<VoucherModel> cashReceiptList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredCashReceiptList = <VoucherModel>[].obs;
 
+  // ! Two lists to hold the Api data and filtered data for journal Voucher
+  RxList<VoucherModel> journalVoucherList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredJournalVoucherList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late BankPaymentDataSource bankPaymentDataSource;
   late BankReceiptDataSource bankReceiptDataSource;
   late CashPaymentDataSource cashPaymentDataSource;
   late CashReceiptDataSource cashReceiptDataSource;
+  late JournalVoucherDataSource journalVoucherDataSource;
 
   // ! Get All Finance Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -108,6 +114,11 @@ class FinanceController extends GetxController
               cashReceiptList.assignAll(payment);
               filteredCashReceiptList.value = (payment);
               cashReceiptDataSource.updateDataSource(cashReceiptList);
+              break;
+            case SubMenuType.journalVoucher:
+              journalVoucherList.assignAll(payment);
+              filteredJournalVoucherList.value = (payment);
+              journalVoucherDataSource.updateDataSource(journalVoucherList);
               break;
             default:
               break;
@@ -161,6 +172,11 @@ class FinanceController extends GetxController
               cashReceiptList.assignAll(payment);
               filteredCashReceiptList.value = (payment);
               cashReceiptDataSource.updateDataSource(cashReceiptList);
+              break;
+            case SubMenuType.journalVoucher:
+              journalVoucherList.assignAll(payment);
+              filteredJournalVoucherList.value = (payment);
+              journalVoucherDataSource.updateDataSource(journalVoucherList);
               break;
             default:
               break;
@@ -278,6 +294,11 @@ class FinanceController extends GetxController
         filteredList = filteredCashReceiptList;
         dataSource = cashReceiptDataSource;
         break;
+      case SubMenuType.journalVoucher:
+        sourceList = journalVoucherList;
+        filteredList = filteredJournalVoucherList;
+        dataSource = journalVoucherDataSource;
+        break;
       default:
         return;
     }
@@ -318,6 +339,9 @@ class FinanceController extends GetxController
         case SubMenuType.cashReceipt:
           filteredCashReceiptList.value = filteredList.toList();
           break;
+        case SubMenuType.journalVoucher:
+          filteredJournalVoucherList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -343,6 +367,9 @@ class FinanceController extends GetxController
         break;
       case SubMenuType.cashReceipt:
         cashReceiptDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.journalVoucher:
+        journalVoucherDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -516,6 +543,10 @@ class FinanceController extends GetxController
       cashReceiptList,
       rowsPerPage: rowsPerPage.value,
     );
+    journalVoucherDataSource = JournalVoucherDataSource(
+      journalVoucherList,
+      rowsPerPage: rowsPerPage.value,
+    );
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         final data = Get.arguments;
@@ -548,6 +579,9 @@ class FinanceController extends GetxController
     } else if (menuType == SubMenuType.cashReceipt) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.cashReceipt;
+    } else if (menuType == SubMenuType.journalVoucher) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.journalVoucher;
     }
 
     await getAllData(mainType: currentSubMenu.value);

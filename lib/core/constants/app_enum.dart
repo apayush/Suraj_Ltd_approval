@@ -20,7 +20,7 @@ enum SubMenuType {
   bankReceipt('Bank Receipt'),
   cashPayment('Cash Payment'),
   cashReceipt('Cash Receipt'),
-  journalVoucher("Journal Vouchers"),
+  journalVoucher('Journal Vouchers'),
 
   // Sales
   salesQuotation('Sales Quotation'),

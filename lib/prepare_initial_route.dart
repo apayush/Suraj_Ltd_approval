@@ -21,14 +21,18 @@ import 'features/finance/controller/finance_controller.dart';
       final menuType = MenuType.fromKey(data['mainType']);
       final subMenuType = SubMenuType.fromKey(data['subType']);
 
-      route = switch (menuType) {
+      final newRoute = switch (menuType) {
         MenuType.finance => AppRouter.financeScreen,
         MenuType.purchase => AppRouter.purchaseScreen,
         MenuType.production => AppRouter.productionScreen,
         MenuType.sales => AppRouter.salesScreen,
-        _ => AppRouter.dashboardScreen,
+        _ => null,
       };
-      argument = {'subMenuType': subMenuType, 'Srl': data['Srl'] ?? ''};
+
+      if (newRoute != null) {
+        route = newRoute;
+        argument = {'subMenuType': subMenuType, 'Srl': data['Srl'] ?? ''};
+      }
     }
   } else {
     if (LocalDB.getBool(AppConstants.isOnBoardingComplete)) {
@@ -41,10 +45,10 @@ import 'features/finance/controller/finance_controller.dart';
 }
 
 void gotToSubMenuFromRoute(
-  String routeName,
-  SubMenuType? subMenuType,
-  String srl,
-) {
+    String routeName,
+    SubMenuType? subMenuType,
+    String srl,
+    ) {
   switch (routeName) {
     case AppRouter.financeScreen:
       Get.find<FinanceController>().goTOSubMenu(subMenuType, srl);
@@ -53,10 +57,10 @@ void gotToSubMenuFromRoute(
       Get.find<PurchaseController>().goTOSubMenu(subMenuType, srl);
       break;
     case AppRouter.salesScreen:
-      // Get.find<SalesController>().goTOSubMenu(subMenuType);
+    // Get.find<SalesController>().goTOSubMenu(subMenuType);
       break;
     case AppRouter.productionScreen:
-      // Get.find<ProductionController>().goTOSubMenu(subMenuType);
+    // Get.find<ProductionController>().goTOSubMenu(subMenuType);
       break;
   }
 }

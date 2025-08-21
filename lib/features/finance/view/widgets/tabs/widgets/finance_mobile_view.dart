@@ -20,6 +20,7 @@ class FinanceMobileView extends GetView<FinanceController> {
         SubMenuType.bankReceipt => controller.filteredBankReceiptList,
         SubMenuType.cashPayment => controller.filteredCashPaymentList,
         SubMenuType.cashReceipt => controller.filteredCashReceiptList,
+        SubMenuType.journalVoucher => controller.filteredJournalVoucherList,
         _ => <VoucherModel>[].obs,
       };
       return financeDataList.isNotEmpty

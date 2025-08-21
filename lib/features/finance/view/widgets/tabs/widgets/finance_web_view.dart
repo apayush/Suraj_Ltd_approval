@@ -22,11 +22,13 @@ class FinanceWebView extends GetView<FinanceController> {
         FinanceSearchAndRefreshWidget(),
         10.heightGap,
         Obx(() {
+          controller.isLoading.value;
           List<VoucherModel> financeDataList = switch (subMenuType) {
             SubMenuType.bankPayment => controller.bankPaymentList,
             SubMenuType.bankReceipt => controller.bankReceiptList,
             SubMenuType.cashPayment => controller.cashPaymentList,
             SubMenuType.cashReceipt => controller.cashReceiptList,
+            SubMenuType.journalVoucher => controller.journalVoucherList,
             _ => [],
           };
 
@@ -35,6 +37,7 @@ class FinanceWebView extends GetView<FinanceController> {
             SubMenuType.bankReceipt => controller.bankReceiptDataSource,
             SubMenuType.cashPayment => controller.cashPaymentDataSource,
             SubMenuType.cashReceipt => controller.cashReceiptDataSource,
+            SubMenuType.journalVoucher => controller.journalVoucherDataSource,
             _ => null,
           };
           return financeDataList.isNotEmpty

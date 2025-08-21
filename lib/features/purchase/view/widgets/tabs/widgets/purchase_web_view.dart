@@ -23,6 +23,7 @@ class PurchaseWebView extends GetView<PurchaseController> {
         PurchaseSearchAndRefreshWidget(),
         10.heightGap,
         Obx(() {
+          controller.isLoading.value;
           List<VoucherModel> financeDataList = switch (subMenuType) {
             SubMenuType.purchaseInvoice =>
               controller.filteredPurchaseInvoiceList,

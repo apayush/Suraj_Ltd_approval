@@ -134,6 +134,8 @@ class NotificationController extends GetxController {
           // Get.find<SalesController>().goTOSubMenu(notification.subType);
         },
       );
+    } else {
+      Get.offAndToNamed(AppRouter.dashboardScreen);
     }
   }
 
