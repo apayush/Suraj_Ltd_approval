@@ -12,6 +12,8 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
+import '../../../core/utills/table_data_sources/purchase_module/goods_receipt_note_data_source.dart';
+import '../../../core/utills/table_data_sources/purchase_module/purchase_indent_data_source.dart';
 import '../../../core/utills/table_data_sources/purchase_module/purchase_invoice_data_source.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
@@ -44,9 +46,17 @@ class PurchaseController extends GetxController
   RxList<VoucherModel> purchaseOrderList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredPurchaseOrderListList = <VoucherModel>[].obs;
 
+  RxList<VoucherModel> purchaseIndentList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredPurchaseIndentList = <VoucherModel>[].obs;
+
+  RxList<VoucherModel> goodsReceiptNoteList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredGoodsReceiptNoteList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late PurchaseInvoiceDataSource purchaseInvoiceDataSource;
   late PurchaseOrderDataSource purchaseOrderDataSource;
+  late PurchaseIndentDataSource purchaseIndentDataSource;
+  late GoodsReceiptNoteDataSource goodsReceiptNoteDataSource;
 
   // ! Get All Purchase Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -86,6 +96,16 @@ class PurchaseController extends GetxController
               purchaseOrderList.assignAll(voucher);
               filteredPurchaseOrderListList.value = (voucher);
               purchaseOrderDataSource.updateDataSource(purchaseOrderList);
+              break;
+            case SubMenuType.purchaseIndent:
+              purchaseIndentList.assignAll(voucher);
+              filteredPurchaseIndentList.value = (voucher);
+              purchaseIndentDataSource.updateDataSource(purchaseIndentList);
+              break;
+            case SubMenuType.goodsReceiptNote:
+              goodsReceiptNoteList.assignAll(voucher);
+              filteredGoodsReceiptNoteList.value = (voucher);
+              goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
               break;
             default:
               break;
@@ -135,6 +155,16 @@ class PurchaseController extends GetxController
               filteredPurchaseOrderListList.value = (voucher);
               purchaseOrderDataSource.updateDataSource(purchaseOrderList);
               break;
+            case SubMenuType.purchaseIndent:
+              purchaseIndentList.assignAll(voucher);
+              filteredPurchaseIndentList.value = (voucher);
+              purchaseIndentDataSource.updateDataSource(purchaseIndentList);
+              break;
+            case SubMenuType.goodsReceiptNote:
+              goodsReceiptNoteList.assignAll(voucher);
+              filteredGoodsReceiptNoteList.value = (voucher);
+              goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
+              break;
             default:
               break;
           }
@@ -156,7 +186,11 @@ class PurchaseController extends GetxController
         queryParams: {'mLinkField': voucher.linkField},
       );
       if (response.statusCode == 200) {
-        AppUtils.openPdf(response.data['Base64Pdf']);
+        final data = response.data;
+        if (data.containsKey('Error')) {
+          AppUtils.showSnackBar('${data['Error']}', background: Colors.red);
+        }
+        AppUtils.openPdf(data['Base64Pdf']);
       }
     } catch (e) {
       print(e);
@@ -244,6 +278,16 @@ class PurchaseController extends GetxController
         filteredList = filteredPurchaseOrderListList;
         dataSource = purchaseOrderDataSource;
         break;
+      case SubMenuType.purchaseIndent:
+        sourceList = purchaseIndentList;
+        filteredList = filteredPurchaseIndentList;
+        dataSource = purchaseIndentDataSource;
+        break;
+      case SubMenuType.goodsReceiptNote:
+        sourceList = goodsReceiptNoteList;
+        filteredList = filteredGoodsReceiptNoteList;
+        dataSource = goodsReceiptNoteDataSource;
+        break;
       default:
         return;
     }
@@ -278,6 +322,12 @@ class PurchaseController extends GetxController
         case SubMenuType.purchaseOrder:
           filteredPurchaseOrderListList.value = filteredList.toList();
           break;
+        case SubMenuType.purchaseIndent:
+          filteredPurchaseIndentList.value = filteredList.toList();
+          break;
+        case SubMenuType.goodsReceiptNote:
+          filteredGoodsReceiptNoteList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -303,6 +353,12 @@ class PurchaseController extends GetxController
         break;
       case SubMenuType.purchaseOrder:
         purchaseOrderDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.purchaseIndent:
+        purchaseIndentDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.goodsReceiptNote:
+        goodsReceiptNoteDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -465,6 +521,14 @@ class PurchaseController extends GetxController
       purchaseOrderList,
       rowsPerPage: rowsPerPage.value,
     );
+    purchaseIndentDataSource = PurchaseIndentDataSource(
+      purchaseIndentList,
+      rowsPerPage: rowsPerPage.value,
+    );
+    goodsReceiptNoteDataSource = GoodsReceiptNoteDataSource(
+      goodsReceiptNoteList,
+      rowsPerPage: rowsPerPage.value,
+    );
 
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -489,19 +553,20 @@ class PurchaseController extends GetxController
     if (menuType == SubMenuType.purchaseInvoice) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.purchaseInvoice;
-      // } else if (menuType == SubMenuType.purchaseIndent) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.purchaseIndent;
-      // } else if (menuType == SubMenuType.purchaseOrder) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.purchaseOrder;
-      // }
+      } else if (menuType == SubMenuType.purchaseIndent) {
+        tabController.animateTo(index);
+        currentSubMenu.value = SubMenuType.purchaseIndent;
+      } else if (menuType == SubMenuType.purchaseOrder) {
+        tabController.animateTo(index);
+        currentSubMenu.value = SubMenuType.purchaseOrder;
+      }
       // else if (menuType == SubMenuType.gateInward) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.gateInward;
-      // } else if (menuType == SubMenuType.goodsReceiptNote) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.goodsReceiptNote;
+      // }
+      else if (menuType == SubMenuType.goodsReceiptNote) {
+        tabController.animateTo(index);
+        currentSubMenu.value = SubMenuType.goodsReceiptNote;
       // } else if (menuType == SubMenuType.purchaseCreditNote) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.purchaseCreditNote;

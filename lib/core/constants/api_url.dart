@@ -1,6 +1,7 @@
 class ApiUrl {
   // ! BASE URL
-  static String baseUrlGlobal = 'http://124.123.122.112:7081/Report';
+  static String baseUrlGlobal = 'http://124.123.122.112:7081/ReportNew';
+  // static String baseUrlGlobal = 'http://124.123.122.112:7081/Report';
 
   // ! LOGIN API
   static const String loginApi = '/Login';
@@ -10,7 +11,7 @@ class ApiUrl {
   // ! Common API
   static const String saveBaseURL = '/SaveBaseURL';
   // SaveBaseUrl?mUrlString=http://124.123.122.112:7081/Report&mUser=Admin
-  static const String getBaseUrl = 'http://124.123.122.112:7081/Report/GetBaseUrl';
+  static const String getBaseUrl = 'http://124.123.122.112:7081/ReportNew/GetBaseUrl';
   static const String getNotificationLogs = '/GetNotificationLogs';
   static const String updateNotificationLogs = '/UpdateNotificationLogs';
 

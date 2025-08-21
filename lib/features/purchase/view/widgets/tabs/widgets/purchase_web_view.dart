@@ -28,12 +28,18 @@ class PurchaseWebView extends GetView<PurchaseController> {
               controller.filteredPurchaseInvoiceList,
             SubMenuType.purchaseOrder =>
               controller.filteredPurchaseOrderListList,
+            SubMenuType.purchaseIndent =>
+              controller.filteredPurchaseIndentList,
+            SubMenuType.goodsReceiptNote =>
+              controller.filteredGoodsReceiptNoteList,
             _ => [],
           };
 
           final dataSource = switch (subMenuType) {
             SubMenuType.purchaseInvoice => controller.purchaseInvoiceDataSource,
             SubMenuType.purchaseOrder => controller.purchaseOrderDataSource,
+            SubMenuType.purchaseIndent => controller.purchaseIndentDataSource,
+            SubMenuType.goodsReceiptNote => controller.goodsReceiptNoteDataSource,
             _ => null,
           };
           return financeDataList.isNotEmpty

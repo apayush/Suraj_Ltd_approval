@@ -29,10 +29,10 @@ enum SubMenuType {
 
   // Purchase
   purchaseInvoice('Purchase Invoice'),
-  // purchaseIndent('Purchase Indent'),
   purchaseOrder('Purchase Order'),
+  purchaseIndent('Purchase Indent'),
+  goodsReceiptNote('Goods Receipt Note'),
   // gateInward('Gate Inward'),
-  // goodsReceiptNote('Goods Receipts Note'),
   // purchaseCreditNote('Purchase Credit Note'),
   // purchaseDebitNote('Purchase Debit Note'),
 

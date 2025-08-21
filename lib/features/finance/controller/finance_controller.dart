@@ -187,7 +187,11 @@ class FinanceController extends GetxController
         queryParams: {'mLinkField': bankPayment.linkField},
       );
       if (response.statusCode == 200) {
-        AppUtils.openPdf(response.data['Base64Pdf']);
+        final data = response.data;
+        if (data.containsKey('Error')) {
+          AppUtils.showSnackBar('${data['Error']}',background: Colors.red);
+        }
+        AppUtils.openPdf(data['Base64Pdf']);
       }
     } catch (e) {
       print(e);
@@ -361,7 +365,7 @@ class FinanceController extends GetxController
     VoucherModel bankPayment,
   ) async {
     if (value == 'View') {
-      getBankpaymentReport(bankPayment);
+      await getBankpaymentReport(bankPayment);
     } else if (value == 'Approve') {
       await Get.dialog(
         GenericDialogBox(
