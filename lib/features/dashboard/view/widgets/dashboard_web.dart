@@ -7,6 +7,8 @@ import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/core/widgets/no_data_found.dart';
 import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_card.dart';
+import 'package:suraj_approval/features/dashboard/view/widgets/widget/dashboard_tile.dart';
+import 'package:suraj_approval/features/dashboard/view/widgets/widget/modern_tile.dart';
 
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../features/dashboard/controller/dashboard_controller.dart';
@@ -76,6 +78,21 @@ class DashboardWeb extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              // Expanded(
+                              //   child: DashboardTile(
+                              //     icon: Icons.verified_rounded,
+                              //     iconGradient: AppGradients.getByIndex(0),
+                              //     title: 'Approved',
+                              //     value:
+                              //         controller.dashboardData
+                              //             .firstWhere(
+                              //               (p0) => p0.period == 'ThisMonth',
+                              //               orElse: () => DashboardModel.empty(),
+                              //             )
+                              //             .approveCount
+                              //             .toString(),
+                              //   ),
+                              // ),
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Approved',
@@ -90,10 +107,25 @@ class DashboardWeb extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                height: 40,
+                                height: 60,
                                 width: 1,
                                 color: Colors.white.withOpacity(0.3),
                               ),
+                              // Expanded(
+                              //   child: DashboardTile(
+                              //     icon: Icons.cancel_outlined,
+                              //     iconGradient: AppGradients.getByIndex(1),
+                              //     title: 'Rejected',
+                              //     value:
+                              //     controller.dashboardData
+                              //         .firstWhere(
+                              //           (p0) => p0.period == 'ThisMonth',
+                              //       orElse: () => DashboardModel.empty(),
+                              //     )
+                              //         .rejectCount
+                              //         .toString(),
+                              //   ),
+                              // ),
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Rejected',
@@ -108,10 +140,28 @@ class DashboardWeb extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                height: 40,
+                                height: 60,
                                 width: 1,
                                 color: Colors.white.withOpacity(0.3),
                               ),
+                              // Expanded(
+                              //   child: DashboardTile(
+                              //     icon: Icons.assignment_turned_in_rounded,
+                              //     iconGradient: AppGradients.getByIndex(2),
+                              //     title: 'Total Requests',
+                              //     value:
+                              //     controller.dashboardData
+                              //         .where((p0) => p0.period == 'ThisMonth')
+                              //         .fold(
+                              //       0,
+                              //           (sum, item) =>
+                              //       sum +
+                              //           item.approveCount +
+                              //           item.rejectCount,
+                              //     )
+                              //         .toString(),
+                              //   ),
+                              // ),
                               Expanded(
                                 child: _buildSummaryCard(
                                   'Total Requests',
@@ -152,7 +202,7 @@ class DashboardWeb extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
-                            // maxCrossAxisExten/t: DeviceType.isDesktop(context)?300:  400,
+                            // maxCrossAxisExtent: DeviceType.isDesktop(context)?300:  400,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
                           ),
@@ -160,6 +210,7 @@ class DashboardWeb extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final item = controller.dashboardData[index];
                             return DashboardCard(model: item);
+                            // return ModernDashboardTile(model: item);
                           },
                         ),
                       ),

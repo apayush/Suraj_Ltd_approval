@@ -132,7 +132,6 @@ class AppScaffold extends StatelessWidget {
       case 'Sales':
         return AppRouter.salesScreen;
       case 'Purchase':
-        print('goin to purchase screen');
         return AppRouter.purchaseScreen;
       case 'Production':
         return AppRouter.productionScreen;

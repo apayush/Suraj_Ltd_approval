@@ -7,10 +7,10 @@ import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
-import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
+import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 
-class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
-  const PurchaseSearchAndRefreshWidget({super.key});
+class SalesSearchAndRefreshWidget extends GetView<SalesController> {
+  const SalesSearchAndRefreshWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,6 @@ import 'package:suraj_approval/features/dashboard/controller/app_drawer_controll
 import 'package:suraj_approval/features/sales/view/widgets/sales_mobile.dart';
 import 'package:suraj_approval/features/sales/view/widgets/sales_tablet.dart';
 import 'package:suraj_approval/features/sales/view/widgets/saless_web.dart';
-
 import '../../../core/widgets/loading_widget.dart';
 import '../controller/sales_controller.dart';
 

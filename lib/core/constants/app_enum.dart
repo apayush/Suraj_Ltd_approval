@@ -20,13 +20,7 @@ enum SubMenuType {
   bankReceipt('Bank Receipt'),
   cashPayment('Cash Payment'),
   cashReceipt('Cash Receipt'),
-  journalVoucher('Journal Vouchers'),
-
-  // Sales
-  salesQuotation('Sales Quotation'),
-  salesOrder('Sales Order'),
-  salesDebitNote('Sales Debit Note'),
-  salesCreditNote('Sales Credit Note'),
+  journalVoucher('Journal Voucher'),
 
   // Purchase
   purchaseInvoice('Purchase Invoice'),
@@ -36,6 +30,12 @@ enum SubMenuType {
   // gateInward('Gate Inward'),
   // purchaseCreditNote('Purchase Credit Note'),
   // purchaseDebitNote('Purchase Debit Note'),
+
+  // Sales
+  salesOrder('Sales Order'),
+  // salesQuotation('Sales Quotation'),
+  // salesDebitNote('Sales Debit Note'),
+  // salesCreditNote('Sales Credit Note'),
 
   // Production
   yieldSheet('Yield Sheet');

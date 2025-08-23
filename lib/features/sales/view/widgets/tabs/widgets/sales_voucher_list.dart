@@ -3,26 +3,25 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/finance/model/bank_payment_model.dart';
-import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
-
+import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 import '../../../../../finance/view/widgets/tabs/widgets/finance_payment_card.dart';
 
-class PurchaseVoucherList extends GetView<PurchaseController> {
-  const PurchaseVoucherList({super.key, required this.purchaseVoucherList});
-  final List<VoucherModel> purchaseVoucherList;
+class SalesVoucherList extends GetView<SalesController> {
+  const SalesVoucherList({super.key, required this.salesVoucherList});
+  final List<VoucherModel> salesVoucherList;
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh:
           () async =>
-              controller.getAllData(mainType: controller.currentSubMenu.value),
+          controller.getAllData(mainType: controller.currentSubMenu.value),
       child: AnimationLimiter(
         child: ListView.builder(
-          itemCount: purchaseVoucherList.length,
+          itemCount: salesVoucherList.length,
           padding: EdgeInsets.zero,
           itemBuilder: (context, index) {
-            final payments = purchaseVoucherList[index];
+            final payments = salesVoucherList[index];
             return AnimationConfiguration.staggeredList(
               position: index,
               duration: const Duration(milliseconds: 375),

@@ -25,7 +25,8 @@ class FinanceSearchAndRefreshWidget extends GetView<FinanceController> {
         10.widthGap,
         Row(
           spacing: 10,
-          children: [buildHoldVoucherButton(), buildClearFilterButton()],
+          children: [buildClearFilterButton()],
+          // children: [buildHoldVoucherButton(), buildClearFilterButton()],
         ),
       ],
     );

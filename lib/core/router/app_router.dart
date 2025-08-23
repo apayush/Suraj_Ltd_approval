@@ -15,6 +15,7 @@ import '../../features/production/controller/production_controller.dart';
 import '../../features/production/view/production_screen.dart';
 import '../../features/purchase/controller/purchase_controller.dart';
 import '../../features/purchase/view/purchase_screen.dart';
+import '../../features/sales/view/sales_screen.dart';
 import '../../features/splash/view/splash_screen.dart';
 import '../widgets/under_development_page.dart';
 
@@ -91,8 +92,8 @@ class AppRouter {
     ),
     GetPage(
       name: salesScreen,
-      page: () => UnderDevelopmentPage(),
-      // page: () => SalesScreen(),
+      // page: () => UnderDevelopmentPage(),
+      page: () => SalesScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<SalesController>(() => SalesController());
       }),

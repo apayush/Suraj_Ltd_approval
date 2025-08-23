@@ -74,8 +74,40 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
             columnWidthMode: ColumnWidthMode.fill,
             tableSummaryRows: tableSummaryRows,
             columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+            // onQueryRowHeight: (details) {
+            //   return details.rowIndex == 0 ? 45.0 : 50.0;
+            // },
             onQueryRowHeight: (details) {
-              return details.rowIndex == 0 ? 45.0 : 50.0;
+              // Header row
+              if (details.rowIndex == 0) return 45;
+
+              final DataGridRow row = source.rows[details.rowIndex - 1];
+
+              // Get value of Narr column
+              final narrCell = row.getCells().firstWhere(
+                    (cell) => cell.columnName == 'Narr',
+                orElse: () => const DataGridCell(columnName: 'Narr', value: ''),
+              );
+
+              final String text = narrCell.value?.toString() ?? '';
+
+              // Assume Narr column width (match your GridColumn width)
+              double columnWidth = 200;
+
+              // Use TextPainter to measure wrapped text
+              final textPainter = TextPainter(
+                text: TextSpan(
+                  text: text,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                textDirection: TextDirection.ltr,
+                maxLines: null,
+              )..layout(maxWidth: columnWidth);
+
+              final height = textPainter.size.height; // + padding
+
+              // Ensure min 50, max 200
+              return height.clamp(50.0, 100.0);
             },
             showHorizontalScrollbar: true,
             showVerticalScrollbar: true,

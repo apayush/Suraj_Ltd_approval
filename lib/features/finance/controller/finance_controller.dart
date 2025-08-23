@@ -185,6 +185,35 @@ class FinanceController extends GetxController
       }
     } catch (e) {
       print(e);
+      switch (mainType) {
+        case SubMenuType.bankPayment:
+          bankPaymentList.clear();
+          filteredBankPaymentList.clear();
+          bankPaymentDataSource.updateDataSource(bankPaymentList);
+          break;
+        case SubMenuType.bankReceipt:
+          bankReceiptList.clear();
+          filteredBankReceiptList.clear();
+          bankReceiptDataSource.updateDataSource(bankReceiptList);
+          break;
+        case SubMenuType.cashPayment:
+          cashPaymentList.clear();
+          filteredCashPaymentList.clear();
+          cashPaymentDataSource.updateDataSource(cashPaymentList);
+          break;
+        case SubMenuType.cashReceipt:
+          cashReceiptList.clear();
+          filteredCashReceiptList.clear();
+          cashReceiptDataSource.updateDataSource(cashReceiptList);
+          break;
+        case SubMenuType.journalVoucher:
+          journalVoucherList.clear();
+          filteredJournalVoucherList.clear();
+          journalVoucherDataSource.updateDataSource(journalVoucherList);
+          break;
+        default:
+          break;
+      }
     } finally {
       isLoading.value = false;
     }

@@ -16,21 +16,21 @@ class PurchaseMobileView extends GetView<PurchaseController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      RxList<VoucherModel> financeDataList = switch (subMenuType) {
+      RxList<VoucherModel> purchaseDataList = switch (subMenuType) {
         SubMenuType.purchaseInvoice => controller.filteredPurchaseInvoiceList,
         SubMenuType.purchaseOrder => controller.filteredPurchaseOrderListList,
         SubMenuType.purchaseIndent => controller.filteredPurchaseIndentList,
         SubMenuType.goodsReceiptNote => controller.filteredGoodsReceiptNoteList,
         _ => RxList<VoucherModel>.empty(),
       };
-      return financeDataList.isNotEmpty
+      return purchaseDataList.isNotEmpty
           ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               PurchaseSearchAndRefreshWidget(),
               10.heightGap,
               Expanded(
-                child: PurchaseVoucherList(financePaymentList: financeDataList),
+                child: PurchaseVoucherList(purchaseVoucherList: purchaseDataList),
               ),
             ],
           )

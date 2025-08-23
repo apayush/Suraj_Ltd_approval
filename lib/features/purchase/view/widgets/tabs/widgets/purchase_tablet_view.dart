@@ -35,7 +35,7 @@ class PurchaseTabletView extends GetView<PurchaseController> {
           return purchaseDataList.isNotEmpty
               ? Expanded(
                 child: PurchaseVoucherList(
-                  financePaymentList: purchaseDataList,
+                  purchaseVoucherList: purchaseDataList,
                 ),
               )
               : const Center(child: NoDataFound());

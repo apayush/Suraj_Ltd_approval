@@ -166,8 +166,32 @@ class PurchaseController extends GetxController
           }
         }
       }
-    } catch (e, s) {
+    } catch (e) {
       print(e);
+      switch (mainType) {
+        case SubMenuType.purchaseInvoice:
+          purchaseInvoiceList.clear();
+          filteredPurchaseInvoiceList.clear();
+          purchaseInvoiceDataSource.updateDataSource(purchaseInvoiceList);
+          break;
+        case SubMenuType.purchaseOrder:
+          purchaseOrderList.clear();
+          filteredPurchaseOrderListList.clear();
+          purchaseOrderDataSource.updateDataSource(purchaseOrderList);
+          break;
+        case SubMenuType.purchaseIndent:
+          purchaseIndentList.clear();
+          filteredPurchaseIndentList.clear();
+          purchaseIndentDataSource.updateDataSource(purchaseIndentList);
+          break;
+        case SubMenuType.goodsReceiptNote:
+          goodsReceiptNoteList.clear();
+          filteredGoodsReceiptNoteList.clear();
+          goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
+          break;
+        default:
+          break;
+      }
     } finally {
       isLoading.value = false;
     }
