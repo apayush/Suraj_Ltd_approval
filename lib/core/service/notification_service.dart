@@ -69,16 +69,16 @@ class NotificationService {
         badge: true,
         sound: true,
       );
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
 
       if (!kIsWeb) {
         final androidInitSettings = AndroidInitializationSettings(
           '@mipmap/ic_launcher',
+        );
+        final iOSInitializeSettings = DarwinInitializationSettings(
+          defaultPresentAlert: true,
+          defaultPresentSound: true,
+          defaultPresentBadge: true,
+          defaultPresentBanner: true,
         );
 
         _notificationChannelName = 'Suraj Approval Notification Channel';
@@ -94,12 +94,12 @@ class NotificationService {
 
         final initialSetting = InitializationSettings(
           android: androidInitSettings,
+          iOS: iOSInitializeSettings,
         );
         await localNotification.initialize(
           initialSetting,
           onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
         );
-
         await localNotification
             .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin
@@ -138,7 +138,7 @@ class NotificationService {
   static Future<void> onFirebaseNotificationReceived(
     RemoteMessage message,
   ) async {
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       final notificationDetails = NotificationDetails(
         iOS: DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
