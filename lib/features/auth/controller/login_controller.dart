@@ -71,6 +71,7 @@ class LoginController extends GetxController {
       }
       isLoading.value = false;
     } on DioException catch (e) {
+      isLoading.value = false;
       errorMessage.value = 'Connection not found, Config your environment';
       if (e.type == DioExceptionType.connectionError) {
         showSettingsDialog(Get.context!);
@@ -94,7 +95,8 @@ class LoginController extends GetxController {
     try {
       final response = await ApiService.getData(
         // ApiUrl.getBaseUrl,
-        'http://124.123.122.112:7081/ReportNew/GetBaseUrl',
+        // 'http://124.123.122.112:7081/ReportNew/GetBaseUrl',
+        'http://124.123.122.112:7081/Report/GetBaseUrl',
         queryParams: {'mType': ipType.value == 1 ? 'Global' : 'Local'},
       );
       final data = (response.data);
@@ -206,6 +208,7 @@ class LoginController extends GetxController {
         },
       ),
     );
+    isLoading.value = false;
     baseUrlController.clear();
   }
 

@@ -65,47 +65,47 @@ class SidebarController extends GetxController {
 
   TextEditingController baseUrlController = TextEditingController();
 
-  // ! Approve Reject Finance Voucher
-  Future<void> postFinanceVoucher({required String newBaseUrl}) async {
-    isLoading.value = true;
-    try {
-      final response = await ApiService.postData(
-        ApiUrl.saveBaseURL,
-        queryParams: {'mUrlString': baseUrlController.text},
-      );
-      if (response.statusCode == 200) {
-        Get.back();
-        if (response.data['status'] == 'success') {
-          AppUtils.showSnackBar('BaseUrl Updated Successfully');
-          getBaseUrl();
-        }
-        baseUrlController.clear();
-      }
-    } catch (e) {
-      print(e);
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // ! GET Base URL
-  Future<void> getBaseUrl() async {
-    isLoading.value = true;
-    try {
-      final response = await ApiService.getData(ApiUrl.getBaseUrl);
-      if (response.statusCode == 200) {
-        final baseURL = (response.data);
-        final jsonString = jsonEncode(baseURL);
-        await LocalDB.setString(AppConstants.baseUrl, jsonString);
-        final newBase = baseURL['data']['mUrl'];
-        ApiUrl.baseUrlGlobal = newBase;
-      }
-    } catch (e) {
-      print(e);
-    } finally {
-      // isLoading.value = false;
-    }
-  }
+  // // ! Approve Reject Finance Voucher
+  // Future<void> postFinanceVoucher({required String newBaseUrl}) async {
+  //   isLoading.value = true;
+  //   try {
+  //     final response = await ApiService.postData(
+  //       ApiUrl.saveBaseURL,
+  //       queryParams: {'mUrlString': baseUrlController.text},
+  //     );
+  //     if (response.statusCode == 200) {
+  //       Get.back();
+  //       if (response.data['status'] == 'success') {
+  //         AppUtils.showSnackBar('BaseUrl Updated Successfully');
+  //         getBaseUrl();
+  //       }
+  //       baseUrlController.clear();
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+  //
+  // // ! GET Base URL
+  // Future<void> getBaseUrl() async {
+  //   isLoading.value = true;
+  //   try {
+  //     final response = await ApiService.getData(ApiUrl.getBaseUrl);
+  //     if (response.statusCode == 200) {
+  //       final baseURL = (response.data);
+  //       final jsonString = jsonEncode(baseURL);
+  //       await LocalDB.setString(AppConstants.baseUrl, jsonString);
+  //       final newBase = baseURL['data']['mUrl'];
+  //       ApiUrl.baseUrlGlobal = newBase;
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     // isLoading.value = false;
+  //   }
+  // }
 
   // ! Update Password
   void showUpdatePwdDialog(BuildContext context) {
