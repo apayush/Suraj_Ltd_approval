@@ -74,12 +74,7 @@ class NotificationService {
         final androidInitSettings = AndroidInitializationSettings(
           '@mipmap/ic_launcher',
         );
-        final iOSInitializeSettings = DarwinInitializationSettings(
-          defaultPresentAlert: true,
-          defaultPresentSound: true,
-          defaultPresentBadge: true,
-          defaultPresentBanner: true,
-        );
+        final iOSInitializeSettings = DarwinInitializationSettings();
 
         _notificationChannelName = 'Suraj Approval Notification Channel';
         _androidNotificationChannel = AndroidNotificationChannel(
@@ -88,8 +83,7 @@ class NotificationService {
           importance: Importance.high,
           enableVibration: true,
           playSound: true,
-          showBadge: true,
-          // sound: RawResourceAndroidNotificationSound('notification'),
+          showBadge: true,      
         );
 
         final initialSetting = InitializationSettings(
@@ -109,15 +103,10 @@ class NotificationService {
 
       FirebaseMessaging.onBackgroundMessage(handlerBackgroundMessage);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        print('msg listen from firebase ${message.data}');
-        print(message.notification?.title);
-        print(message.notification?.body);
-        print(Platform.isAndroid);
         onFirebaseNotificationReceived(message);
         final controller = Get.find<NotificationController>();
         await controller.fetchNotifications();
       });
-      // FirebaseMessaging.onMessage.listen(onFirebaseNotificationReceived);
       FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedApp);
 
       if (kIsWeb) {

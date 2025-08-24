@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
+import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 
 import 'core/constants/app_enum.dart';
 import 'core/router/app_router.dart';
@@ -57,7 +58,7 @@ void gotToSubMenuFromRoute(
       Get.find<PurchaseController>().goTOSubMenu(subMenuType, srl);
       break;
     case AppRouter.salesScreen:
-    // Get.find<SalesController>().goTOSubMenu(subMenuType);
+    Get.find<SalesController>().goTOSubMenu(subMenuType,srl);
       break;
     case AppRouter.productionScreen:
     // Get.find<ProductionController>().goTOSubMenu(subMenuType);

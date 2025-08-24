@@ -9,6 +9,7 @@ import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
+import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 
 class NotificationController extends GetxController {
   // Observable variables
@@ -131,7 +132,7 @@ class NotificationController extends GetxController {
           'Srl': notification.srl,
         },
         onExistingRouteNavigate: () {
-          // Get.find<SalesController>().goTOSubMenu(notification.subType);
+          Get.find<SalesController>().goTOSubMenu(notification.subType,notification.srl??'');
         },
       );
     } else {
