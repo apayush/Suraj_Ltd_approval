@@ -71,7 +71,9 @@ class GenericDialogBox extends StatelessWidget {
                         // Header
                         Container(
                           height: 45.0,
-                          // padding: const EdgeInsets.all(12.0),
+                          // decoration: const BoxDecoration(
+                          //   gradient: AppGradients.royalBlueToDeepBlue,
+                          // ),
                           color: AppColors.blue,
                           child: Stack(
                             children: [

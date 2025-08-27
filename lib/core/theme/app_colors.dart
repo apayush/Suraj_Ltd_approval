@@ -83,7 +83,7 @@ class AppGradients {
   );
 
   static const LinearGradient royalBlueToDeepBlue = LinearGradient(
-    colors: [Color(0xff2A77FF), Color(0xff0F5DB8)],
+    colors: [Color(0xff5DB8FF), Color(0xff2A77FF), Color(0xff0F5DB8)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

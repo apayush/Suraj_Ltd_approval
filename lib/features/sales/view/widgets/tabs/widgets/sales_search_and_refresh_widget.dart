@@ -8,8 +8,7 @@ import 'package:suraj_approval/core/utills/device_type.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
-
-import '../../../../../../core/utills/app_utills.dart';
+import '../../../../../../core/widgets/app_dialog.dart';
 
 class SalesSearchAndRefreshWidget extends GetView<SalesController> {
   const SalesSearchAndRefreshWidget({super.key});
@@ -88,8 +87,27 @@ class SalesSearchAndRefreshWidget extends GetView<SalesController> {
 
   Widget BuildFilterBtn() {
     return AppIconButton(onPressed: (){
-      AppUtils.appBottomSheet(Get.context!,buildFilter()
-          .paddingSymmetric(horizontal: 10, vertical: 10));
+      Get.dialog(
+        GenericDialogBox(
+          headerText: 'Filter By Branch',
+          content: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: buildFilter()
+          ),
+          primaryButtonText: 'Apply',
+          secondaryButtonText: 'Cancel',
+          onPrimaryButtonPressed: () async {
+            controller.getAllData(mainType: controller.currentSubMenu.value);
+            Get.back();
+          },
+          onSecondaryButtonPressed: () {
+            Get.back();
+          },
+          isLoading: controller.isLoading,
+        ),
+      );
+      // AppUtils.appBottomSheet(Get.context!,buildFilter()
+      //               .paddingSymmetric(horizontal: 10, vertical: 10));
     }, icon: CupertinoIcons.sort_down);
   }
 }

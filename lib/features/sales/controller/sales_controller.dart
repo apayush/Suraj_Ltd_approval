@@ -35,9 +35,10 @@ class SalesController extends GetxController
   onBranchValueChanged(DropDownResponse? value) {
     if (value != null) {
       selectBranch.value = value;
-      getAllData(mainType: currentSubMenu.value);
+      if(DeviceType.isDesktop(Get.context!))
+        getAllData(mainType: currentSubMenu.value);
     } else {
-      selectBranch.value = null;
+      selectBranch.value = BranchList.first;
     }
   }
 
