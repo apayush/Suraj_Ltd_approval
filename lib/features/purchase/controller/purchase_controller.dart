@@ -29,6 +29,22 @@ class PurchaseController extends GetxController
   RxBool isRejectLoading = false.obs;
   RxBool isHoldVoucherModelEnabled = false.obs;
 
+  Rxn<DropDownResponse> selectBranch = Rxn<DropDownResponse>();
+  RxList<DropDownResponse> BranchList = <DropDownResponse>[
+    DropDownResponse(value: '', text: 'Select Branch'),
+    DropDownResponse(value: 'THOL', text: 'THOL'),
+    DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
+  ].obs;
+
+  onBranchValueChanged(DropDownResponse? value) {
+    if (value != null) {
+      selectBranch.value = value;
+      getAllData(mainType: currentSubMenu.value);
+    } else {
+      selectBranch.value = null;
+    }
+  }
+
   MenuType currentMenu = MenuType.purchase;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.purchaseInvoice.obs;
 
@@ -77,6 +93,7 @@ class PurchaseController extends GetxController
           'mUser': userModel?.mUser,
           'MainType': mainType.key,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
+          'mBranchName' : selectBranch.value?.value ?? ''
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
@@ -545,7 +562,7 @@ class PurchaseController extends GetxController
       goodsReceiptNoteList,
       rowsPerPage: rowsPerPage.value,
     );
-
+    selectBranch.value = BranchList.first;
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         final data = Get.arguments;

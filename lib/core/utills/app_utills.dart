@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:io' as io;
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:suraj_approval/core/widgets/app_pdf_viewer.dart';
 import 'package:universal_html/html.dart' as html;
-
 import '../theme/app_colors.dart';
 import 'app_module_container.dart';
 
@@ -112,13 +109,51 @@ class AppUtils {
     );
   }
 
-  static void showActionBottomSheet(
-    BuildContext context,
-    Widget content, {
-    bool isScrollControlled = false,
-  }) {
+  static void appBottomSheet(
+      BuildContext context,
+      Widget content, {
+        bool isScrollControlled = false,
+      }) {
     Get.bottomSheet(
-      content,
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header with title and close button
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey.shade300, width: 1),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Filters',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Get.back(),
+                  iconSize: 24,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+          ),
+          // Your content
+          Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: content,
+          ),
+        ],
+      ),
       isScrollControlled: isScrollControlled,
       backgroundColor: Theme.of(context).canvasColor,
       shape: const RoundedRectangleBorder(
@@ -159,24 +194,11 @@ class AppUtils {
     }
   }
 
-  static Future<File> base64ToPdfFile(String base64Str, String filename) async {
+  static Future<io.File> base64ToPdfFile(String base64Str, String filename) async {
     final bytes = base64Decode(base64Str);
     final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/$filename');
+    final file = io.File('${dir.path}/$filename');
     await file.writeAsBytes(bytes);
     return file;
   }
 }
-
-// void openLink(String url) async {
-//   final Uri uri = Uri.parse(url);
-//   // Check if the link can be opened
-//   if (await canLaunchUrl(uri)) {
-//     await launchUrl(
-//       uri,
-//       mode: LaunchMode.externalApplication,
-//     );
-//   } else {
-//     throw 'Could not launch $url';
-//   }
-// }

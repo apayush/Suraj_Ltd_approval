@@ -268,3 +268,174 @@ class AppTextField extends StatelessWidget {
     );
   }
 }
+
+class DropDownResponse {
+  final String? value;
+  final String? text;
+
+  DropDownResponse({this.value, this.text});
+}
+
+class CustomDropdownSingle extends StatefulWidget {
+  final double? width;
+  final String hintText;
+  DropDownResponse? selectedItem;
+  final bool isEnabled;
+  final bool isAddNewButton;
+  final List<DropDownResponse>? items;
+  final Future<List<DropDownResponse>> Function(String)? fetchData;
+  final VoidCallback? onAddNewPressed;
+  final String? validationMessage;
+  final ValueChanged<DropDownResponse?>? onChanged;
+  final bool isValidator;
+
+  CustomDropdownSingle({
+    super.key,
+    this.width,
+    required this.hintText,
+    required this.selectedItem,
+    this.isEnabled = true,
+    this.isAddNewButton = false,
+    this.items,
+    this.fetchData,
+    this.onAddNewPressed,
+    this.validationMessage,
+    this.onChanged,
+    this.isValidator = false,
+  });
+
+  @override
+  State<CustomDropdownSingle> createState() => _CustomDropdownSingleState();
+}
+
+class _CustomDropdownSingleState extends State<CustomDropdownSingle> {
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.selectedItem?.text ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomDropdownSingle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedItem != widget.selectedItem ||
+        oldWidget.items != widget.items) {
+      DropDownResponse? selected = widget.selectedItem;
+      if (selected != null && (selected.text == null || selected.text!.isEmpty)) {
+        final match = widget.items?.firstWhere(
+              (e) => e.value == selected?.value,
+          orElse: () => selected!,
+        );
+        selected = match;
+      }
+      controller.text = selected?.text ?? '';
+      if (selected != widget.selectedItem) {
+        widget.selectedItem = selected;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double adjustedWidth = widget.width ?? screenWidth;
+    if (screenWidth >= 600 && screenWidth < 1024) {
+      adjustedWidth = screenWidth * 0.75;
+    } else if (screenWidth >= 1024) {
+      adjustedWidth = 350.0;
+    }
+
+    return FormField<DropDownResponse>(
+      initialValue: widget.selectedItem,
+      validator: widget.isValidator
+          ? (value) {
+        if (widget.selectedItem != null) return null;
+        if (value == null) {
+          return widget.hintText;
+        }
+        return null;
+      }
+          : null,
+      builder: (state) {
+        if (state.value != widget.selectedItem) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            state.didChange(widget.selectedItem);
+          });
+        }
+        return SizedBox(
+          width: widget.width ?? adjustedWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 45.0,
+                width: widget.width ?? adjustedWidth,
+                child: _buildDropdownField(context, state),
+              ),
+              if (state.hasError && widget.selectedItem == null)
+                _buildErrorText(context),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDropdownField(
+      BuildContext context,
+      FormFieldState<DropDownResponse> state,
+      ) {
+    return Container(
+      height: 45.0,
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: state.hasError && widget.selectedItem == null
+              ? Colors.red
+              : Colors.grey,
+          width: 0.5,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<DropDownResponse>(
+          value: widget.selectedItem,
+          isExpanded: true,
+          isDense: true,
+          hint: Text(
+            widget.hintText,
+            style: TextStyle(color: Colors.grey),
+          ),
+          items: widget.items?.map((DropDownResponse item) {
+            return DropdownMenuItem<DropDownResponse>(
+              value: item,
+              child: Text(item.text ?? ''),
+            );
+          }).toList(),
+          onChanged: widget.isEnabled
+              ? (DropDownResponse? newValue) {
+            setState(() {
+              widget.selectedItem = newValue;
+            });
+            state.didChange(newValue);
+            widget.onChanged?.call(newValue);
+          }
+              : null,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorText(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0, left: 4.0),
+      child: Text(
+        widget.validationMessage ?? widget.hintText,
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+  }
+}

@@ -9,6 +9,8 @@ import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
 
+import '../../../../../../core/utills/app_utills.dart';
+
 class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
   const PurchaseSearchAndRefreshWidget({super.key});
 
@@ -24,8 +26,14 @@ class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
           buildSearchTextField(),
         10.widthGap,
         Row(
-          spacing: 10,
-          children: [buildClearFilterButton()],
+            children: [
+              if(DeviceType.isDesktop(context))
+                buildFilter()
+              else
+                BuildFilterBtn(),
+              10.widthGap,
+              buildClearFilterButton(),
+            ]
           // children: [buildHoldVoucherButton(), buildClearFilterButton()],
         ),
       ],
@@ -63,5 +71,25 @@ class PurchaseSearchAndRefreshWidget extends GetView<PurchaseController> {
       onPressed: controller.resetFilters,
       icon: CupertinoIcons.arrow_clockwise,
     );
+  }
+
+  Widget buildFilter() {
+    return Obx(
+          ()=> CustomDropdownSingle(
+        selectedItem: controller.selectBranch.value,
+        hintText: 'Select Branch',
+        width: DeviceType.isMobile(Get.context!) ? Get.width : null,
+        items: controller.BranchList,
+        isValidator: true,
+        onChanged: controller.onBranchValueChanged,
+      ),
+    );
+  }
+
+  Widget BuildFilterBtn() {
+    return AppIconButton(onPressed: (){
+      AppUtils.appBottomSheet(Get.context!,buildFilter()
+          .paddingSymmetric(horizontal: 10, vertical: 10));
+    }, icon: CupertinoIcons.sort_down);
   }
 }
