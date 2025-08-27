@@ -296,6 +296,7 @@ class FinanceController extends GetxController
 
   // ! RESET FILTERS
   resetFilters() {
+    selectBranch.value = BranchList.first;
     getAllData(mainType: currentSubMenu.value);
   }
 
