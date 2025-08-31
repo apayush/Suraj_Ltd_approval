@@ -10,6 +10,7 @@ class VoucherModel {
   final int? sno;
   final String? party;
   final double? debit;
+  final double? amount;
   final double? credit;
   final String? cheque;
   final String? narr;
@@ -30,6 +31,7 @@ class VoucherModel {
     this.sno,
     this.party,
     this.debit,
+    this.amount,
     this.credit,
     this.cheque,
     this.narr,
@@ -54,6 +56,7 @@ class VoucherModel {
               : int.tryParse(json['Sno'].toString()) ?? 0,
       party: json['Party'] as String?,
       debit: (json['Debit'] as num?)?.toDouble(),
+      amount: (json['Amount'] as num?)?.toDouble(),
       credit: (json['Credit'] as num?)?.toDouble(),
       cheque: json['Cheque'] as String?,
       narr: json['Narr'] as String?,
@@ -77,6 +80,7 @@ class VoucherModel {
       'Sno': sno,
       'Party': party,
       'Debit': debit,
+      'Amount': amount,
       'Credit': credit,
       'Cheque': cheque,
       'Narr': narr,

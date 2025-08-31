@@ -97,21 +97,61 @@ class VoucherCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  if (payment.debit?.toInt() != 0 || payment.credit != 0)
+                  // if (payment.amount?.toInt() != 0 || payment.credit != 0)
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         payment.debit?.toInt() == 0
+                  //             ? '₹${formatAmount(payment.credit) ?? AppStrings.notAvailable}'
+                  //             : '₹${formatAmount(payment.debit) ?? AppStrings.notAvailable}',
+                  //         style: TextStyle(
+                  //           fontSize: 20,
+                  //           fontWeight: FontWeight.bold,
+                  //           color:
+                  //               payment.debit?.toInt() == 0
+                  //                   ? Colors.green
+                  //                   : Colors.red,
+                  //         ),
+                  //       ),
+                  //       Container(
+                  //         padding: const EdgeInsets.symmetric(
+                  //           horizontal: 8,
+                  //           vertical: 4,
+                  //         ),
+                  //         decoration: BoxDecoration(
+                  //           color:
+                  //               payment.debit?.toInt() == 0
+                  //                   ? Colors.green.shade50
+                  //                   : Colors.red.shade50,
+                  //           borderRadius: BorderRadius.circular(4),
+                  //         ),
+                  //         child: AppText(
+                  //           payment.debit?.toInt() == 0 ? 'Credit' : 'Debit',
+                  //           style: TextStyles.normalBold(context),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  if ((payment.debit?.toInt() != 0 || payment.credit != 0) ||
+                      (payment.debit?.toInt() == 0 && payment.credit == 0 && (payment.amount != null)))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          payment.debit?.toInt() == 0
+                          payment.debit?.toInt() != 0
+                              ? '₹${formatAmount(payment.debit) ?? AppStrings.notAvailable}'
+                              : payment.credit != 0
                               ? '₹${formatAmount(payment.credit) ?? AppStrings.notAvailable}'
-                              : '₹${formatAmount(payment.debit) ?? AppStrings.notAvailable}',
+                              : '₹${formatAmount(payment.amount) ?? AppStrings.notAvailable}', // <-- new fallback
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color:
-                                payment.debit?.toInt() == 0
-                                    ? Colors.green
-                                    : Colors.red,
+                            color: payment.debit?.toInt() != 0
+                                ? Colors.red
+                                : payment.credit != 0
+                                ? Colors.green
+                                : Colors.blue, // <-- color for amount
                           ),
                         ),
                         Container(
@@ -120,14 +160,19 @@ class VoucherCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color:
-                                payment.debit?.toInt() == 0
-                                    ? Colors.green.shade50
-                                    : Colors.red.shade50,
+                            color: payment.debit?.toInt() != 0
+                                ? Colors.red.shade50
+                                : payment.credit != 0
+                                ? Colors.green.shade50
+                                : Colors.blue.shade50, // <-- background for amount
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: AppText(
-                            payment.debit?.toInt() == 0 ? 'Credit' : 'Debit',
+                            payment.debit?.toInt() != 0
+                                ? 'Debit'
+                                : payment.credit != 0
+                                ? 'Credit'
+                                : 'Amount', // <-- label for amount
                             style: TextStyles.normalBold(context),
                           ),
                         ),

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/service/network_service.dart';
 import 'package:suraj_approval/core/service/notification_service.dart';
-
 import 'core/router/app_router.dart';
 import 'core/service/api_client.dart';
 import 'core/service/local_db.dart';
@@ -65,4 +64,5 @@ Future<void> initializeApp() async {
   if (storedUrl != null) {
     ApiUrl.baseUrlGlobal = storedUrl;
   }
+  // FlutterAppBadger.removeBadge();
 }

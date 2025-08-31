@@ -74,6 +74,12 @@ class SalesWebView extends GetView<SalesController> {
                     allowSorting: false,
                   ),
                   GridColumn(
+                    columnName: 'Amount',
+                    columnWidthMode: ColumnWidthMode.auto,
+                    label: appGridLabel('Amount'),
+                    allowSorting: false,
+                  ),
+                  GridColumn(
                     columnName: 'AuthIds',
                     columnWidthMode: ColumnWidthMode.auto,
                     label: appGridLabel('AuthIds'),

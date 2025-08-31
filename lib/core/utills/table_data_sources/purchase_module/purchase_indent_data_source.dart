@@ -50,6 +50,7 @@ class PurchaseIndentDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
+      _createCell('Amount', (e.amount ?? '').toString()),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];
