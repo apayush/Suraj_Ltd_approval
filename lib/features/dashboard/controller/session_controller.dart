@@ -90,7 +90,7 @@ class SessionController extends GetxController {
       barrierDismissible: false,
       GenericDialogBox(
         headerText: AppStrings.youHaveLoggedOut,
-        showCloseIcon: false,
+        isShowTopCloseButton: false,
         content: AppText(
           AppStrings.sessionHasExpired2,
           softWrap: true,

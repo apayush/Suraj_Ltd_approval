@@ -18,6 +18,8 @@ class SalesMobileView extends GetView<SalesController> {
     return Obx(() {
       RxList<VoucherModel> salesDataList = switch (subMenuType) {
         SubMenuType.salesOrder => controller.filteredSalesOrderList,
+        SubMenuType.salesQuotation => controller.filteredSalesQuotationList,
+        SubMenuType.salesEnquiry => controller.filteredSalesEnquiryList,
         _ => RxList<VoucherModel>.empty(),
       };
       return salesDataList.isNotEmpty

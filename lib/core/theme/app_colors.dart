@@ -17,7 +17,8 @@ class AppColors {
   static const Color onError = Color(0xFFFFFFFF);
   static const Color textFieldBackgroundColor = Color(0xFFF6F6F6);
   static const Color dividerColors = Color(0xFFDADADA);
-  static const Color blue = Color(0xFF00457A); // Good Color
+  static const Color blue = Color(0xFF266499); // Good Color
+  // static const Color blue = Color(0xFF00457A); // Good Color
   static const Color blue50 = Color(0xFFE1EAF0);
   static const Color blue100 = Color(0xFFB3C9DA);
   static const Color blue200 = Color(0xFF80A5C1);

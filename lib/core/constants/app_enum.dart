@@ -33,7 +33,8 @@ enum SubMenuType {
 
   // Sales
   salesOrder('Sales Order'),
-  // salesQuotation('Sales Quotation'),
+  salesQuotation('Sales Quotation'),
+  salesEnquiry('Sales Enquiry'),
   // salesDebitNote('Sales Debit Note'),
   // salesCreditNote('Sales Credit Note'),
 

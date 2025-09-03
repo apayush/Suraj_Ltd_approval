@@ -10,15 +10,16 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
+import '../../../core/utills/table_data_sources/sales_module/sales_enquiry_data_source.dart';
 import '../../../core/utills/table_data_sources/sales_module/sales_order_data_source.dart';
+import '../../../core/utills/table_data_sources/sales_module/sales_quotation_data_source.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../../finance/model/bank_payment_model.dart';
 import '../view/widgets/tabs/widgets/sales_view.dart';
 
-class SalesController extends GetxController
-    with GetTickerProviderStateMixin {
+class SalesController extends GetxController with GetTickerProviderStateMixin {
   RxBool isLoading = false.obs;
 
   RxBool isApproveLoading = false.obs;
@@ -26,16 +27,17 @@ class SalesController extends GetxController
   RxBool isHoldVoucherModelEnabled = false.obs;
 
   Rxn<DropDownResponse> selectBranch = Rxn<DropDownResponse>();
-  RxList<DropDownResponse> BranchList = <DropDownResponse>[
-    DropDownResponse(value: '', text: 'Select Branch'),
-    DropDownResponse(value: 'THOL', text: 'THOL'),
-    DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
-  ].obs;
+  RxList<DropDownResponse> BranchList =
+      <DropDownResponse>[
+        DropDownResponse(value: '', text: 'Select Branch'),
+        DropDownResponse(value: 'THOL', text: 'THOL'),
+        DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
+      ].obs;
 
   onBranchValueChanged(DropDownResponse? value) {
     if (value != null) {
       selectBranch.value = value;
-      if(DeviceType.isDesktop(Get.context!))
+      if (DeviceType.isDesktop(Get.context!))
         getAllData(mainType: currentSubMenu.value);
     } else {
       selectBranch.value = BranchList.first;
@@ -56,8 +58,18 @@ class SalesController extends GetxController
   RxList<VoucherModel> salesOrderList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredSalesOrderList = <VoucherModel>[].obs;
 
+  // ! Two lists to hold the Api data and filtered data for Sales Quotation
+  RxList<VoucherModel> salesQuotationList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredSalesQuotationList = <VoucherModel>[].obs;
+
+  // ! Two lists to hold the Api data and filtered data for Sales Quotation
+  RxList<VoucherModel> salesEnquiryList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredSalesEnquiryList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late SalesOrderDataSource salesOrderDataSource;
+  late SalesQuotationDataSource salesQuotationDataSource;
+  late SalesEnquiryDataSource salesEnquiryDataSource;
 
   // ! Get All Sales Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -78,7 +90,7 @@ class SalesController extends GetxController
           'mUser': userModel?.mUser,
           'MainType': mainType.key,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
-          'mBranchName' : selectBranch.value?.value ?? ''
+          'mBranchName': selectBranch.value?.value ?? '',
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
@@ -93,6 +105,16 @@ class SalesController extends GetxController
               salesOrderList.assignAll(voucher);
               filteredSalesOrderList.value = (voucher);
               salesOrderDataSource.updateDataSource(salesOrderList);
+              break;
+            case SubMenuType.salesQuotation:
+              salesQuotationList.assignAll(voucher);
+              filteredSalesQuotationList.value = (voucher);
+              salesQuotationDataSource.updateDataSource(salesQuotationList);
+              break;
+            case SubMenuType.salesEnquiry:
+              salesEnquiryList.assignAll(voucher);
+              filteredSalesEnquiryList.value = (voucher);
+              salesEnquiryDataSource.updateDataSource(salesEnquiryList);
               break;
             default:
               break;
@@ -133,6 +155,16 @@ class SalesController extends GetxController
               filteredSalesOrderList.value = (voucher);
               salesOrderDataSource.updateDataSource(salesOrderList);
               break;
+            case SubMenuType.salesQuotation:
+              salesQuotationList.assignAll(voucher);
+              filteredSalesQuotationList.value = (voucher);
+              salesQuotationDataSource.updateDataSource(salesQuotationList);
+              break;
+            case SubMenuType.salesEnquiry:
+              salesEnquiryList.assignAll(voucher);
+              filteredSalesEnquiryList.value = (voucher);
+              salesEnquiryDataSource.updateDataSource(salesEnquiryList);
+              break;
             default:
               break;
           }
@@ -145,6 +177,16 @@ class SalesController extends GetxController
           salesOrderList.clear();
           filteredSalesOrderList.clear();
           salesOrderDataSource.updateDataSource(salesOrderList);
+          break;
+        case SubMenuType.salesQuotation:
+          salesQuotationList.clear();
+          filteredSalesQuotationList.clear();
+          salesQuotationDataSource.updateDataSource(salesQuotationList);
+          break;
+        case SubMenuType.salesEnquiry:
+          salesEnquiryList.clear();
+          filteredSalesEnquiryList.clear();
+          salesEnquiryDataSource.updateDataSource(salesEnquiryList);
           break;
         default:
           break;
@@ -178,9 +220,9 @@ class SalesController extends GetxController
 
   // ! Approve Reject Sales Voucher
   Future<void> postVoucher(
-      VoucherModel voucher, {
-        required String voucherStatus,
-      }) async {
+    VoucherModel voucher, {
+    required String voucherStatus,
+  }) async {
     final userModel = LocalDB.getUserModel();
     isLoading.value = true;
     try {
@@ -191,6 +233,7 @@ class SalesController extends GetxController
           'mUserLevel': voucher.userLevel,
           'LinkField': voucher.linkField,
           'mAuthorise': voucherStatus,
+          'mBranchName': voucher.mBranch,
           'mRemarks': remarkController.value.text,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
         },
@@ -246,6 +289,16 @@ class SalesController extends GetxController
         filteredList = filteredSalesOrderList;
         dataSource = salesOrderDataSource;
         break;
+      case SubMenuType.salesQuotation:
+        sourceList = salesQuotationList;
+        filteredList = filteredSalesQuotationList;
+        dataSource = salesQuotationDataSource;
+        break;
+      case SubMenuType.salesEnquiry:
+        sourceList = salesEnquiryList;
+        filteredList = filteredSalesEnquiryList;
+        dataSource = salesEnquiryDataSource;
+        break;
       default:
         return;
     }
@@ -256,16 +309,16 @@ class SalesController extends GetxController
       filteredList.assignAll(
         sourceList.where((item) {
           return [
-            item.mBranch,
-            item.type,
-            item.srl,
-            item.docDate,
-            item.party,
-            item.debit,
-            item.credit,
-            item.authIds,
-            item.mainType,
-          ]
+                item.mBranch,
+                item.type,
+                item.srl,
+                item.docDate,
+                item.party,
+                item.debit,
+                item.credit,
+                item.authIds,
+                item.mainType,
+              ]
               .map((e) => e?.toString().toLowerCase() ?? '')
               .any((field) => field.contains(query));
         }),
@@ -276,6 +329,12 @@ class SalesController extends GetxController
       switch (currentSubMenu.value) {
         case SubMenuType.salesOrder:
           filteredSalesOrderList.value = filteredList.toList();
+          break;
+        case SubMenuType.salesQuotation:
+          filteredSalesQuotationList.value = filteredList.toList();
+          break;
+        case SubMenuType.salesEnquiry:
+          filteredSalesEnquiryList.value = filteredList.toList();
           break;
         default:
           break;
@@ -299,6 +358,12 @@ class SalesController extends GetxController
     switch (currentSubMenu.value) {
       case SubMenuType.salesOrder:
         salesOrderDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.salesQuotation:
+        salesQuotationDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.salesEnquiry:
+        salesEnquiryDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -457,6 +522,14 @@ class SalesController extends GetxController
       salesOrderList,
       rowsPerPage: rowsPerPage.value,
     );
+    salesQuotationDataSource = SalesQuotationDataSource(
+      salesQuotationList,
+      rowsPerPage: rowsPerPage.value,
+    );
+    salesEnquiryDataSource = SalesEnquiryDataSource(
+      salesEnquiryList,
+      rowsPerPage: rowsPerPage.value,
+    );
     selectBranch.value = BranchList.first;
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -481,6 +554,12 @@ class SalesController extends GetxController
     if (menuType == SubMenuType.salesOrder) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.salesOrder;
+    } else if (menuType == SubMenuType.salesQuotation) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.salesQuotation;
+    } else if (menuType == SubMenuType.salesEnquiry) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.salesEnquiry;
     }
 
     await getAllData(mainType: currentSubMenu.value);

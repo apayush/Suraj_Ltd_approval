@@ -23,6 +23,10 @@ class SalesTabletView extends GetView<SalesController> {
           List<VoucherModel> salesDataList = switch (subMenuType) {
             SubMenuType.salesOrder =>
             controller.filteredSalesOrderList,
+            SubMenuType.salesQuotation =>
+            controller.filteredSalesQuotationList,
+            SubMenuType.salesEnquiry =>
+            controller.filteredSalesEnquiryList,
             _ => [],
           };
           return salesDataList.isNotEmpty

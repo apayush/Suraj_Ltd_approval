@@ -27,11 +27,17 @@ class SalesWebView extends GetView<SalesController> {
           List<VoucherModel> financeDataList = switch (subMenuType) {
             SubMenuType.salesOrder =>
             controller.filteredSalesOrderList,
+            SubMenuType.salesQuotation =>
+            controller.filteredSalesQuotationList,
+            SubMenuType.salesEnquiry =>
+            controller.filteredSalesEnquiryList,
             _ => [],
           };
 
           final dataSource = switch (subMenuType) {
             SubMenuType.salesOrder => controller.salesOrderDataSource,
+            SubMenuType.salesQuotation => controller.salesQuotationDataSource,
+            SubMenuType.salesEnquiry => controller.salesEnquiryDataSource,
             _ => null,
           };
           return financeDataList.isNotEmpty

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
+import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/features/dashboard/controller/session_controller.dart';
 
 import '../../../core/constants/api_url.dart';
@@ -121,16 +123,14 @@ class SidebarController extends GetxController {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CommonTextField(
+              AppTextField(
                 controller: passwordController,
-                hintText: 'New Password',
-                labelText: 'New Password',
+                hint: 'New Password',
               ),
-              const SizedBox(height: 10),
-              CommonTextField(
+              10.heightGap,
+              AppTextField(
                 controller: confirmPasswordController,
-                hintText: 'Confirm Password',
-                labelText: 'Confirm Password',
+                hint: 'Confirm Password',
               ),
             ],
           ),
