@@ -46,10 +46,10 @@ import 'features/finance/controller/finance_controller.dart';
 }
 
 void gotToSubMenuFromRoute(
-    String routeName,
-    SubMenuType? subMenuType,
-    String srl,
-    ) {
+  String routeName,
+  SubMenuType? subMenuType,
+  String srl,
+) {
   switch (routeName) {
     case AppRouter.financeScreen:
       Get.find<FinanceController>().goTOSubMenu(subMenuType, srl);
@@ -58,10 +58,10 @@ void gotToSubMenuFromRoute(
       Get.find<PurchaseController>().goTOSubMenu(subMenuType, srl);
       break;
     case AppRouter.salesScreen:
-    Get.find<SalesController>().goTOSubMenu(subMenuType,srl);
+      Get.find<SalesController>().goTOSubMenu(subMenuType, srl);
       break;
     case AppRouter.productionScreen:
-    // Get.find<ProductionController>().goTOSubMenu(subMenuType);
+      // Get.find<ProductionController>().goTOSubMenu(subMenuType);
       break;
   }
 }

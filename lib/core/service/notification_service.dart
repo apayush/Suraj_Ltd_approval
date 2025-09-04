@@ -74,7 +74,10 @@ class NotificationService {
         final androidInitSettings = AndroidInitializationSettings(
           '@mipmap/ic_launcher',
         );
-        final iOSInitializeSettings = DarwinInitializationSettings();
+        final iOSInitializeSettings = DarwinInitializationSettings(
+          defaultPresentBadge: false,
+          requestBadgePermission: false,
+        );
 
         _notificationChannelName = 'Suraj Approval Notification Channel';
         _androidNotificationChannel = AndroidNotificationChannel(
@@ -83,7 +86,7 @@ class NotificationService {
           importance: Importance.high,
           enableVibration: true,
           playSound: true,
-          showBadge: true,      
+          showBadge: true,
         );
 
         final initialSetting = InitializationSettings(
