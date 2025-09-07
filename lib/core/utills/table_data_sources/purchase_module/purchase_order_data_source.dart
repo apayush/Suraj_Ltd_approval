@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -50,7 +51,7 @@ class PurchaseOrderDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Amount', (e.amount ?? '').toString()),
+      _createCell('Amount', '₹ ' + (formatAmount(e.amount) ?? '0')),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];

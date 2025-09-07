@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../features/finance/controller/finance_controller.dart';
@@ -51,8 +52,8 @@ class BankReceiptDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Debit', e.debit?.toString() ?? '0'),
-      _createCell('Credit', e.credit?.toString() ?? '0'),
+      _createCell('Debit', '₹ ' + (formatAmount(e.debit) ?? '0')),
+      _createCell('Credit', '₹ ' + (formatAmount(e.credit) ?? '0')),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -15,7 +16,10 @@ class PurchaseIndentDataSource extends DataGridSource {
   int rowsPerPage;
   int currentPageIndex = 0;
 
-  PurchaseIndentDataSource(this.purchaseIndentList, {required this.rowsPerPage}) {
+  PurchaseIndentDataSource(
+    this.purchaseIndentList, {
+    required this.rowsPerPage,
+  }) {
     _loadInitialPage();
   }
 
@@ -38,8 +42,8 @@ class PurchaseIndentDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-      return DataGridRow(cells: _buildDataGridCells(e));
-    })
+          return DataGridRow(cells: _buildDataGridCells(e));
+        })
         .toList(growable: false);
   }
 
@@ -50,7 +54,7 @@ class PurchaseIndentDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Amount', (e.amount ?? '').toString()),
+      _createCell('Amount', '₹ ' + (formatAmount(e.amount) ?? '0')),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];
@@ -79,22 +83,22 @@ class PurchaseIndentDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-      row.getCells().map<Widget>((dataGridCell) {
-        if (dataGridCell.columnName == 'Action') {
-          return buildActionIcons(dataGridCell.value as VoucherModel);
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: AppText(
-              dataGridCell.value.toString(),
-              style: TextStyles.small(Get.context!),
-              overflow: TextOverflow.ellipsis,
-              alignment: Alignment.centerLeft,
-            ),
-          );
-        }
-      }).toList(),
+          row.getCells().map<Widget>((dataGridCell) {
+            if (dataGridCell.columnName == 'Action') {
+              return buildActionIcons(dataGridCell.value as VoucherModel);
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                child: AppText(
+                  dataGridCell.value.toString(),
+                  style: TextStyles.small(Get.context!),
+                  overflow: TextOverflow.ellipsis,
+                  alignment: Alignment.centerLeft,
+                ),
+              );
+            }
+          }).toList(),
     );
   }
 
@@ -108,11 +112,11 @@ class PurchaseIndentDataSource extends DataGridSource {
       paginatedItems =
           purchaseIndentList
               .getRange(
-            startIndex,
-            endIndex > purchaseIndentList.length
-                ? purchaseIndentList.length
-                : endIndex,
-          )
+                startIndex,
+                endIndex > purchaseIndentList.length
+                    ? purchaseIndentList.length
+                    : endIndex,
+              )
               .toList();
 
       _buildDataGridRows();

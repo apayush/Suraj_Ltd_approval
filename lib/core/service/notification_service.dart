@@ -66,7 +66,7 @@ class NotificationService {
     try {
       await FirebaseMessaging.instance.requestPermission(
         alert: true,
-        badge: true,
+        badge: Platform.isIOS ? false : true,
         sound: true,
       );
 

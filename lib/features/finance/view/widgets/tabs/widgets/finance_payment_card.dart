@@ -134,7 +134,9 @@ class VoucherCard extends StatelessWidget {
                   //     ],
                   //   ),
                   if ((payment.debit?.toInt() != 0 || payment.credit != 0) ||
-                      (payment.debit?.toInt() == 0 && payment.credit == 0 && (payment.amount != null)))
+                      (payment.debit?.toInt() == 0 &&
+                          payment.credit == 0 &&
+                          (payment.amount != null)))
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -147,11 +149,12 @@ class VoucherCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: payment.debit?.toInt() != 0
-                                ? Colors.red
-                                : payment.credit != 0
-                                ? Colors.green
-                                : Colors.blue, // <-- color for amount
+                            color:
+                                payment.debit?.toInt() != 0
+                                    ? Colors.red
+                                    : payment.credit != 0
+                                    ? Colors.green
+                                    : Colors.blue, // <-- color for amount
                           ),
                         ),
                         Container(
@@ -160,11 +163,14 @@ class VoucherCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: payment.debit?.toInt() != 0
-                                ? Colors.red.shade50
-                                : payment.credit != 0
-                                ? Colors.green.shade50
-                                : Colors.blue.shade50, // <-- background for amount
+                            color:
+                                payment.debit?.toInt() != 0
+                                    ? Colors.red.shade50
+                                    : payment.credit != 0
+                                    ? Colors.green.shade50
+                                    : Colors
+                                        .blue
+                                        .shade50, // <-- background for amount
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: AppText(

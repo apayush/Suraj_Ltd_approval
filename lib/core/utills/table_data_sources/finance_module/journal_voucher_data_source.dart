@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import '../../../../features/finance/controller/finance_controller.dart';
 import '../../../../features/finance/model/bank_payment_model.dart';
 import '../../../widgets/common_widgets.dart';
@@ -14,7 +16,10 @@ class JournalVoucherDataSource extends DataGridSource {
   int rowsPerPage;
   int currentPageIndex = 0;
 
-  JournalVoucherDataSource(this.journalVoucherList, {required this.rowsPerPage}) {
+  JournalVoucherDataSource(
+    this.journalVoucherList, {
+    required this.rowsPerPage,
+  }) {
     _loadInitialPage();
   }
 
@@ -37,8 +42,8 @@ class JournalVoucherDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-      return DataGridRow(cells: _buildDataGridCells(e));
-    })
+          return DataGridRow(cells: _buildDataGridCells(e));
+        })
         .toList(growable: false);
   }
 
@@ -50,8 +55,8 @@ class JournalVoucherDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Debit', e.debit?.toString() ?? '0'),
-      _createCell('Credit', e.credit?.toString() ?? '0'),
+      _createCell('Debit', '₹ ' + (formatAmount(e.debit) ?? '0')),
+      _createCell('Credit', '₹ ' + (formatAmount(e.credit) ?? '0')),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];
@@ -80,22 +85,22 @@ class JournalVoucherDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-      row.getCells().map<Widget>((dataGridCell) {
-        if (dataGridCell.columnName == 'Action') {
-          return buildActionIcons(dataGridCell.value as VoucherModel);
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: AppText(
-              dataGridCell.value.toString(),
-              style: TextStyles.small(Get.context!),
-              overflow: TextOverflow.ellipsis,
-              alignment: Alignment.centerLeft,
-            ),
-          );
-        }
-      }).toList(),
+          row.getCells().map<Widget>((dataGridCell) {
+            if (dataGridCell.columnName == 'Action') {
+              return buildActionIcons(dataGridCell.value as VoucherModel);
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                child: AppText(
+                  dataGridCell.value.toString(),
+                  style: TextStyles.small(Get.context!),
+                  overflow: TextOverflow.ellipsis,
+                  alignment: Alignment.centerLeft,
+                ),
+              );
+            }
+          }).toList(),
     );
   }
 
@@ -109,11 +114,11 @@ class JournalVoucherDataSource extends DataGridSource {
       paginatedItems =
           journalVoucherList
               .getRange(
-            startIndex,
-            endIndex > journalVoucherList.length
-                ? journalVoucherList.length
-                : endIndex,
-          )
+                startIndex,
+                endIndex > journalVoucherList.length
+                    ? journalVoucherList.length
+                    : endIndex,
+              )
               .toList();
 
       _buildDataGridRows();

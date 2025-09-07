@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
+import 'package:suraj_approval/core/utills/num_utils.dart';
 import 'package:suraj_approval/features/sales/controller/sales_controller.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 import '../../../../features/finance/model/bank_payment_model.dart';
 import '../../../widgets/common_widgets.dart';
 import '../../app_module_container.dart';
@@ -15,9 +17,9 @@ class SalesQuotationDataSource extends DataGridSource {
   int currentPageIndex = 0;
 
   SalesQuotationDataSource(
-      this.salesQuotationList, {
-        required this.rowsPerPage,
-      }) {
+    this.salesQuotationList, {
+    required this.rowsPerPage,
+  }) {
     _loadInitialPage();
   }
 
@@ -40,8 +42,8 @@ class SalesQuotationDataSource extends DataGridSource {
   void _buildDataGridRows() {
     _dataGridRows = paginatedItems
         .map<DataGridRow>((e) {
-      return DataGridRow(cells: _buildDataGridCells(e));
-    })
+          return DataGridRow(cells: _buildDataGridCells(e));
+        })
         .toList(growable: false);
   }
 
@@ -52,7 +54,7 @@ class SalesQuotationDataSource extends DataGridSource {
       _createCell('Srl', e.srl ?? ''),
       _createCell('DocDate', e.docDate ?? ''),
       _createCell('Party', e.party ?? ''),
-      _createCell('Amount', (e.amount ?? '').toString()),
+      _createCell('Amount', '₹ ' + (formatAmount(e.amount) ?? '0')),
       _createCell('AuthIds', e.authIds ?? ''),
       _createCell('Narr', e.narr ?? ''),
     ];
@@ -81,22 +83,22 @@ class SalesQuotationDataSource extends DataGridSource {
     return DataGridRowAdapter(
       color: backgroundColor,
       cells:
-      row.getCells().map<Widget>((dataGridCell) {
-        if (dataGridCell.columnName == 'Action') {
-          return buildActionIcons(dataGridCell.value as VoucherModel);
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: AppText(
-              dataGridCell.value.toString(),
-              style: TextStyles.small(Get.context!),
-              overflow: TextOverflow.ellipsis,
-              alignment: Alignment.centerLeft,
-            ),
-          );
-        }
-      }).toList(),
+          row.getCells().map<Widget>((dataGridCell) {
+            if (dataGridCell.columnName == 'Action') {
+              return buildActionIcons(dataGridCell.value as VoucherModel);
+            } else {
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.center,
+                child: AppText(
+                  dataGridCell.value.toString(),
+                  style: TextStyles.small(Get.context!),
+                  overflow: TextOverflow.ellipsis,
+                  alignment: Alignment.centerLeft,
+                ),
+              );
+            }
+          }).toList(),
     );
   }
 
@@ -110,11 +112,11 @@ class SalesQuotationDataSource extends DataGridSource {
       paginatedItems =
           salesQuotationList
               .getRange(
-            startIndex,
-            endIndex > salesQuotationList.length
-                ? salesQuotationList.length
-                : endIndex,
-          )
+                startIndex,
+                endIndex > salesQuotationList.length
+                    ? salesQuotationList.length
+                    : endIndex,
+              )
               .toList();
 
       _buildDataGridRows();
