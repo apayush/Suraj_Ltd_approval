@@ -10,6 +10,7 @@ import 'package:suraj_approval/features/sales/view/widgets/tabs/widgets/sales_vo
 
 class SalesTabletView extends GetView<SalesController> {
   SalesTabletView({super.key, required this.subMenuType});
+
   final SubMenuType subMenuType;
 
   @override
@@ -21,20 +22,17 @@ class SalesTabletView extends GetView<SalesController> {
         10.heightGap,
         Obx(() {
           List<VoucherModel> salesDataList = switch (subMenuType) {
-            SubMenuType.salesOrder =>
-            controller.filteredSalesOrderList,
-            SubMenuType.salesQuotation =>
-            controller.filteredSalesQuotationList,
-            SubMenuType.salesEnquiry =>
-            controller.filteredSalesEnquiryList,
+            SubMenuType.salesOrder => controller.filteredSalesOrderList,
+            SubMenuType.salesQuotation => controller.filteredSalesQuotationList,
+            SubMenuType.salesEnquiry => controller.filteredSalesEnquiryList,
+            SubMenuType.salesCreditNote =>
+              controller.filteredSalesCreditNoteList,
             _ => [],
           };
           return salesDataList.isNotEmpty
               ? Expanded(
-            child: SalesVoucherList(
-              salesVoucherList: salesDataList,
-            ),
-          )
+                child: SalesVoucherList(salesVoucherList: salesDataList),
+              )
               : const Center(child: NoDataFound());
         }),
       ],

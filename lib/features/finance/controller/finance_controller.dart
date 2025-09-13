@@ -31,16 +31,17 @@ class FinanceController extends GetxController
   RxBool isHoldVoucherModelEnabled = false.obs;
 
   Rxn<DropDownResponse> selectBranch = Rxn<DropDownResponse>();
-  RxList<DropDownResponse> BranchList = <DropDownResponse>[
-    DropDownResponse(value: '', text: 'Select Branch'),
-    DropDownResponse(value: 'THOL', text: 'THOL'),
-    DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
-  ].obs;
+  RxList<DropDownResponse> BranchList =
+      <DropDownResponse>[
+        DropDownResponse(value: '', text: 'Select Branch'),
+        DropDownResponse(value: 'THOL', text: 'THOL'),
+        DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
+      ].obs;
 
   onBranchValueChanged(DropDownResponse? value) {
     if (value != null) {
       selectBranch.value = value;
-      if(DeviceType.isDesktop(Get.context!))
+      if (DeviceType.isDesktop(Get.context!))
         getAllData(mainType: currentSubMenu.value);
     } else {
       selectBranch.value = BranchList.first;
@@ -102,7 +103,7 @@ class FinanceController extends GetxController
           'mUser': userModel?.mUser,
           'MainType': mainType.key,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
-          'mBranchName' : selectBranch.value?.value ?? ''
+          'mBranchName': selectBranch.value?.value ?? '',
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
@@ -292,8 +293,10 @@ class FinanceController extends GetxController
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
       } else {
-        AppUtils.showSnackBar('Something went wrong! Status Code : ${response.statusCode}',
-            background: Colors.red);
+        AppUtils.showSnackBar(
+          'Something went wrong! Status Code : ${response.statusCode}',
+          background: Colors.red,
+        );
       }
     } catch (e) {
       print(e);

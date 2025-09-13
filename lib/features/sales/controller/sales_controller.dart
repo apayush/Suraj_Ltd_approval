@@ -1,9 +1,11 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/utills/device_type.dart';
+import 'package:suraj_approval/core/utills/table_data_sources/sales_module/sales_credit_note_data_source.dart';
 import 'package:suraj_approval/features/notifications/controller/notification_controller.dart';
+
 import '../../../core/constants/api_url.dart';
 import '../../../core/constants/app_enum.dart';
 import '../../../core/service/api_service.dart';
@@ -66,10 +68,15 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
   RxList<VoucherModel> salesEnquiryList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredSalesEnquiryList = <VoucherModel>[].obs;
 
+  // ! Two lists to hold the Api data and filtered data for Sales Quotation
+  RxList<VoucherModel> salesCreditNoteList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredSalesCreditNoteList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late SalesOrderDataSource salesOrderDataSource;
   late SalesQuotationDataSource salesQuotationDataSource;
   late SalesEnquiryDataSource salesEnquiryDataSource;
+  late SalesCreditNoteDataSource salesCreditNoteDataSource;
 
   // ! Get All Sales Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -115,6 +122,11 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
               salesEnquiryList.assignAll(voucher);
               filteredSalesEnquiryList.value = (voucher);
               salesEnquiryDataSource.updateDataSource(salesEnquiryList);
+              break;
+            case SubMenuType.salesCreditNote:
+              salesCreditNoteList.assignAll(voucher);
+              filteredSalesCreditNoteList.value = (voucher);
+              salesCreditNoteDataSource.updateDataSource(salesCreditNoteList);
               break;
             default:
               break;
@@ -165,6 +177,11 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
               filteredSalesEnquiryList.value = (voucher);
               salesEnquiryDataSource.updateDataSource(salesEnquiryList);
               break;
+            case SubMenuType.salesCreditNote:
+              salesCreditNoteList.assignAll(voucher);
+              filteredSalesCreditNoteList.value = (voucher);
+              salesCreditNoteDataSource.updateDataSource(salesCreditNoteList);
+              break;
             default:
               break;
           }
@@ -187,6 +204,11 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
           salesEnquiryList.clear();
           filteredSalesEnquiryList.clear();
           salesEnquiryDataSource.updateDataSource(salesEnquiryList);
+          break;
+        case SubMenuType.salesCreditNote:
+          salesCreditNoteList.clear();
+          filteredSalesCreditNoteList.clear();
+          salesCreditNoteDataSource.updateDataSource(salesCreditNoteList);
           break;
         default:
           break;
@@ -252,8 +274,10 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
       } else {
-        AppUtils.showSnackBar('Something went wrong! Status Code : ${response.statusCode}',
-            background: Colors.red);
+        AppUtils.showSnackBar(
+          'Something went wrong! Status Code : ${response.statusCode}',
+          background: Colors.red,
+        );
       }
     } catch (e) {
       print(e);
@@ -304,6 +328,12 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         filteredList = filteredSalesEnquiryList;
         dataSource = salesEnquiryDataSource;
         break;
+      case SubMenuType.salesCreditNote:
+        sourceList = salesCreditNoteList;
+        filteredList = filteredSalesCreditNoteList;
+        dataSource = salesCreditNoteDataSource;
+        break;
+
       default:
         return;
     }
@@ -341,6 +371,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         case SubMenuType.salesEnquiry:
           filteredSalesEnquiryList.value = filteredList.toList();
           break;
+        case SubMenuType.salesCreditNote:
+          filteredSalesCreditNoteList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -369,6 +402,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         break;
       case SubMenuType.salesEnquiry:
         salesEnquiryDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.salesCreditNote:
+        salesCreditNoteDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -544,6 +580,10 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
       salesEnquiryList,
       rowsPerPage: rowsPerPage.value,
     );
+    salesCreditNoteDataSource = SalesCreditNoteDataSource(
+      salesCreditNoteList,
+      rowsPerPage: rowsPerPage.value,
+    );
     selectBranch.value = BranchList.first;
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -574,6 +614,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
     } else if (menuType == SubMenuType.salesEnquiry) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.salesEnquiry;
+    } else if (menuType == SubMenuType.salesCreditNote) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.salesCreditNote;
     }
 
     await getAllData(mainType: currentSubMenu.value);
