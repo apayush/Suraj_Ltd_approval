@@ -33,6 +33,8 @@ class PurchaseWebView extends GetView<PurchaseController> {
               controller.filteredPurchaseIndentList,
             SubMenuType.goodsReceiptNote =>
               controller.filteredGoodsReceiptNoteList,
+            SubMenuType.purchaseDebitNote =>
+              controller.filteredPurchaseDebitNoteList,
             _ => [],
           };
 
@@ -41,6 +43,7 @@ class PurchaseWebView extends GetView<PurchaseController> {
             SubMenuType.purchaseOrder => controller.purchaseOrderDataSource,
             SubMenuType.purchaseIndent => controller.purchaseIndentDataSource,
             SubMenuType.goodsReceiptNote => controller.goodsReceiptNoteDataSource,
+            SubMenuType.purchaseDebitNote => controller.purchaseDebitNoteDataSource,
             _ => null,
           };
           return financeDataList.isNotEmpty

@@ -13,6 +13,7 @@ import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
 import '../../../core/utills/table_data_sources/purchase_module/goods_receipt_note_data_source.dart';
+import '../../../core/utills/table_data_sources/purchase_module/purchase_debit_note_data_source.dart';
 import '../../../core/utills/table_data_sources/purchase_module/purchase_indent_data_source.dart';
 import '../../../core/utills/table_data_sources/purchase_module/purchase_invoice_data_source.dart';
 import '../../../core/widgets/app_dialog.dart';
@@ -30,16 +31,17 @@ class PurchaseController extends GetxController
   RxBool isHoldVoucherModelEnabled = false.obs;
 
   Rxn<DropDownResponse> selectBranch = Rxn<DropDownResponse>();
-  RxList<DropDownResponse> BranchList = <DropDownResponse>[
-    DropDownResponse(value: '', text: 'Select Branch'),
-    DropDownResponse(value: 'THOL', text: 'THOL'),
-    DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
-  ].obs;
+  RxList<DropDownResponse> BranchList =
+      <DropDownResponse>[
+        DropDownResponse(value: '', text: 'Select Branch'),
+        DropDownResponse(value: 'THOL', text: 'THOL'),
+        DropDownResponse(value: 'CHANDARDA', text: 'CHANDARDA'),
+      ].obs;
 
   onBranchValueChanged(DropDownResponse? value) {
     if (value != null) {
       selectBranch.value = value;
-      if(DeviceType.isDesktop(Get.context!))
+      if (DeviceType.isDesktop(Get.context!))
         getAllData(mainType: currentSubMenu.value);
     } else {
       selectBranch.value = BranchList.first;
@@ -69,11 +71,15 @@ class PurchaseController extends GetxController
   RxList<VoucherModel> goodsReceiptNoteList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredGoodsReceiptNoteList = <VoucherModel>[].obs;
 
+  RxList<VoucherModel> purchaseDebitNoteList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredPurchaseDebitNoteList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late PurchaseInvoiceDataSource purchaseInvoiceDataSource;
   late PurchaseOrderDataSource purchaseOrderDataSource;
   late PurchaseIndentDataSource purchaseIndentDataSource;
   late GoodsReceiptNoteDataSource goodsReceiptNoteDataSource;
+  late PurchaseDebitNoteDataSource purchaseDebitNoteDataSource;
 
   // ! Get All Purchase Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -94,7 +100,7 @@ class PurchaseController extends GetxController
           'mUser': userModel?.mUser,
           'MainType': mainType.key,
           'mDeviceType': DeviceType.isMobile(Get.context!) ? 'mobile' : 'web',
-          'mBranchName' : selectBranch.value?.value ?? ''
+          'mBranchName': selectBranch.value?.value ?? '',
         };
         final response = await ApiService.getData(
           ApiUrl.getAuthorisationListFilter,
@@ -124,6 +130,13 @@ class PurchaseController extends GetxController
               goodsReceiptNoteList.assignAll(voucher);
               filteredGoodsReceiptNoteList.value = (voucher);
               goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
+              break;
+            case SubMenuType.purchaseDebitNote:
+              purchaseDebitNoteList.assignAll(voucher);
+              filteredPurchaseDebitNoteList.value = (voucher);
+              purchaseDebitNoteDataSource.updateDataSource(
+                purchaseDebitNoteList,
+              );
               break;
             default:
               break;
@@ -179,6 +192,13 @@ class PurchaseController extends GetxController
               filteredGoodsReceiptNoteList.value = (voucher);
               goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
               break;
+            case SubMenuType.purchaseDebitNote:
+              purchaseDebitNoteList.assignAll(voucher);
+              filteredPurchaseDebitNoteList.value = (voucher);
+              purchaseDebitNoteDataSource.updateDataSource(
+                purchaseDebitNoteList,
+              );
+              break;
             default:
               break;
           }
@@ -206,6 +226,11 @@ class PurchaseController extends GetxController
           goodsReceiptNoteList.clear();
           filteredGoodsReceiptNoteList.clear();
           goodsReceiptNoteDataSource.updateDataSource(goodsReceiptNoteList);
+          break;
+        case SubMenuType.purchaseDebitNote:
+          purchaseDebitNoteList.clear();
+          filteredPurchaseDebitNoteList.clear();
+          goodsReceiptNoteDataSource.updateDataSource(purchaseDebitNoteList);
           break;
         default:
           break;
@@ -270,8 +295,10 @@ class PurchaseController extends GetxController
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
       } else {
-        AppUtils.showSnackBar('Something went wrong! Status Code : ${response.statusCode}',
-            background: Colors.red);
+        AppUtils.showSnackBar(
+          'Something went wrong! Status Code : ${response.statusCode}',
+          background: Colors.red,
+        );
       }
     } catch (e) {
       print(e);
@@ -328,6 +355,11 @@ class PurchaseController extends GetxController
         filteredList = filteredGoodsReceiptNoteList;
         dataSource = goodsReceiptNoteDataSource;
         break;
+      case SubMenuType.purchaseDebitNote:
+        sourceList = purchaseDebitNoteList;
+        filteredList = filteredPurchaseDebitNoteList;
+        dataSource = purchaseDebitNoteDataSource;
+        break;
       default:
         return;
     }
@@ -368,6 +400,9 @@ class PurchaseController extends GetxController
         case SubMenuType.goodsReceiptNote:
           filteredGoodsReceiptNoteList.value = filteredList.toList();
           break;
+        case SubMenuType.purchaseDebitNote:
+          filteredPurchaseDebitNoteList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -399,6 +434,9 @@ class PurchaseController extends GetxController
         break;
       case SubMenuType.goodsReceiptNote:
         goodsReceiptNoteDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+        case SubMenuType.purchaseDebitNote:
+          purchaseDebitNoteDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -578,6 +616,10 @@ class PurchaseController extends GetxController
       goodsReceiptNoteList,
       rowsPerPage: rowsPerPage.value,
     );
+    purchaseDebitNoteDataSource = PurchaseDebitNoteDataSource(
+      goodsReceiptNoteList,
+      rowsPerPage: rowsPerPage.value,
+    );
     selectBranch.value = BranchList.first;
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -619,9 +661,9 @@ class PurchaseController extends GetxController
       // } else if (menuType == SubMenuType.purchaseCreditNote) {
       //   tabController.animateTo(index);
       //   currentSubMenu.value = SubMenuType.purchaseCreditNote;
-      // } else if (menuType == SubMenuType.purchaseDebitNote) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.purchaseDebitNote;
+    } else if (menuType == SubMenuType.purchaseDebitNote) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.purchaseDebitNote;
     } else if (menuType == SubMenuType.purchaseOrder) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.purchaseOrder;

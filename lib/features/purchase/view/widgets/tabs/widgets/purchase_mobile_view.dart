@@ -21,6 +21,7 @@ class PurchaseMobileView extends GetView<PurchaseController> {
         SubMenuType.purchaseOrder => controller.filteredPurchaseOrderListList,
         SubMenuType.purchaseIndent => controller.filteredPurchaseIndentList,
         SubMenuType.goodsReceiptNote => controller.filteredGoodsReceiptNoteList,
+        SubMenuType.purchaseDebitNote => controller.filteredPurchaseDebitNoteList,
         _ => RxList<VoucherModel>.empty(),
       };
       return purchaseDataList.isNotEmpty

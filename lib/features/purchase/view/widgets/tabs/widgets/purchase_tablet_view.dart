@@ -30,6 +30,8 @@ class PurchaseTabletView extends GetView<PurchaseController> {
               controller.filteredPurchaseIndentList,
             SubMenuType.goodsReceiptNote =>
               controller.filteredGoodsReceiptNoteList,
+            SubMenuType.purchaseDebitNote =>
+              controller.filteredPurchaseDebitNoteList,
             _ => [],
           };
           return purchaseDataList.isNotEmpty
