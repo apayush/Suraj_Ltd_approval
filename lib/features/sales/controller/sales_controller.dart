@@ -239,7 +239,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         },
       );
       if (response.statusCode == 200) {
-        Get.back();
+        if (Get.isDialogOpen ?? false) {
+          Get.back();
+        }
         if (response.data['Success'] == 'Approve') {
           AppUtils.showSnackBar('Voucher Approved Successfully');
         } else if (response.data['Success'] == 'Hold') {
@@ -249,6 +251,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         }
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
+      } else {
+        AppUtils.showSnackBar('Something went wrong! Status Code : ${response.statusCode}',
+            background: Colors.red);
       }
     } catch (e) {
       print(e);
@@ -405,6 +410,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
             await postVoucher(voucher, voucherStatus: 'Approve');
             isApproveLoading.value = false;
             // }
+            if (Get.isDialogOpen ?? false) {
+              Get.back();
+            }
           },
           onSecondaryButtonPressed: () {
             Get.back();
@@ -440,6 +448,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
               isApproveLoading.value = true;
               await postVoucher(voucher, voucherStatus: 'Hold');
               isApproveLoading.value = false;
+              if (Get.isDialogOpen ?? false) {
+                Get.back();
+              }
             }
           },
           onSecondaryButtonPressed: () {
@@ -476,6 +487,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
               isRejectLoading.value = true;
               await postVoucher(voucher, voucherStatus: 'Reject');
               isRejectLoading.value = false;
+              if (Get.isDialogOpen ?? false) {
+                Get.back();
+              }
             }
           },
           onSecondaryButtonPressed: () {

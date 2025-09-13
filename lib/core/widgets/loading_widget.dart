@@ -9,12 +9,21 @@ class LoaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () =>
-          controller.isLoading.value
-              ? const LoadingIndicator()
-              : const SizedBox.shrink(),
-    );
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return Stack(
+          children: [
+            // Blocks all gestures
+            const ModalBarrier(
+              dismissible: false,
+              color: Colors.transparent, // optional background
+            ),
+            const LoadingIndicator(),
+          ],
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }
 

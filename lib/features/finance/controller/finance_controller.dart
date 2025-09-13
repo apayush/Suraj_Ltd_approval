@@ -279,14 +279,21 @@ class FinanceController extends GetxController
         },
       );
       if (response.statusCode == 200) {
-        Get.back();
+        if (Get.isDialogOpen ?? false) {
+          Get.back();
+        }
         if (response.data['Success'] == 'Approve') {
           AppUtils.showSnackBar('Voucher Approved Successfully');
         } else if (response.data['Success'] == 'Reject') {
           AppUtils.showSnackBar('Voucher Rejected Successfully');
+        } else if (response.data['Success'] == 'Hold') {
+          AppUtils.showSnackBar('Voucher Hold Successfully');
         }
         remarkController.clear();
         getAllData(mainType: currentSubMenu.value);
+      } else {
+        AppUtils.showSnackBar('Something went wrong! Status Code : ${response.statusCode}',
+            background: Colors.red);
       }
     } catch (e) {
       print(e);
@@ -462,6 +469,9 @@ class FinanceController extends GetxController
             await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
             isApproveLoading.value = false;
             // }
+            if (Get.isDialogOpen ?? false) {
+              Get.back();
+            }
           },
           onSecondaryButtonPressed: () {
             Get.back();
@@ -497,6 +507,9 @@ class FinanceController extends GetxController
               isApproveLoading.value = true;
               await postFinanceVoucher(bankPayment, paymentStatus: 'Hold');
               isApproveLoading.value = false;
+              if (Get.isDialogOpen ?? false) {
+                Get.back();
+              }
             }
           },
           onSecondaryButtonPressed: () {
@@ -533,6 +546,9 @@ class FinanceController extends GetxController
               isRejectLoading.value = true;
               await postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
               isRejectLoading.value = false;
+              if (Get.isDialogOpen ?? false) {
+                Get.back();
+              }
             }
           },
           onSecondaryButtonPressed: () {

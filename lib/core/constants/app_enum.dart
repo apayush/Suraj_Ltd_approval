@@ -27,16 +27,16 @@ enum SubMenuType {
   purchaseOrder('Purchase Order'),
   purchaseIndent('Purchase Indent'),
   goodsReceiptNote('Goods Receipt Note'),
+  purchaseDebitNote('Debit Note Purchase'),
   // gateInward('Gate Inward'),
   // purchaseCreditNote('Purchase Credit Note'),
-  // purchaseDebitNote('Purchase Debit Note'),
 
   // Sales
   salesOrder('Sales Order'),
   salesQuotation('Sales Quotation'),
   salesEnquiry('Sales Enquiry'),
+  salesCreditNote('Credit Note Sales'),
   // salesDebitNote('Sales Debit Note'),
-  // salesCreditNote('Sales Credit Note'),
 
   // Production
   yieldSheet('Yield Sheet');
