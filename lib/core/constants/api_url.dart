@@ -27,4 +27,5 @@ class ApiUrl {
 
   // ! Get PDF Report
   static const String getVoucherReport = '/getBankpaymentReport';
+  static const String downloadComparisonPdf = '/DownloadComparisonPdf';
 }

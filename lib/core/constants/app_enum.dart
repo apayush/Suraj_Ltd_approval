@@ -28,6 +28,7 @@ enum SubMenuType {
   purchaseIndent('Purchase Indent'),
   goodsReceiptNote('Goods Receipt Note'),
   purchaseDebitNote('Debit Note Purchase'),
+  purchaseQuotation('Purchase Comparision'),
   // gateInward('Gate Inward'),
   // purchaseCreditNote('Purchase Credit Note'),
 

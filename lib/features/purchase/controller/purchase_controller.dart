@@ -16,6 +16,7 @@ import '../../../core/utills/table_data_sources/purchase_module/goods_receipt_no
 import '../../../core/utills/table_data_sources/purchase_module/purchase_debit_note_data_source.dart';
 import '../../../core/utills/table_data_sources/purchase_module/purchase_indent_data_source.dart';
 import '../../../core/utills/table_data_sources/purchase_module/purchase_invoice_data_source.dart';
+import '../../../core/utills/table_data_sources/purchase_module/purchase_quotation_data_source.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
@@ -74,12 +75,16 @@ class PurchaseController extends GetxController
   RxList<VoucherModel> purchaseDebitNoteList = <VoucherModel>[].obs;
   RxList<VoucherModel> filteredPurchaseDebitNoteList = <VoucherModel>[].obs;
 
+  RxList<VoucherModel> purchaseQuotationList = <VoucherModel>[].obs;
+  RxList<VoucherModel> filteredPurchaseQuotationList = <VoucherModel>[].obs;
+
   //! DataGridSource for the SfDataGrid
   late PurchaseInvoiceDataSource purchaseInvoiceDataSource;
   late PurchaseOrderDataSource purchaseOrderDataSource;
   late PurchaseIndentDataSource purchaseIndentDataSource;
   late GoodsReceiptNoteDataSource goodsReceiptNoteDataSource;
   late PurchaseDebitNoteDataSource purchaseDebitNoteDataSource;
+  late PurchaseQuotationDataSource purchaseQuotationDataSource;
 
   // ! Get All Purchase Module Data Table
   Future<void> getAllData({required SubMenuType mainType}) async {
@@ -136,6 +141,13 @@ class PurchaseController extends GetxController
               filteredPurchaseDebitNoteList.value = (voucher);
               purchaseDebitNoteDataSource.updateDataSource(
                 purchaseDebitNoteList,
+              );
+              break;
+            case SubMenuType.purchaseQuotation:
+              purchaseQuotationList.assignAll(voucher);
+              filteredPurchaseQuotationList.value = (voucher);
+              purchaseQuotationDataSource.updateDataSource(
+                purchaseQuotationList,
               );
               break;
             default:
@@ -199,6 +211,13 @@ class PurchaseController extends GetxController
                 purchaseDebitNoteList,
               );
               break;
+            case SubMenuType.purchaseQuotation:
+              purchaseQuotationList.assignAll(voucher);
+              filteredPurchaseQuotationList.value = (voucher);
+              purchaseQuotationDataSource.updateDataSource(
+                purchaseQuotationList,
+              );
+              break;
             default:
               break;
           }
@@ -232,6 +251,11 @@ class PurchaseController extends GetxController
           filteredPurchaseDebitNoteList.clear();
           goodsReceiptNoteDataSource.updateDataSource(purchaseDebitNoteList);
           break;
+        case SubMenuType.purchaseQuotation:
+          purchaseQuotationList.clear();
+          filteredPurchaseQuotationList.clear();
+          goodsReceiptNoteDataSource.updateDataSource(purchaseQuotationList);
+          break;
         default:
           break;
       }
@@ -241,13 +265,21 @@ class PurchaseController extends GetxController
   }
 
   // ! GET PDF Report
-  Future<void> getVoucherReport(VoucherModel voucher) async {
+  Future<void> getVoucherReport(VoucherModel voucher, {bool? fromPurchaseQuotation}) async {
     isLoading.value = true;
     try {
-      final response = await ApiService.getData(
-        ApiUrl.getVoucherReport,
-        queryParams: {'mLinkField': voucher.linkField},
-      );
+      dynamic response = {};
+      if(fromPurchaseQuotation == true) {
+        response = await ApiService.getData(
+          ApiUrl.downloadComparisonPdf,
+          queryParams: {'mLinkField': voucher.linkField, 'compNos' : ''},
+        );
+      } else {
+        response = await ApiService.getData(
+          ApiUrl.getVoucherReport,
+          queryParams: {'mLinkField': voucher.linkField},
+        );
+      }
       if (response.statusCode == 200) {
         final data = response.data;
         if (data.containsKey('Error')) {
@@ -360,6 +392,11 @@ class PurchaseController extends GetxController
         filteredList = filteredPurchaseDebitNoteList;
         dataSource = purchaseDebitNoteDataSource;
         break;
+      case SubMenuType.purchaseQuotation:
+        sourceList = purchaseQuotationList;
+        filteredList = filteredPurchaseQuotationList;
+        dataSource = purchaseQuotationDataSource;
+        break;
       default:
         return;
     }
@@ -403,6 +440,9 @@ class PurchaseController extends GetxController
         case SubMenuType.purchaseDebitNote:
           filteredPurchaseDebitNoteList.value = filteredList.toList();
           break;
+        case SubMenuType.purchaseQuotation:
+          filteredPurchaseQuotationList.value = filteredList.toList();
+          break;
         default:
           break;
       }
@@ -435,8 +475,11 @@ class PurchaseController extends GetxController
       case SubMenuType.goodsReceiptNote:
         goodsReceiptNoteDataSource.setRowsPerPage(newRowsPerPage);
         break;
-        case SubMenuType.purchaseDebitNote:
-          purchaseDebitNoteDataSource.setRowsPerPage(newRowsPerPage);
+      case SubMenuType.purchaseDebitNote:
+        purchaseDebitNoteDataSource.setRowsPerPage(newRowsPerPage);
+        break;
+      case SubMenuType.purchaseQuotation:
+        purchaseQuotationDataSource.setRowsPerPage(newRowsPerPage);
         break;
       default:
         break;
@@ -446,9 +489,9 @@ class PurchaseController extends GetxController
   // ! Handle Action Menu Selection
   TextEditingController remarkController = TextEditingController();
 
-  Future<void> handleMenuSelection(String value, VoucherModel voucher) async {
+  Future<void> handleMenuSelection(String value, VoucherModel voucher, {bool? fromPurchaseQuotation}) async {
     if (value == 'View') {
-      getVoucherReport(voucher);
+      getVoucherReport(voucher,fromPurchaseQuotation: fromPurchaseQuotation);
     } else if (value == 'Approve') {
       await Get.dialog(
         GenericDialogBox(
@@ -617,7 +660,11 @@ class PurchaseController extends GetxController
       rowsPerPage: rowsPerPage.value,
     );
     purchaseDebitNoteDataSource = PurchaseDebitNoteDataSource(
-      goodsReceiptNoteList,
+      purchaseDebitNoteList,
+      rowsPerPage: rowsPerPage.value,
+    );
+    purchaseQuotationDataSource = PurchaseQuotationDataSource(
+      purchaseQuotationList,
       rowsPerPage: rowsPerPage.value,
     );
     selectBranch.value = BranchList.first;
@@ -667,6 +714,9 @@ class PurchaseController extends GetxController
     } else if (menuType == SubMenuType.purchaseOrder) {
       tabController.animateTo(index);
       currentSubMenu.value = SubMenuType.purchaseOrder;
+    } else if (menuType == SubMenuType.purchaseQuotation) {
+      tabController.animateTo(index);
+      currentSubMenu.value = SubMenuType.purchaseQuotation;
     }
 
     await getAllData(mainType: currentSubMenu.value);
