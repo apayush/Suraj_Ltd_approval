@@ -272,7 +272,7 @@ class PurchaseController extends GetxController
       if(fromPurchaseQuotation == true) {
         response = await ApiService.getData(
           ApiUrl.downloadComparisonPdf,
-          queryParams: {'mLinkField': voucher.linkField, 'compNos' : ''},
+          queryParams: {'LinkField': voucher.linkField, 'compNos' : ''},
         );
       } else {
         response = await ApiService.getData(
@@ -284,6 +284,9 @@ class PurchaseController extends GetxController
         final data = response.data;
         if (data.containsKey('Error')) {
           AppUtils.showSnackBar('${data['Error']}', background: Colors.red);
+        }
+        if(data.containsKey('pdfBase64')) {
+          AppUtils.openPdf(data['pdfBase64']);
         }
         AppUtils.openPdf(data['Base64Pdf']);
       }
