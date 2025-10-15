@@ -269,7 +269,7 @@ class PurchaseController extends GetxController
     isLoading.value = true;
     try {
       dynamic response = {};
-      if(fromPurchaseQuotation == true) {
+      if(fromPurchaseQuotation == true && currentSubMenu.value == SubMenuType.purchaseQuotation) {
         response = await ApiService.getData(
           ApiUrl.downloadComparisonPdf,
           queryParams: {'LinkField': voucher.linkField, 'compNos' : ''},

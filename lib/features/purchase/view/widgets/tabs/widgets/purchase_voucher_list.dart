@@ -33,7 +33,7 @@ class PurchaseVoucherList extends GetView<PurchaseController> {
                     payment: payments,
                     primaryColor: AppColors.blue,
                     onTap: () {
-                      controller.handleMenuSelection('View', payments);
+                      controller.handleMenuSelection('View', payments,fromPurchaseQuotation: true);
                     },
                     onApprove: () {
                       controller.handleMenuSelection('Approve', payments);
