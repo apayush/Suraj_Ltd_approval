@@ -1,3 +1,4 @@
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/api_url.dart';
@@ -66,8 +67,14 @@ class NotificationController extends GetxController {
         ApiUrl.updateNotificationLogs,
         queryParams: {'NidList': notification?.nid},
       );
+      final data = response.data;
       if (response.statusCode == 200) {
         fetchNotifications();
+        if(data['status']=='success'){
+          int? unReadNotificationCount = data['ncount'];
+          if(unReadNotificationCount!=null)
+          AppBadgePlus.updateBadge(unReadNotificationCount);
+        }
       }
       if (isClosed) return;
     } catch (e) {

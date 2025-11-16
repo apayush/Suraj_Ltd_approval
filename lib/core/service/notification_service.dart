@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/constants/api_url.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
+import 'package:suraj_approval/core/service/api_service.dart';
+import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/prepare_initial_route.dart';
 
 import '../../features/notifications/controller/notification_controller.dart';
@@ -23,16 +27,15 @@ Future<void> handlerBackgroundMessage(RemoteMessage message) async {
 @pragma('vm:entry-point')
 void onDidReceiveNotificationResponse(NotificationResponse details) {
   final data = jsonDecode(details.payload ?? '');
-  final result = prepareInitialRoute(
-    RemoteMessage(
-      notification: RemoteNotification(
-        title: data['title'] ?? '',
-        body: data['body'] ?? '',
-      ),
-      data: data,
+  final notificationMessage = RemoteMessage(
+    notification: RemoteNotification(
+      title: data['title'] ?? '',
+      body: data['body'] ?? '',
     ),
+    data: data,
   );
-
+  final result = prepareInitialRoute(notificationMessage);
+  NotificationService.updateBadgeCountOnTapNotification(notificationMessage);
   Future.microtask(() {
     if (Get.routing.current != result.route &&
         Get.routing.previous != result.route) {
@@ -66,7 +69,7 @@ class NotificationService {
     try {
       await FirebaseMessaging.instance.requestPermission(
         alert: true,
-        badge: Platform.isIOS ? false : true,
+        badge: true,
         sound: true,
       );
 
@@ -75,8 +78,8 @@ class NotificationService {
           '@mipmap/ic_launcher',
         );
         final iOSInitializeSettings = DarwinInitializationSettings(
-          defaultPresentBadge: false,
-          requestBadgePermission: false,
+          defaultPresentBadge: true,
+          requestBadgePermission: true,
         );
 
         _notificationChannelName = 'Suraj Approval Notification Channel';
@@ -149,6 +152,7 @@ class NotificationService {
           'mainType': message.data['mainType'],
           'subType': message.data['subType'],
           'Srl': message.data['Srl'] ?? '',
+          'Nid': message.data['Nid'] ?? '',
         }),
       );
     }
@@ -171,6 +175,9 @@ class NotificationService {
   static Future<void> setUpNotificationWeb() async {}
 
   static void onMessageOpenedApp(RemoteMessage message) {
+    if (Platform.isIOS) {
+      updateBadgeCountOnTapNotification(message);
+    }
     final result = prepareInitialRoute(message);
     Get.offAllNamed(result.route, arguments: result.argument);
   }
@@ -181,6 +188,32 @@ class NotificationService {
       await FirebaseMessaging.instance.deleteToken();
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  static Future<void> updateBadgeCountOnTapNotification(
+    RemoteMessage message,
+  ) async {
+    try {
+      final nID = message.data['Nid'] ?? '';
+      final res = await ApiService.postData(
+        ApiUrl.updateNotificationLogsSingle,
+        queryParams: {
+          'Nid': nID,
+          'mUser': LocalDB.getString(AppConstants.currentUser) ?? '',
+        },
+      );
+      final data = res.data;
+      if (data['status'] == 'success') {
+        int? intNotificationCount = data['ncount'];
+        if (intNotificationCount != null)
+          AppBadgePlus.updateBadge(intNotificationCount);
+      } else
+        print(
+          'failed to update badge count data: $data, status code:${res.statusCode}',
+        );
+    } catch (e) {
+      print('failed to update badge count error:$e');
     }
   }
 }
