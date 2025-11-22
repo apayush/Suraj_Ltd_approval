@@ -95,8 +95,8 @@ class LoginController extends GetxController {
     try {
       final response = await ApiService.getData(
         // ApiUrl.getBaseUrl,
-        'http://124.123.122.112:7081/ReportNew/GetBaseUrl',
-        // 'http://124.123.122.112:7081/Report/GetBaseUrl',
+        // 'http://124.123.122.112:7081/ReportNew/GetBaseUrl',
+        'http://124.123.122.112:7081/Report/GetBaseUrl',
         queryParams: {'mType': ipType.value == 1 ? 'Global' : 'Local'},
       );
       final data = (response.data);
@@ -223,5 +223,6 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     keyboardFocusNode.requestFocus();
+    NotificationService.updateBadgeCount(0);
   }
 }

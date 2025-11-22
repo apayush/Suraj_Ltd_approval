@@ -1,6 +1,6 @@
 name: suraj_approval
 description: "freelancing project for Suraj Ltd. to manage approval requests"
-version: 1.0.6+1
+version: 1.0.9+1
 publish_to: none
 
 environment:

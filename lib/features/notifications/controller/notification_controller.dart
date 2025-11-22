@@ -7,6 +7,7 @@ import 'package:suraj_approval/core/enum/page_state.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/api_service.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
+import 'package:suraj_approval/core/service/notification_service.dart';
 import 'package:suraj_approval/features/finance/controller/finance_controller.dart';
 import 'package:suraj_approval/features/notifications/model/notification_model.dart';
 import 'package:suraj_approval/features/purchase/controller/purchase_controller.dart';
@@ -42,6 +43,7 @@ class NotificationController extends GetxController {
                 .where((e) => e.isSuccess == true)
                 .toList();
         unreadCount.value = notifications.length;
+        NotificationService.updateBadgeCount(unreadCount.value);
         pageState.value = PageState.idle;
       } else {
         pageState.value = PageState.error;
@@ -64,8 +66,11 @@ class NotificationController extends GetxController {
       //   return;
       // }
       final response = await ApiService.postData(
-        ApiUrl.updateNotificationLogs,
-        queryParams: {'NidList': notification?.nid},
+        ApiUrl.updateNotificationLogsSingle,
+        queryParams: {
+          'Nid': notification?.nid,
+          'mUser': LocalDB.getUserModel()?.mUser ?? '',
+        },
       );
       final data = response.data;
       if (response.statusCode == 200) {
@@ -73,7 +78,7 @@ class NotificationController extends GetxController {
         if(data['status']=='success'){
           int? unReadNotificationCount = data['ncount'];
           if(unReadNotificationCount!=null)
-          AppBadgePlus.updateBadge(unReadNotificationCount);
+          NotificationService.updateBadgeCount(unReadNotificationCount);
         }
       }
       if (isClosed) return;

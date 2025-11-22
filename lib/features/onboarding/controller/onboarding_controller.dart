@@ -1,13 +1,20 @@
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/constants/app_constants.dart';
 import 'package:suraj_approval/core/constants/app_images.dart';
 import 'package:suraj_approval/core/router/app_router.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
+import 'package:suraj_approval/core/service/notification_service.dart';
 
 class OnboardingController extends GetxController {
   final PageController pageController = PageController();
   final RxInt currentPage = 0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    NotificationService.updateBadgeCount(0);
+  }
 
   final List<OnboardingData> onboardingPages = [
     OnboardingData(

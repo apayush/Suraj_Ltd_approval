@@ -36,7 +36,10 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
   );
   final result = prepareInitialRoute(notificationMessage);
   NotificationService.updateBadgeCountOnTapNotification(notificationMessage);
+
   Future.microtask(() {
+    final controller = Get.find<NotificationController>();
+    controller.fetchNotifications();
     if (Get.routing.current != result.route &&
         Get.routing.previous != result.route) {
       Get.offAllNamed(result.route, arguments: result.argument);
@@ -46,15 +49,15 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
       Future.microtask(() {
         gotToSubMenuFromRoute(
           result.route,
-          result.argument['subMenuType'],
-          result.argument['Srl'],
+          result.argument?['subMenuType'],
+          result.argument?['Srl'] ?? '',
         );
       });
     } else if (Get.routing.current == result.route) {
       gotToSubMenuFromRoute(
         result.route,
-        result.argument['subMenuType'],
-        result.argument['Srl'],
+        result.argument?['subMenuType'],
+        result.argument?['Srl'] ?? '',
       );
     }
   });
@@ -142,7 +145,7 @@ class NotificationService {
         ),
       );
       await localNotification.show(
-        message.hashCode,
+        int.tryParse(message.data['nid'].toString())??0,
         message.notification?.title ?? 'Title not available',
         message.notification?.body ?? 'Message not available',
         notificationDetails,
@@ -152,7 +155,7 @@ class NotificationService {
           'mainType': message.data['mainType'],
           'subType': message.data['subType'],
           'Srl': message.data['Srl'] ?? '',
-          'Nid': message.data['Nid'] ?? '',
+          'nid': message.data['nid'] ?? '',
         }),
       );
     }
@@ -175,9 +178,7 @@ class NotificationService {
   static Future<void> setUpNotificationWeb() async {}
 
   static void onMessageOpenedApp(RemoteMessage message) {
-    if (Platform.isIOS) {
-      updateBadgeCountOnTapNotification(message);
-    }
+    updateBadgeCountOnTapNotification(message);
     final result = prepareInitialRoute(message);
     Get.offAllNamed(result.route, arguments: result.argument);
   }
@@ -195,25 +196,32 @@ class NotificationService {
     RemoteMessage message,
   ) async {
     try {
-      final nID = message.data['Nid'] ?? '';
+      final nID = message.data['nid'] ?? '';
       final res = await ApiService.postData(
         ApiUrl.updateNotificationLogsSingle,
-        queryParams: {
-          'Nid': nID,
-          'mUser': LocalDB.getString(AppConstants.currentUser) ?? '',
-        },
+        queryParams: {'Nid': nID, 'mUser': LocalDB.getUserModel()?.mUser ?? ''},
       );
       final data = res.data;
       if (data['status'] == 'success') {
         int? intNotificationCount = data['ncount'];
-        if (intNotificationCount != null)
-          AppBadgePlus.updateBadge(intNotificationCount);
+        if (intNotificationCount != null) {
+          updateBadgeCount(intNotificationCount);
+        }
       } else
         print(
           'failed to update badge count data: $data, status code:${res.statusCode}',
         );
     } catch (e) {
       print('failed to update badge count error:$e');
+    }
+  }
+
+  static Future<void> updateBadgeCount(int? count)async{
+    if(count==null)return;
+    try{
+      AppBadgePlus.updateBadge(count);
+    }catch(e){
+      print('Error updateBadgeCount');
     }
   }
 }
