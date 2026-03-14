@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:suraj_approval/features/hourly/controller/hourly_report_controller.dart';
+import 'package:suraj_approval/features/hourly/view/hourly_report_screen.dart';
 import 'package:suraj_approval/features/notifications/view/notifications_screen.dart';
 import 'package:suraj_approval/features/onboarding/controller/onboarding_controller.dart';
 import 'package:suraj_approval/features/onboarding/view/onboarding_screen.dart';
@@ -30,6 +32,7 @@ class AppRouter {
   static const String purchaseScreen = '/purchase_screen';
   static const String salesScreen = '/sales_screen';
   static const String notification = '/notifications';
+  static const String hourly = '/hourly';
 
   static final List<GetPage> routes = [
     GetPage(
@@ -76,8 +79,7 @@ class AppRouter {
     ),
     GetPage(
       name: productionScreen,
-      page: () => UnderDevelopmentPage(),
-      // page: () => ProductionScreen(),
+      page: () => ProductionScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<ProductionController>(() => ProductionController());
       }),
@@ -96,6 +98,14 @@ class AppRouter {
       page: () => SalesScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<SalesController>(() => SalesController());
+      }),
+    ),
+    GetPage(
+      name: hourly,
+      // page: () => UnderDevelopmentPage(),
+      page: () => HourlyReportScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<HourlyReportController>(() => HourlyReportController());
       }),
     ),
     GetPage(name: notification, page: () => NotificationsScreen()),

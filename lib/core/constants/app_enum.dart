@@ -40,7 +40,8 @@ enum SubMenuType {
   // salesDebitNote('Sales Debit Note'),
 
   // Production
-  yieldSheet('Yield Sheet');
+  // yieldSheet('Yield Sheet'),
+  hourlyProductionEntry('Hourly Report');
 
   final String key;
 
