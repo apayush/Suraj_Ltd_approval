@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
-import 'package:suraj_approval/features/hourly/controller/hourly_report_controller.dart';
-import 'package:suraj_approval/features/hourly/model/hourly_report_model.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
+import 'package:suraj_approval/features/production/controller/hourly_report_controller.dart';
+import 'package:suraj_approval/core/utills/app_module_container.dart';
+import 'package:suraj_approval/core/widgets/app_text_field.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'hourly_report_widgets.dart';
 
 /// Shared entry form content — used by mobile, tablet, web layouts.
@@ -67,7 +71,7 @@ class _EntryFormCard extends StatelessWidget {
                         color: AppColors.blue,
                         size: 20,
                       ),
-                      const SizedBox(width: 8),
+                      8.widthGap,
                       Text(
                         'New Production Entry',
                         style: TextStyle(
@@ -84,7 +88,7 @@ class _EntryFormCard extends StatelessWidget {
                   _buildFields(context, isDark),
 
                   // ── Action Buttons ─────────────────────────────────────
-                  const SizedBox(height: 24),
+                  24.heightGap,
                   _buildButtons(),
                 ],
               ),
@@ -105,8 +109,9 @@ class _EntryFormCard extends StatelessWidget {
   // 3-col: web
   Widget _buildThreeColumnLayout(bool isDark) {
     return Obx(() {
-      final isExpansion =
-          controller.selectedReportType.value == ReportType.expansion;
+      final isExpansion = controller.selectedReportType.value
+          .toLowerCase()
+          .contains('expansion');
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -120,56 +125,56 @@ class _EntryFormCard extends StatelessWidget {
                 onChanged: controller.onEntryDateChanged,
               ),
             ),
-            Obx(
-              () => TimeSlotDropdown(
-                value: controller.selectedTimeSlot.value,
-                onChanged: controller.onTimeSlotChanged,
-              ),
-            ),
+            TimeSlotDropdown(controller: controller),
           ]),
           if (isExpansion) ...[
-            const SizedBox(height: 14),
+            14.heightGap,
             // Row 2: DIA | Grade | Size Wise
             _row3([
               LabeledTextField(
                 label: 'DIA Number',
                 controller: controller.diaController,
+                required: true,
+                validator:
+                    (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
                 hint: 'e.g. 123',
               ),
               LabeledTextField(
                 label: 'Grade / Number',
                 controller: controller.gradeController,
+                required: true,
+                validator:
+                    (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
                 hint: 'e.g. 316L',
               ),
               LabeledTextField(
                 label: 'Size Wise',
                 controller: controller.sizeController,
+                required: true,
+                validator:
+                    (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
                 hint: 'e.g. 138x9x152700',
               ),
             ]),
           ],
-          const SizedBox(height: 14),
+          14.heightGap,
           // Row 3: Target | Actual | empty
           _row3([
             LabeledTextField(
               label: 'Target (Per Hour)',
               controller: controller.targetController,
               keyboardType: TextInputType.number,
-              valueColor: AppColors.blue,
               required: true,
               validator:
-                  (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
             LabeledTextField(
               label: 'Actual (Per Hour)',
               controller: controller.actualController,
               keyboardType: TextInputType.number,
-              valueColor: Colors.green,
               required: true,
               validator:
-                  (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
             const SizedBox(), // empty 3rd slot
           ]),
@@ -181,14 +186,15 @@ class _EntryFormCard extends StatelessWidget {
   // 2-col: tablet
   Widget _buildTwoColumnLayout(bool isDark) {
     return Obx(() {
-      final isExpansion =
-          controller.selectedReportType.value == ReportType.expansion;
+      final isExpansion = controller.selectedReportType.value
+          .toLowerCase()
+          .contains('expansion');
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Department (full width)
           _deptDropdown(isDark),
-          const SizedBox(height: 14),
+          14.heightGap,
           // Date | Time Slot
           _row2([
             Obx(
@@ -198,15 +204,10 @@ class _EntryFormCard extends StatelessWidget {
                 onChanged: controller.onEntryDateChanged,
               ),
             ),
-            Obx(
-              () => TimeSlotDropdown(
-                value: controller.selectedTimeSlot.value,
-                onChanged: controller.onTimeSlotChanged,
-              ),
-            ),
+            TimeSlotDropdown(controller: controller),
           ]),
           if (isExpansion) ...[
-            const SizedBox(height: 14),
+            14.heightGap,
             _row2([
               LabeledTextField(
                 label: 'DIA Number',
@@ -219,14 +220,14 @@ class _EntryFormCard extends StatelessWidget {
                 hint: 'e.g. 316L',
               ),
             ]),
-            const SizedBox(height: 14),
+            14.heightGap,
             LabeledTextField(
               label: 'Size Wise',
               controller: controller.sizeController,
               hint: 'e.g. 138x9x152700',
             ),
           ],
-          const SizedBox(height: 14),
+          14.heightGap,
           _row2([
             LabeledTextField(
               label: 'Target (Per Hour)',
@@ -235,8 +236,7 @@ class _EntryFormCard extends StatelessWidget {
               valueColor: AppColors.blue,
               required: true,
               validator:
-                  (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
             LabeledTextField(
               label: 'Actual (Per Hour)',
@@ -245,8 +245,7 @@ class _EntryFormCard extends StatelessWidget {
               valueColor: Colors.green,
               required: true,
               validator:
-                  (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Required' : null,
+                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
           ]),
         ],
@@ -257,13 +256,14 @@ class _EntryFormCard extends StatelessWidget {
   // 1-col: mobile
   Widget _buildOneColumnLayout(bool isDark) {
     return Obx(() {
-      final isExpansion =
-          controller.selectedReportType.value == ReportType.expansion;
+      final isExpansion = controller.selectedReportType.value
+          .toLowerCase()
+          .contains('expansion');
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _deptDropdown(isDark),
-          const SizedBox(height: 14),
+          14.heightGap,
           Obx(
             () => DatePickerField(
               label: 'Date',
@@ -271,34 +271,29 @@ class _EntryFormCard extends StatelessWidget {
               onChanged: controller.onEntryDateChanged,
             ),
           ),
-          const SizedBox(height: 14),
-          Obx(
-            () => TimeSlotDropdown(
-              value: controller.selectedTimeSlot.value,
-              onChanged: controller.onTimeSlotChanged,
-            ),
-          ),
+          14.heightGap,
+          TimeSlotDropdown(controller: controller),
           if (isExpansion) ...[
-            const SizedBox(height: 14),
+            14.heightGap,
             LabeledTextField(
               label: 'DIA Number',
               controller: controller.diaController,
               hint: 'e.g. 123',
             ),
-            const SizedBox(height: 14),
+            14.heightGap,
             LabeledTextField(
               label: 'Grade / Number',
               controller: controller.gradeController,
               hint: 'e.g. 316L',
             ),
-            const SizedBox(height: 14),
+            14.heightGap,
             LabeledTextField(
               label: 'Size Wise',
               controller: controller.sizeController,
               hint: 'e.g. 138x9x152700',
             ),
           ],
-          const SizedBox(height: 14),
+          14.heightGap,
           LabeledTextField(
             label: 'Target (Per Hour)',
             controller: controller.targetController,
@@ -306,10 +301,9 @@ class _EntryFormCard extends StatelessWidget {
             valueColor: AppColors.blue,
             required: true,
             validator:
-                (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
-          const SizedBox(height: 14),
+          14.heightGap,
           LabeledTextField(
             label: 'Actual (Per Hour)',
             controller: controller.actualController,
@@ -317,8 +311,7 @@ class _EntryFormCard extends StatelessWidget {
             valueColor: Colors.green,
             required: true,
             validator:
-                (v) =>
-                    (v == null || v.trim().isEmpty) ? 'Required' : null,
+                (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
         ],
       );
@@ -330,53 +323,46 @@ class _EntryFormCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Department',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            color: isDark ? Colors.white70 : Colors.grey.shade700,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Obx(
-          () => DropdownButtonFormField<ReportType>(
-            value: controller.selectedReportType.value,
-            isExpanded: true,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 12,
+        AppText('Department', style: TextStyles.small(Get.context!)),
+        8.heightGap,
+        Obx(() {
+          if (controller.isLoading.value) {
+            return SizedBox(
+              height: 48,
+              width: double.infinity,
+              child: Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: LoaderWidget(controller: controller),
+                ),
               ),
-              prefixIcon: const Icon(
-                Icons.factory_outlined,
-                size: 18,
-                color: AppColors.blue,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey.shade400),
-              ),
-            ),
-            items: ReportType.values
-                .map(
-                  (t) => DropdownMenuItem(
-                    value: t,
-                    child: Text(
-                      t.label,
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ),
-                )
-                .toList(),
+            );
+          }
+
+          // Safe lookup without throwing Bad State: No Element
+          final dummy = DropDownResponse(value: '', text: 'Select Department');
+          final matchingItem = controller.reportTypeDropdownList.firstWhere(
+            (item) => item.value == controller.selectedReportType.value,
+            orElse:
+                () =>
+                    controller.reportTypeDropdownList.isNotEmpty
+                        ? controller.reportTypeDropdownList.first
+                        : dummy,
+          );
+
+          return CustomDropdownSingle(
+            width: double.infinity,
+            hintText: 'Select Department',
+            selectedItem: matchingItem.value == '' ? null : matchingItem,
+            items: controller.reportTypeDropdownList,
             onChanged: (v) {
-              if (v != null) controller.onReportTypeChanged(v);
+              if (v != null && v.value != null) {
+                controller.onReportTypeChanged(v.value!);
+              }
             },
-          ),
-        ),
+          );
+        }),
       ],
     );
   }
@@ -385,17 +371,15 @@ class _EntryFormCard extends StatelessWidget {
   Widget _row2(List<Widget> children) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: children
-          .map(
-            (w) => Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 14),
-                child: w,
-              ),
-            ),
-          )
-          .toList()
-        ..last = Expanded(child: children.last),
+      children: List.generate(children.length, (i) {
+        final isLast = i == children.length - 1;
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(right: isLast ? 0 : 14),
+            child: children[i],
+          ),
+        );
+      }),
     );
   }
 
@@ -419,55 +403,26 @@ class _EntryFormCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // Clear button
-        OutlinedButton.icon(
+        AppButton(
+          text: 'Clear',
           onPressed: controller.clearForm,
-          icon: const Icon(Icons.refresh_outlined, size: 15),
-          label: const Text('Clear'),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.grey.shade700,
-            side: BorderSide(color: Colors.grey.shade400),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            textStyle: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          isCancelButton: true,
+          width: 90,
         ),
-        const SizedBox(width: 10),
+        10.widthGap,
         // Save button
         Obx(
-          () => ElevatedButton.icon(
-            onPressed:
-                controller.isLoading.value ? null : controller.submitEntry,
-            icon:
-                controller.isLoading.value
-                    ? const SizedBox(
-                      width: 14,
-                      height: 14,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                    : const Icon(Icons.save_outlined, size: 15),
-            label: const Text('Save Entry'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.blue,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              textStyle: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+          () => AppButton(
+            text: 'Save',
+            onPressed: () {
+              if (!controller.isLoading.value) {
+                if (!controller.formKey.currentState!.validate())
+                  return;
+                controller.postHourlyProductionEntry();
+                // controller.submitEntry();
+              }
+            },
+            isLoading: controller.isLoading.value,
           ),
         ),
       ],

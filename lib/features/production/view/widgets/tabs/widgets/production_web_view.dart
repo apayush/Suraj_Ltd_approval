@@ -1,0 +1,27 @@
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:suraj_approval/core/utills/app_module_container.dart';
+import 'package:suraj_approval/core/constants/app_enum.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
+
+import '../../hourly_module/hourly_tab_view.dart';
+
+class ProductionWebView extends StatelessWidget {
+  const ProductionWebView({super.key, required this.subMenuType});
+  final SubMenuType subMenuType;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (subMenuType) {
+      case SubMenuType.hourlyProductionEntry:
+        return const HourlyTabView(columns: 3);
+      default:
+        return Center(
+          child: AppText(
+            '${subMenuType.key} — Coming Soon',
+            style: TextStyles.normal(Get.context!),
+          ),
+        );
+    }
+  }
+}

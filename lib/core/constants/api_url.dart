@@ -29,4 +29,10 @@ class ApiUrl {
   // ! Get PDF Report
   static const String getVoucherReport = '/getBankpaymentReport';
   static const String downloadComparisonPdf = '/DownloadComparisonPdf';
+
+  // ! Production Module
+  static const String getProductionRights = '/GetProductionRights';
+  static const String submitHourlyProductionEntry = '/SubmitHourlyProductionEntry';
+  static const String getHourlyReportData = '/GetHourlyReportData';
+
 }

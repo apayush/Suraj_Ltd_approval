@@ -78,10 +78,20 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
             //   return details.rowIndex == 0 ? 45.0 : 50.0;
             // },
             onQueryRowHeight: (details) {
-              // Header row
-              if (details.rowIndex == 0) return 45;
+              final int headerCount = 1 + (stackedHeaderRows?.length ?? 0);
+              
+              if (details.rowIndex < headerCount) {
+                return 45.0; // Header or Stacked Header row
+              }
 
-              final DataGridRow row = source.rows[details.rowIndex - 1];
+              final int dataRowIndex = details.rowIndex - headerCount;
+
+              // Check for index out of bounds (eg. Summary rows or extra footers)
+              if (dataRowIndex >= source.rows.length) {
+                return 40.0; // Default height for summary/footer rows
+              }
+
+              final DataGridRow row = source.rows[dataRowIndex];
 
               // Get value of Narr column
               final narrCell = row.getCells().firstWhere(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:suraj_approval/features/hourly/controller/hourly_report_controller.dart';
-import 'package:suraj_approval/features/hourly/view/hourly_report_widgets.dart';
+import 'package:suraj_approval/features/production/controller/hourly_report_controller.dart';
+import 'hourly_report_widgets.dart';
 
 /// Shared report view content — used by mobile, tablet, web layouts.
 /// [compact] = true on mobile → filter shows as dialog

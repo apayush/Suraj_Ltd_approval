@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
@@ -9,7 +8,6 @@ import '../../../../core/utills/app_module_container.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/common_widgets.dart';
 import '../../controller/production_controller.dart';
-import 'hourly_tab_view.dart';
 
 class ProductionWeb extends StatelessWidget {
   ProductionWeb({super.key});
@@ -41,33 +39,8 @@ class ProductionWeb extends StatelessWidget {
       body: TabBarView(
         controller: controller.tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: _buildTabViews(context),
+        children: controller.tabViews,
       ),
     );
-  }
-
-  List<Widget> _buildTabViews(BuildContext context) {
-    final subMenus =
-        LocalDB.getUserModel()?.getSubMenusFor(MenuType.production) ?? [];
-
-    if (subMenus.isEmpty) {
-      return [const HourlyTabView(columns: 3)];
-    }
-
-    return subMenus.map((sm) {
-      switch (sm) {
-        case SubMenuType.hourlyProductionEntry:
-          // On ultra-wide (>1400px) HourlyTabView shows side-by-side panels
-          // internally; twoColumn still applies to the entry form fields.
-          return const HourlyTabView(columns: 3);
-        default:
-          return Center(
-            child: AppText(
-              '${sm.key} — Coming Soon',
-              style: TextStyles.normal(Get.context!),
-            ),
-          );
-      }
-    }).toList();
   }
 }

@@ -41,7 +41,7 @@ enum SubMenuType {
 
   // Production
   // yieldSheet('Yield Sheet'),
-  hourlyProductionEntry('Hourly Report');
+  hourlyProductionEntry('Hourly Production Entry');
 
   final String key;
 

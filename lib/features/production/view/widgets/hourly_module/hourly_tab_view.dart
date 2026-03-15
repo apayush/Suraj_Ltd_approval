@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 
-import '../../../hourly/controller/hourly_report_controller.dart';
-import '../../../hourly/view/entry_tab_content.dart';
-import '../../../hourly/view/report_tab_content.dart';
+import '../../../controller/hourly_report_controller.dart';
+import 'entry_tab_content.dart';
+import 'report_tab_content.dart';
 
 /// Embeds the Hourly Report module (Entry + Report inner tabs) inside the
 /// Production screen — no separate route needed.
@@ -51,10 +51,14 @@ class _HourlyTabViewState extends State<HourlyTabView> {
             controller: _controller.tabController,
             indicatorColor: AppColors.blue,
             indicatorWeight: 3,
+            onTap: (value) {
+              if(value == 1) {
+                _controller.getHourlyReportData();
+              }
+            },
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            padding: EdgeInsets.zero, // Removes the default leading space
-            labelColor: AppColors.blue,
+            padding: EdgeInsets.zero,
             unselectedLabelColor: isDark ? Colors.white54 : Colors.grey,
             tabs: const [Tab(text: "Data Entry"), Tab(text: "View Report")],
           ),

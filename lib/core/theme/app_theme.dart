@@ -25,7 +25,7 @@ class AppTheme {
         fontSize: FontSizes.extraLarge,
       ),
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       indicatorColor: AppColors.blue,
       unselectedLabelStyle: TextStyles.tabStyle(textColor: Colors.grey),
       labelStyle: TextStyles.tabStyle(textColor: Colors.black),
@@ -79,7 +79,7 @@ class AppTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       backgroundColor: AppColors.darkDrawerBackgroundColor,
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       indicatorColor: AppColors.blue,
       unselectedLabelStyle: TextStyles.tabStyle(textColor: Colors.grey),
       labelStyle: TextStyles.tabStyle(textColor: Colors.white),
