@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
-import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/features/production/controller/hourly_report_controller.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
@@ -334,7 +333,7 @@ class _EntryFormCard extends StatelessWidget {
                 child: SizedBox(
                   width: 24,
                   height: 24,
-                  child: LoaderWidget(controller: controller),
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
             );

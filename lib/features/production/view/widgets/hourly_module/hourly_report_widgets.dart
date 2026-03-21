@@ -473,6 +473,7 @@ class _MobileFilterButton extends StatelessWidget {
                   },
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 12,
@@ -523,6 +524,7 @@ class _MobileFilterButton extends StatelessWidget {
                     );
                   }
                   return CustomDropdownSingle(
+                    width: double.infinity,
                     hintText: 'Select Department',
                     selectedItem:
                         matchingDDLValue.value == ''

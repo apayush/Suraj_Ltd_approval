@@ -34,5 +34,7 @@ class ApiUrl {
   static const String getProductionRights = '/GetProductionRights';
   static const String submitHourlyProductionEntry = '/SubmitHourlyProductionEntry';
   static const String getHourlyReportData = '/GetHourlyReportData';
+  static const String submitDaywiseProductionEntry = '/SubmitDaywiseProductionEntry';
+  static const String getDaywiseReport = '/GetDaywiseReport';
 
 }

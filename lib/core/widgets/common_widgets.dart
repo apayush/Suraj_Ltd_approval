@@ -300,7 +300,7 @@ class AppButton extends StatelessWidget {
         borderRadius: RadiusUtils.borderRadiusForButtons,
       ),
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all<Color>(
             isCancelButton ? Colors.grey.shade200 : backgroundColor,

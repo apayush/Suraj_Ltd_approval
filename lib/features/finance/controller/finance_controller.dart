@@ -280,9 +280,7 @@ class FinanceController extends GetxController
         },
       );
       if (response.statusCode == 200) {
-        if (Get.isDialogOpen ?? false) {
-          Get.back();
-        }
+        // Dialog closing is now managed by the caller's finally block to avoid race conditions.
         if (response.data['Success'] == 'Approve') {
           AppUtils.showSnackBar('Voucher Approved Successfully');
         } else if (response.data['Success'] == 'Reject') {
@@ -444,8 +442,9 @@ class FinanceController extends GetxController
     if (value == 'View') {
       await getBankpaymentReport(bankPayment);
     } else if (value == 'Approve') {
-      await Get.dialog(
-        GenericDialogBox(
+      await showDialog(
+        context: Get.context!,
+        builder: (context) => GenericDialogBox(
           headerText: 'Approve',
           content: Form(
             key: approveFormKey,
@@ -456,7 +455,7 @@ class FinanceController extends GetxController
                   AppText(
                     'Are you sure you want to Approve?',
                     softWrap: true,
-                    style: TextStyles.medium(Get.context!),
+                    style: TextStyles.medium(context),
                   ),
                   20.heightGap,
                   buildRemarkField(),
@@ -467,24 +466,26 @@ class FinanceController extends GetxController
           primaryButtonText: 'Approve',
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () async {
-            // if (approveFormKey.currentState!.validate()) {
-            isApproveLoading.value = true;
-            await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
-            isApproveLoading.value = false;
-            // }
-            if (Get.isDialogOpen ?? false) {
-              Get.back();
+            try {
+              isApproveLoading.value = true;
+              await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
+            } catch (e) {
+              print('Error approving voucher: $e');
+            } finally {
+              isApproveLoading.value = false;
+              Navigator.of(context).pop();
             }
           },
           onSecondaryButtonPressed: () {
-            Get.back();
+            Navigator.of(context).pop();
           },
           isLoading: isApproveLoading,
         ),
       );
     } else if (value == 'Hold') {
-      await Get.dialog(
-        GenericDialogBox(
+      await showDialog(
+        context: Get.context!,
+        builder: (context) => GenericDialogBox(
           headerText: 'Hold',
           content: Form(
             key: approveFormKey,
@@ -495,7 +496,7 @@ class FinanceController extends GetxController
                   AppText(
                     'Are you sure you want to Hold?',
                     softWrap: true,
-                    style: TextStyles.medium(Get.context!),
+                    style: TextStyles.medium(context),
                   ),
                   20.heightGap,
                   buildRemarkField(),
@@ -507,23 +508,27 @@ class FinanceController extends GetxController
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () async {
             if (approveFormKey.currentState!.validate()) {
-              isApproveLoading.value = true;
-              await postFinanceVoucher(bankPayment, paymentStatus: 'Hold');
-              isApproveLoading.value = false;
-              if (Get.isDialogOpen ?? false) {
-                Get.back();
+              try {
+                isApproveLoading.value = true;
+                await postFinanceVoucher(bankPayment, paymentStatus: 'Hold');
+              } catch (e) {
+                print('Error holding voucher: $e');
+              } finally {
+                isApproveLoading.value = false;
+                Navigator.of(context).pop();
               }
             }
           },
           onSecondaryButtonPressed: () {
-            Get.back();
+            Navigator.of(context).pop();
           },
           isLoading: isApproveLoading,
         ),
       );
     } else if (value == 'Reject') {
-      await Get.dialog(
-        GenericDialogBox(
+      await showDialog(
+        context: Get.context!,
+        builder: (context) => GenericDialogBox(
           headerText: 'Reject',
           content: Form(
             key: rejectFormKey,
@@ -534,7 +539,7 @@ class FinanceController extends GetxController
                   AppText(
                     'Are you sure you want to Reject?',
                     softWrap: true,
-                    style: TextStyles.medium(Get.context!),
+                    style: TextStyles.medium(context),
                   ),
                   20.heightGap,
                   buildRemarkField(),
@@ -546,16 +551,19 @@ class FinanceController extends GetxController
           secondaryButtonText: 'Cancel',
           onPrimaryButtonPressed: () async {
             if (rejectFormKey.currentState!.validate()) {
-              isRejectLoading.value = true;
-              await postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
-              isRejectLoading.value = false;
-              if (Get.isDialogOpen ?? false) {
-                Get.back();
+              try {
+                isRejectLoading.value = true;
+                await postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
+              } catch (e) {
+                print('Error rejecting voucher: $e');
+              } finally {
+                isRejectLoading.value = false;
+                Navigator.of(context).pop();
               }
             }
           },
           onSecondaryButtonPressed: () {
-            Get.back();
+            Navigator.of(context).pop();
           },
           isLoading: isRejectLoading,
         ),

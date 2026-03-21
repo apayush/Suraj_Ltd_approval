@@ -4,6 +4,7 @@ import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/constants/app_enum.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 
+import '../../daywise_module/daywise_tab_view.dart';
 import '../../hourly_module/hourly_tab_view.dart';
 
 class ProductionWebView extends StatelessWidget {
@@ -15,6 +16,8 @@ class ProductionWebView extends StatelessWidget {
     switch (subMenuType) {
       case SubMenuType.hourlyProductionEntry:
         return const HourlyTabView(columns: 3);
+      case SubMenuType.MPDSPDDaywiseEntry:
+        return const DaywiseTabView(columns: 3);
       default:
         return Center(
           child: AppText(
