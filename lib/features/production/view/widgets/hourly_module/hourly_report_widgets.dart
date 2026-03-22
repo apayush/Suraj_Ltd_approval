@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
 import 'package:suraj_approval/core/widgets/app_dialog.dart';
 
@@ -221,6 +222,7 @@ class ReportTable extends StatelessWidget {
                     onPageNavigationEnd: (pageIndex) {},
                     onRowsPerPageChanged: (value) {},
                     source: dataSource,
+                    columnWidthMode: ColumnWidthMode.auto,
                     tableSummaryRows: [
                       GridTableSummaryRow(
                         showSummaryInRow: false,
@@ -283,11 +285,11 @@ class ReportTable extends StatelessWidget {
       return GridColumn(
         columnName: name,
         width: width ?? double.nan,
-        columnWidthMode:
-        isNumeric ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+        minimumWidth: 150,
+        columnWidthMode: ColumnWidthMode.fitByColumnName,
         label: appGridLabel(
           label,
-          align: isNumeric ? Alignment.centerRight : Alignment.centerLeft,
+          align: Alignment.center,
         ),
       );
     }
@@ -515,11 +517,7 @@ class _MobileFilterButton extends StatelessWidget {
                       height: 48,
                       width: double.infinity,
                       child: Center(
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
+                        child: LoadingIndicator(size: 24),
                       ),
                     );
                   }

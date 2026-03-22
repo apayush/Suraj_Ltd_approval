@@ -28,7 +28,8 @@ class LoaderWidget extends StatelessWidget {
 }
 
 class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({super.key});
+  final double size;
+  const LoadingIndicator({super.key, this.size = 60.0});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class LoadingIndicator extends StatelessWidget {
         color: const Color(0xFF007CB6),
         waveColor: AppColors.blue200,
         trackColor: AppColors.blue100,
-        size: 60.0,
+        size: size,
       ),
     );
   }

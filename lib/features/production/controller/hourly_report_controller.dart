@@ -95,17 +95,6 @@ class HourlyReportController extends GetxController
     getHourlyReportData();
   }
 
-  @override
-  void onClose() {
-    tabController.dispose();
-    diaController.dispose();
-    gradeController.dispose();
-    sizeController.dispose();
-    targetController.dispose();
-    actualController.dispose();
-    super.onClose();
-  }
-
   // ─── Helpers ─────────────────────────────────────────────────────────────────
   bool _sameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
@@ -329,8 +318,9 @@ class HourlyReportController extends GetxController
             totalReportActual.value = reportDetails['TotalActual'] ?? 0;
           }
         } else {
+          entries.clear();
           AppUtils.showSnackBar(
-            response.data['Message'] ?? 'Failed to fetch data',
+            response.data['message'] ?? response.data['Message'] ?? 'Failed to fetch data',
             background: Colors.red,
           );
         }

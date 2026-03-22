@@ -5,6 +5,7 @@ import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/features/production/controller/daywise_report_controller.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/features/production/view/widgets/hourly_module/hourly_report_widgets.dart';
 
 class DaywiseEntryTabContent extends StatelessWidget {
@@ -267,7 +268,7 @@ class _EntryFormCard extends StatelessWidget {
         8.heightGap,
         Obx(() {
           if (controller.isLoading.value && controller.deptDropdownList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: LoadingIndicator(size: 24));
           }
 
           final dummy = DropDownResponse(value: '', text: 'Select Department');

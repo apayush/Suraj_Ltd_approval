@@ -8,6 +8,8 @@ import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_utills.dart';
 import '../model/daywise_report_model.dart';
 
+import 'package:suraj_approval/features/production/utills/daywise_report_pdf_helper.dart';
+
 class DaywiseProductionController extends GetxController
     with GetSingleTickerProviderStateMixin {
   static DaywiseProductionController get instance => Get.find();
@@ -219,14 +221,46 @@ class DaywiseProductionController extends GetxController
 
           entries.assignAll(newList);
         } else {
+          entries.clear();
           AppUtils.showSnackBar(
             response.data['message'] ?? response.data['Message'] ?? 'Failed to fetch data',
             background: Colors.red,
           );
         }
+      } else {
+        entries.clear();
       }
     } catch (e) {
+      entries.clear();
       print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! =================== Print Daywise Report ================================
+  Future<void> printReport() async {
+    if (entries.isEmpty) {
+      AppUtils.showSnackBar('No data available to print', background: Colors.orange);
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final base64Pdf = await DaywiseReportPdfHelper.generateDaywiseReportPdf(
+        reportType: reportDeptFilter.value,
+        startDate: startDate.value,
+        endDate: endDate.value,
+        entries: entries,
+        isFullType: isFullTypeFilter,
+      );
+
+      final dateStr = '${DateFormat('dd_MMM').format(startDate.value)}_to_${DateFormat('dd_MMM_yyyy').format(endDate.value)}';
+      final fileName = 'Daywise_Report_${reportDeptFilter.value}_$dateStr.pdf';
+      await AppUtils.openPdf(base64Pdf, fileName: fileName);
+    } catch (e) {
+      print('Error generating PDF: $e');
+      AppUtils.showSnackBar('Failed to generate PDF', background: Colors.red);
     } finally {
       isLoading.value = false;
     }

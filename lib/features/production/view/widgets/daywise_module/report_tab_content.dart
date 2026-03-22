@@ -7,6 +7,7 @@ import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/features/production/controller/daywise_report_controller.dart';
 import 'daywise_report_widgets.dart';
 
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/core/widgets/no_data_found.dart';
 
 class DaywiseReportTabContent extends StatelessWidget {
@@ -36,7 +37,7 @@ class DaywiseReportTabContent extends StatelessWidget {
                   if (controller.isLoading.value) {
                     return const Center(child: Padding(
                       padding: EdgeInsets.all(40.0),
-                      child: CircularProgressIndicator(),
+                      child: LoadingIndicator(),
                     ));
                   }
                   if (controller.entries.isEmpty) {
@@ -46,16 +47,6 @@ class DaywiseReportTabContent extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${controller.reportDeptFilter.value} REPORT',
-                            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.blue),
-                          ),
-                        ],
-                      ),
-                      10.heightGap,
                       DaywiseReportTable(
                         entries: controller.entries,
                         isFullType: controller.isFullTypeFilter,
@@ -97,7 +88,7 @@ class DaywiseReportTabContent extends StatelessWidget {
           AppButton(
             text: 'Print',
             onPressed: () {
-              // controller.printReport();
+              controller.printReport();
             },
             width: 80,
           ),

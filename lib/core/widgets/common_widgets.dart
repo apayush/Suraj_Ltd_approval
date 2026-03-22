@@ -123,7 +123,7 @@ class AppIconButton extends StatelessWidget {
 Widget appGridLabel(String label, {Alignment align = Alignment.centerLeft}) {
   return Container(
     padding: const EdgeInsets.all(8.0),
-    alignment: Alignment.centerLeft,
+    alignment: align,
     child: AppText(
       label,
       alignment: align,

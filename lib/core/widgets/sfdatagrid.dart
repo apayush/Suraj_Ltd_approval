@@ -21,6 +21,7 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
   final bool isScrollbarAlwaysShown;
   final ScrollPhysics verticalScrollPhysics;
   final List<StackedHeaderRow>? stackedHeaderRows;
+  final ColumnWidthMode columnWidthMode;
 
   const SfDataGridPaginationWithAllData({
     super.key,
@@ -38,6 +39,7 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
     this.isScrollbarAlwaysShown = true,
     this.verticalScrollPhysics = const AlwaysScrollableScrollPhysics(),
     this.stackedHeaderRows,
+    this.columnWidthMode = ColumnWidthMode.fill,
   });
 
   @override
@@ -71,7 +73,7 @@ class SfDataGridPaginationWithAllData<T> extends StatelessWidget {
           child: SfDataGrid(
             key: sfDataKey ?? GlobalKey<SfDataGridState>(),
             source: source,
-            columnWidthMode: ColumnWidthMode.fill,
+            columnWidthMode: columnWidthMode,
             tableSummaryRows: tableSummaryRows,
             columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
             // onQueryRowHeight: (details) {

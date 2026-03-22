@@ -6,6 +6,7 @@ import 'package:suraj_approval/features/production/controller/hourly_report_cont
 import 'package:suraj_approval/core/utills/app_module_container.dart';
 import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'hourly_report_widgets.dart';
 
 /// Shared entry form content — used by mobile, tablet, web layouts.
@@ -333,7 +334,7 @@ class _EntryFormCard extends StatelessWidget {
                 child: SizedBox(
                   width: 24,
                   height: 24,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: LoadingIndicator(size: 24),
                 ),
               ),
             );
