@@ -224,4 +224,13 @@ class NotificationService {
       print('Error updateBadgeCount');
     }
   }
+
+  /// Cancel ALL delivered notifications from the iOS/Android notification panel
+  static Future<void> cancelAllNotifications() async {
+    try {
+      await localNotification.cancelAll();
+    } catch (e) {
+      debugPrint('Error cancelAllNotifications: $e');
+    }
+  }
 }
