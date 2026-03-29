@@ -7,8 +7,11 @@ import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import 'package:suraj_approval/core/widgets/no_data_found.dart';
+import 'package:suraj_approval/core/widgets/app_dialog.dart';
+import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../controller/lg30_pilger_controller.dart';
-import '../hourly_module/hourly_report_widgets.dart';
+import 'package:suraj_approval/features/production/model/lg30_report_data_source.dart';
 
 class LG30ReportTabContent extends StatelessWidget {
   final LG30PilgerController controller;
@@ -71,12 +74,7 @@ class LG30ReportTabContent extends StatelessWidget {
             );
           }),
           const Spacer(),
-          // Refresh/Show Report button
-          AppButton(
-            text: 'Show Report',
-            onPressed: controller.getReportData,
-            width: compact ? 110 : 120,
-          ),
+          // Refresh button removed as per user request
           8.widthGap,
           // Print button
           AppButton(
@@ -92,198 +90,234 @@ class LG30ReportTabContent extends StatelessWidget {
   Widget _buildReportTable(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      color: isDark ? Colors.grey.shade900 : Colors.white,
-      elevation: 1,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Header
           Container(
-            height: 3,
-            decoration: const BoxDecoration(
-              color: AppColors.blue,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey.shade900 : Colors.grey.shade50,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
                 Obx(() => Text(
-                      '${controller.reportDeptFilter.value} — ${DateFormat('dd MMM yyyy').format(controller.reportDate.value)}',
+                      '${controller.reportDeptFilter.value.toUpperCase()} REPORT',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
                         color: isDark ? Colors.white : Colors.black87,
                       ),
                     )),
-                12.heightGap,
-                // Table
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Obx(() => DataTable(
-                        headingRowColor: WidgetStateProperty.all(
-                          const Color(0xFFCFE2FF),
-                        ),
-                        headingTextStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: Colors.black87,
-                        ),
-                        dataTextStyle: TextStyle(
-                          fontSize: 12,
-                          color: isDark ? Colors.white : Colors.black87,
-                        ),
-                        border: TableBorder.all(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        columns: const [
-                          DataColumn(label: Text('MACHINE NAME')),
-                          DataColumn(label: Text('NOS'), numeric: true),
-                          DataColumn(label: Text('KGS'), numeric: true),
-                          DataColumn(label: Text('MAINT.')),
-                          DataColumn(label: Text('NO RM')),
-                          DataColumn(label: Text('MANPOWER')),
-                          DataColumn(label: Text('OTHER')),
-                        ],
-                        rows: [
-                          // Data rows
-                          ...controller.reportEntries.map((entry) {
-                            return DataRow(cells: [
-                              DataCell(Text(entry.machineName,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  entry.nos == 0 ? '-' : '${entry.nos}')),
-                              DataCell(Text(entry.kgs == 0
-                                  ? '-'
-                                  : entry.kgs.toStringAsFixed(1))),
-                              DataCell(Text(entry.maint)),
-                              DataCell(Text(entry.rm)),
-                              DataCell(Text(entry.man)),
-                              DataCell(Text(entry.other)),
-                            ]);
-                          }),
-                          // Total row
-                          DataRow(
-                            color: WidgetStateProperty.all(AppColors.blue),
-                            cells: [
-                              const DataCell(Text('TOTAL',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
-                              DataCell(Text(
-                                  '${controller.totalReportNos.value}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
-                              DataCell(Text(
-                                  controller.totalReportKgs.value
-                                      .toStringAsFixed(1),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white))),
-                              const DataCell(Text('')),
-                              const DataCell(Text('')),
-                              const DataCell(Text('')),
-                              const DataCell(Text('')),
-                            ],
-                          ),
-                        ],
-                      )),
-                ),
+                const SizedBox(height: 4),
+                Obx(() => Text(
+                      'Date: ${DateFormat('dd MMM yyyy').format(controller.reportDate.value)}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: isDark ? Colors.white54 : Colors.grey,
+                      ),
+                    )),
               ],
             ),
+          ),
+          // Grid
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Obx(() {
+              final dataSource = LG30ReportDataSource(
+                entries: controller.reportEntries,
+                isDark: isDark,
+              );
+
+              return SfDataGridPaginationWithAllData<LG30PilgerController>(
+                controller: controller,
+                dynamicColumns: _buildGridColumns(),
+                totalItems: controller.reportEntries.length,
+                hidePaging: true,
+                isScrollbarAlwaysShown: false,
+                rowsPerPage: controller.reportEntries.length,
+                onPageNavigationStart: (pageIndex) {},
+                onPageNavigationEnd: (pageIndex) {},
+                onRowsPerPageChanged: (value) {},
+                source: dataSource,
+                columnWidthMode: ColumnWidthMode.auto,
+              );
+            }),
           ),
         ],
       ),
     );
   }
 
+  List<GridColumn> _buildGridColumns() {
+    GridColumn textColumn(String name, String label, {Alignment align = Alignment.centerLeft}) {
+      return GridColumn(
+        columnName: name,
+        columnWidthMode: ColumnWidthMode.fitByColumnName,
+        minimumWidth: 120,
+        label: appGridLabel(
+          label,
+          align: align,
+        ),
+      );
+    }
+
+    return [
+      textColumn('machine', 'MACHINE NAME'),
+      textColumn('nos', 'NOS', align: Alignment.centerRight),
+      textColumn('kgs', 'KGS', align: Alignment.centerRight),
+      textColumn('maint', 'MAINT.'),
+      textColumn('rm', 'NO RM'),
+      textColumn('man', 'MANPOWER'),
+      textColumn('other', 'OTHER'),
+    ];
+  }
+
   void _showFilterDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => _LG30FilterDialog(controller: controller),
+    DateTime tempDate = controller.reportDate.value;
+    String tempDept = controller.reportDeptFilter.value;
+
+    Get.dialog(
+      StatefulBuilder(
+        builder: (ctx, setState) {
+          final isDark = Theme.of(ctx).brightness == Brightness.dark;
+
+          final dummy = DropDownResponse(value: '', text: 'Select Department');
+          DropDownResponse matchingDDLValue = controller.deptDropdownList.firstWhere(
+            (t) => t.value == tempDept,
+            orElse: () => controller.deptDropdownList.isNotEmpty ? controller.deptDropdownList.first : dummy,
+          );
+
+          return GenericDialogBox(
+            headerText: 'Filters',
+            primaryButtonText: 'Apply',
+            secondaryButtonText: 'Cancel',
+            onPrimaryButtonPressed: () {
+              controller.reportDate.value = tempDate;
+              controller.reportDeptFilter.value = tempDept;
+              controller.getReportData();
+              Get.back();
+            },
+            onSecondaryButtonPressed: () {
+              Get.back();
+            },
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Date
+                Text(
+                  'Filter Date',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Colors.white70 : Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                InkWell(
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: ctx,
+                      initialDate: tempDate,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2030),
+                    );
+                    if (picked != null) setState(() => tempDate = picked);
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade400),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.blue),
+                        const SizedBox(width: 8),
+                        Text(DateFormat('dd MMM yyyy').format(tempDate), style: const TextStyle(fontSize: 13)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Department
+                Text(
+                  'Department',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Colors.white70 : Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                CustomDropdownSingle(
+                  width: double.infinity,
+                  hintText: 'Select Department',
+                  selectedItem: matchingDDLValue.value == '' ? null : matchingDDLValue,
+                  items: controller.deptDropdownList,
+                  onChanged: (v) {
+                    if (v != null && v.value != null) {
+                      setState(() => tempDept = v.value!);
+                    }
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
-// ── Filter Dialog ─────────────────────────────────────────────────────────────
-
-class _LG30FilterDialog extends StatelessWidget {
-  final LG30PilgerController controller;
-  const _LG30FilterDialog({required this.controller});
+class _TotalChip extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+  const _TotalChip({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Row(
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Icon(Icons.filter_list, color: AppColors.blue, size: 20),
-          8.widthGap,
-          const Text('Filter Report',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
         ],
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppText('Department',
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade600)),
-          8.heightGap,
-          Obx(() {
-            final dummy =
-                DropDownResponse(value: '', text: 'Select Department');
-            final matchingItem = controller.deptDropdownList.firstWhere(
-              (item) => item.value == controller.reportDeptFilter.value,
-              orElse: () => controller.deptDropdownList.isNotEmpty
-                  ? controller.deptDropdownList.first
-                  : dummy,
-            );
-            return CustomDropdownSingle(
-              width: double.infinity,
-              hintText: 'Select Department',
-              selectedItem: matchingItem.value == '' ? null : matchingItem,
-              items: controller.deptDropdownList,
-              onChanged: (v) {
-                if (v?.value != null) {
-                  controller.onReportDeptFilterChanged(v!.value!);
-                }
-              },
-            );
-          }),
-          16.heightGap,
-          Obx(() => DatePickerField(
-                label: 'Date',
-                date: controller.reportDate.value,
-                onChanged: controller.onReportDateChanged,
-              )),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.blue),
-          onPressed: () {
-            Navigator.of(context).pop();
-            controller.getReportData();
-          },
-          child:
-              const Text('Apply', style: TextStyle(color: Colors.white)),
-        ),
-      ],
     );
   }
 }
