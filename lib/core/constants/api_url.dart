@@ -37,4 +37,9 @@ class ApiUrl {
   static const String submitDaywiseProductionEntry = '/SubmitDaywiseProductionEntry';
   static const String getDaywiseReport = '/GetDaywiseReport';
 
+  // ! LG30 Pilger Module
+  static const String getMachinesByDepartment = '/GetMachinesByDepartment';
+  static const String submitLG35PilgerEntry = '/SubmitLG35PilgerProductionEntry';
+  static const String getReportLG35Pilger = '/GetReportLG35Pilger';
+
 }

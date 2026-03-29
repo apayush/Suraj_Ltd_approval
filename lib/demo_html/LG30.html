@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Production System v3.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-color: #0d6efd; --bg-color: #f4f6f9; }
+        body { background-color: var(--bg-color); font-family: 'Segoe UI', sans-serif; font-size: 14px; }
+        
+        /* HEADER & TABS */
+        .app-header {
+            background: var(--primary-color);
+            padding: 10px 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .nav-pills .nav-link { 
+            color: rgba(255,255,255,0.8); 
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .nav-pills .nav-link.active { 
+            background-color: white; 
+            color: var(--primary-color); 
+        }
+
+        /* CARD VIEW FOR MOBILE INPUT */
+        @media (max-width: 768px) {
+            .mobile-entry-table thead { display: none; } 
+            .mobile-entry-table tr {
+                display: block;
+                margin-bottom: 15px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                padding: 15px;
+                border: 1px solid #dee2e6;
+            }
+            .mobile-entry-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border: none;
+                border-bottom: 1px solid #eee;
+            }
+            .mobile-entry-table td:last-child { border-bottom: none; }
+            .mobile-entry-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #555;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+            }
+            .mobile-entry-table .machine-name {
+                background-color: #e7f1ff;
+                color: #0d6efd;
+                font-weight: 800;
+                font-size: 1.1rem;
+                justify-content: center;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            .mobile-entry-table .machine-name::before { display: none; }
+            .mobile-entry-table input { text-align: right; width: 60%; }
+        }
+
+        /* DESKTOP VIEW */
+        @media (min-width: 769px) {
+            .machine-name { font-weight: bold; background-color: #f8f9fa; width: 220px; }
+            .mobile-entry-table th { background-color: #e9ecef; text-align: center; }
+        }
+
+        /* REPORT TABLE (Always Table View) */
+        .report-table th { background-color: #cfe2ff; text-align: center; vertical-align: middle; }
+        .report-table td { text-align: center; vertical-align: middle; }
+        .report-total { background-color: #0d6efd; color: white; font-weight: bold; }
+        
+        /* Floating Save Button */
+        .fab-save {
+            position: fixed; bottom: 20px; right: 20px;
+            border-radius: 50px; padding: 15px 30px;
+            font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="text-white mb-0">🏭 Production Log</h5>
+        <span class="badge bg-light text-dark" id="currentDateDisplay"></span>
+    </div>
+    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="tab-input" data-bs-toggle="pill" data-bs-target="#content-input" type="button">📝 INPUT</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="tab-report" data-bs-toggle="pill" data-bs-target="#content-report" type="button">📊 REPORT MODULE</button>
+        </li>
+    </ul>
+</div>
+
+<div class="tab-content" id="pills-tabContent">
+
+    <div class="tab-pane fade show active" id="content-input">
+        <div class="container mt-3 pb-5">
+            
+            <div class="card p-3 mb-3 border-0 shadow-sm">
+                <div class="row g-2">
+                    <div class="col-12 col-md-5">
+                        <label class="small text-muted fw-bold">SELECT DEPARTMENT</label>
+                        <select class="form-select form-select-lg bg-light" id="inputDept" onchange="loadInputGrid()">
+                            <option value="LG-30">Daily LG-30 Production</option>
+                            <option value="PILGER-SPD">Pilger Report SPD</option>
+                            <option value="LG-75">LG-75 & LG-150 Line</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="small text-muted fw-bold">DATE</label>
+                        <input type="date" class="form-control" id="inputDate">
+                    </div>
+                    <div class="col-6 col-md-3 d-flex align-items-end">
+                        <button class="btn btn-outline-danger w-100" onclick="clearForm()">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <form id="entryForm">
+                <table class="table table-bordered mobile-entry-table bg-white">
+                    <thead>
+                        <tr>
+                            <th>MACHINE NAME</th>
+                            <th>NOS</th>
+                            <th>KGS</th>
+                            <th>MAINTENANCE</th>
+                            <th>RM ISSUE</th>
+                            <th>MANPOWER</th>
+                            <th>OTHER</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inputTableBody">
+                        </tbody>
+                </table>
+            </form>
+        </div>
+        
+        <button class="btn btn-primary fab-save" onclick="saveData()">💾 SAVE ENTRY</button>
+    </div>
+
+
+    <div class="tab-pane fade" id="content-report">
+        <div class="container mt-3">
+            
+            <div class="card p-4 border-0 shadow-sm mb-4" style="background-color: #e3f2fd;">
+                <h6 class="fw-bold text-primary mb-3">🔍 FILTER REPORT</h6>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Department:</label>
+                        <select class="form-select" id="reportDept">
+                            <option value="LG-30">Daily LG-30 Production</option>
+                            <option value="PILGER-SPD">Pilger Report SPD</option>
+                            <option value="LG-75">LG-75 & LG-150 Line</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Date:</label>
+                        <input type="date" class="form-control" id="reportDate">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100 fw-bold" onclick="generateReport()">SHOW REPORT</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reportOutput" class="d-none">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-uppercase mb-0" id="reportTitle">REPORT</h4>
+                    <button class="btn btn-success btn-sm" onclick="window.print()">🖨️ Print Report</button>
+                </div>
+
+                <div class="table-responsive bg-white p-3 shadow-sm">
+                    <table class="table table-bordered table-striped report-table mb-0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 25%;">MACHINE NAME</th>
+                                <th colspan="2">PRODUCTION</th>
+                                <th colspan="4">REMARKS / DOWNTIME</th>
+                            </tr>
+                            <tr>
+                                <th style="width: 10%;">NOS</th>
+                                <th style="width: 10%;">KGS</th>
+                                <th>MAINT.</th>
+                                <th>NO RM</th>
+                                <th>MANPOWER</th>
+                                <th>OTHER</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportBody">
+                            </tbody>
+                        <tfoot id="reportFooter">
+                            </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // --- 1. CONFIGURATION ---
+    const machineDB = {
+        "LG-30": ["LG 30 NO 1", "LG 30 NO 2", "LG 30 NO 3", "LG 30 NO 4", "LG 30 NO 5", "LG 30 NO 6"],
+        "PILGER-SPD": ["SPD PILGER 1", "SPD PILGER 2", "SPD PILGER 3", "SPD PILGER 4", "SPD PILGER 5"],
+        "LG-75": [
+            "LG 150 NO 1",
+            "LG 75 NO 1-A", "LG 75 NO 2-A", "LG 75 NO 3-A", "LG 75 NO 4-A",
+            "LG 75 NO 5-A", "LG 75 NO 6-A", "LG 75 NO 7-A", "LG 75 NO 8-A",
+            "LG 75 NO 9-M", "LG 75 NO 10-M", "LG 75 NO 11-M", "LG 75 NO 12-M",
+            "LG 75 NO 13-M", "LG 75 NO 14-M", "LG 75 NO 15-M", "LG 75 NO 16-M"
+        ]
+    };
+
+    // Global Data Store
+    let productionData = [];
+
+    // Initialize Dates
+    document.getElementById('inputDate').valueAsDate = new Date();
+    document.getElementById('reportDate').valueAsDate = new Date();
+    document.getElementById('currentDateDisplay').innerText = new Date().toLocaleDateString();
+
+    // --- 2. INPUT LOGIC ---
+    function loadInputGrid() {
+        const dept = document.getElementById('inputDept').value;
+        const machines = machineDB[dept];
+        const tbody = document.getElementById('inputTableBody');
+        tbody.innerHTML = '';
+
+        machines.forEach((machine, i) => {
+            const row = `
+                <tr>
+                    <td class="machine-name" data-label="Machine">${machine}</td>
+                    <td data-label="Production NOS"><input type="number" class="form-control" id="nos_${i}" placeholder="0"></td>
+                    <td data-label="Production KGS"><input type="number" class="form-control" id="kgs_${i}" placeholder="0"></td>
+                    <td data-label="Maintenance"><input type="text" class="form-control" id="maint_${i}"></td>
+                    <td data-label="RM Issue"><input type="text" class="form-control" id="rm_${i}"></td>
+                    <td data-label="Manpower"><input type="text" class="form-control" id="man_${i}"></td>
+                    <td data-label="Other"><input type="text" class="form-control" id="other_${i}"></td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function saveData() {
+        const dept = document.getElementById('inputDept').value;
+        const date = document.getElementById('inputDate').value;
+        const machines = machineDB[dept];
+
+        // Clear previous data for this specific Date + Dept combination (Overwrite logic)
+        productionData = productionData.filter(d => !(d.dept === dept && d.date === date));
+
+        machines.forEach((machine, i) => {
+            const entry = {
+                date: date,
+                dept: dept,
+                machine: machine,
+                nos: document.getElementById(`nos_${i}`).value || 0,
+                kgs: document.getElementById(`kgs_${i}`).value || 0,
+                maint: document.getElementById(`maint_${i}`).value || '',
+                rm: document.getElementById(`rm_${i}`).value || '',
+                man: document.getElementById(`man_${i}`).value || '',
+                other: document.getElementById(`other_${i}`).value || ''
+            };
+            productionData.push(entry);
+        });
+
+        alert("✅ Data Saved! Go to 'REPORT MODULE' to view it.");
+    }
+
+    function clearForm() {
+        if(confirm("Clear all inputs?")) loadInputGrid();
+    }
+
+    // --- 3. REPORT LOGIC ---
+    function generateReport() {
+        // 1. Get Filters
+        const filterDept = document.getElementById('reportDept').value;
+        const filterDate = document.getElementById('reportDate').value;
+
+        // 2. Update Title
+        document.getElementById('reportTitle').innerText = `${filterDept} - ${filterDate}`;
+        document.getElementById('reportOutput').classList.remove('d-none');
+
+        // 3. Filter Data
+        const filteredData = productionData.filter(d => d.dept === filterDept && d.date === filterDate);
+        
+        const tbody = document.getElementById('reportBody');
+        const tfoot = document.getElementById('reportFooter');
+        tbody.innerHTML = '';
+        tfoot.innerHTML = '';
+
+        if (filteredData.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-muted">No data found for <b>${filterDept}</b> on <b>${filterDate}</b>.<br>Please enter data in the INPUT tab first.</td></tr>`;
+            return;
+        }
+
+        // 4. Render Rows & Calculate Totals
+        let totalNos = 0;
+        let totalKgs = 0;
+
+        filteredData.forEach(row => {
+            totalNos += parseInt(row.nos);
+            totalKgs += parseFloat(row.kgs);
+
+            const tr = `
+                <tr>
+                    <td class="fw-bold text-start ps-3">${row.machine}</td>
+                    <td>${row.nos == 0 ? '-' : row.nos}</td>
+                    <td>${row.kgs == 0 ? '-' : row.kgs}</td>
+                    <td>${row.maint}</td>
+                    <td>${row.rm}</td>
+                    <td>${row.man}</td>
+                    <td>${row.other}</td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', tr);
+        });
+
+        // 5. Render Footer
+        tfoot.innerHTML = `
+            <tr class="report-total">
+                <td>TOTAL</td>
+                <td>${totalNos}</td>
+                <td>${totalKgs.toFixed(0)}</td>
+                <td colspan="4" class="bg-light"></td>
+            </tr>
+        `;
+    }
+
+    // Load Default Grid
+    loadInputGrid();
+
+</script>
+
+</body>
+</html>
