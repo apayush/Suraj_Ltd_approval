@@ -5,50 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:suraj_approval/core/widgets/app_pdf_viewer.dart';
+import 'package:suraj_approval/core/widgets/toast/toast.dart';
 import 'package:universal_html/html.dart' as html;
 import '../theme/app_colors.dart';
 import 'app_module_container.dart';
 
 class AppUtils {
-  // Show a simple Snackbar
+  /// Shows an animated overlay toast (radon-style).
+  /// [background] is mapped to isPositive: red/orange → negative, else positive.
   static void showSnackBar(
     String message, {
     Color? background,
     String? title,
     SnackPosition? position,
   }) {
-    Get.showSnackbar(
-      GetSnackBar(
-        title: title ?? null,
-        messageText: Center(
-          child: IntrinsicWidth(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 20.0,
-              ),
-              decoration: BoxDecoration(
-                color: background ?? AppColors.blue,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-        snackPosition: position ?? SnackPosition.TOP,
-        backgroundColor: Colors.transparent,
-        margin: const EdgeInsets.all(16),
-        isDismissible: true,
-        borderRadius: 0,
-        duration: const Duration(seconds: 2),
-      ),
+    final isNegative = background == Colors.red || background == Colors.orange;
+    Toast.show(
+      message,
+      isPositive: !isNegative,
     );
   }
 
