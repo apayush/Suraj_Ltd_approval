@@ -80,18 +80,14 @@ class _DailyReportFilterBar extends StatelessWidget {
               } else if (end != null) {
                 dateStr = 'Until ${DateFormat('dd/MM').format(end)}';
               }
-              return AppButton(
-                text: 'Filter • $dateStr',
-                onPressed: () => _showFilterDialog(context),
-                backgroundColor: AppColors.blue,
+              return Flexible(
+                child: AppButton(
+                  text: 'Filter • $dateStr',
+                  onPressed: () => _showFilterDialog(context),
+                  backgroundColor: AppColors.blue,
+                ),
               );
             }),
-            const Spacer(),
-            AppButton(
-              text: 'Clear',
-              onPressed: controller.resetFilters,
-              isCancelButton: true,
-            ),
           ],
         ),
       );
@@ -119,8 +115,8 @@ class _DailyReportFilterBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 4.0),
             child: AppButton(
-              text: 'Show All',
-              onPressed: controller.resetFilters,
+              text: 'Search',
+              onPressed: controller.getReportData,
               backgroundColor: AppColors.blue,
             ),
           ),
@@ -145,6 +141,7 @@ class _DailyReportFilterBar extends StatelessWidget {
             onPrimaryButtonPressed: () {
               controller.filterStartDate.value = tempStart;
               controller.filterEndDate.value = tempEnd;
+              controller.getReportData();
               Get.back();
             },
             onSecondaryButtonPressed: () {

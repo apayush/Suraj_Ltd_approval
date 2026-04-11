@@ -78,16 +78,10 @@ class DailyProductionController extends GetxController with GetSingleTickerProvi
 
   void onFilterStartDateChanged(DateTime date) {
     filterStartDate.value = date;
-    getReportData();
   }
 
   void onFilterEndDateChanged(DateTime date) {
     filterEndDate.value = date;
-    getReportData();
-  }
-
-  void resetFilters() {
-    getReportData();
   }
 
   void clearForm() {

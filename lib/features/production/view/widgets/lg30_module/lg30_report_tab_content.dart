@@ -12,6 +12,7 @@ import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../controller/lg30_pilger_controller.dart';
 import 'package:suraj_approval/features/production/model/lg30_report_data_source.dart';
+import '../hourly_module/hourly_report_widgets.dart';
 
 class LG30ReportTabContent extends StatelessWidget {
   final LG30PilgerController controller;
@@ -27,7 +28,7 @@ class LG30ReportTabContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Filter bar
+        // Filter bar앉
         _buildFilterBar(context),
         // Report table
         Expanded(
@@ -53,38 +54,102 @@ class LG30ReportTabContent extends StatelessWidget {
   }
 
   Widget _buildFilterBar(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-      ),
-      child: Row(
-        children: [
-          Obx(() {
-            final dept = controller.reportDeptFilter.value;
-            final date =
-                DateFormat('dd/MM/yy').format(controller.reportDate.value);
-            return Flexible(
-              child: AppButton(
-                text: '$dept • $date',
-                onPressed: () => _showFilterDialog(context),
-                backgroundColor: AppColors.blue,
+    if (compact) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+        ),
+        child: Row(
+          children: [
+            Obx(() {
+              final dept = controller.reportDeptFilter.value;
+              final date =
+                  DateFormat('dd/MM/yy').format(controller.reportDate.value);
+              return Flexible(
+                child: AppButton(
+                  text: 'Filter • $dept • $date',
+                  onPressed: () => _showFilterDialog(context),
+                  backgroundColor: AppColors.blue,
+                ),
+              );
+            }),
+            const Spacer(),
+            AppButton(
+              text: 'Print',
+              onPressed: () => controller.printReport(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Desktop / Tablet Inline
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Department', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Obx(() {
+                    final dummy = DropDownResponse(value: '', text: 'Select Department');
+                    final matchingItem = controller.deptDropdownList.firstWhere(
+                      (item) => item.value == controller.reportDeptFilter.value,
+                      orElse: () => controller.deptDropdownList.isNotEmpty ? controller.deptDropdownList.first : dummy,
+                    );
+                    return CustomDropdownSingle(
+                      width: double.infinity,
+                      hintText: 'Select Department',
+                      selectedItem: matchingItem.value == '' ? null : matchingItem,
+                      items: controller.deptDropdownList,
+                      onChanged: (v) {
+                        if (v?.value != null) {
+                          controller.reportDeptFilter.value = v!.value!;
+                        }
+                      },
+                    );
+                  }),
+                ],
               ),
-            );
-          }),
-          const Spacer(),
-          // Refresh button removed as per user request
-          8.widthGap,
-          // Print button
-          AppButton(
-            text: 'Print',
-            onPressed: () => controller.printReport(),
-            width: 80,
-          ),
-        ],
-      ),
-    );
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Obx(() => DatePickerField(
+                    label: 'Date',
+                    date: controller.reportDate.value,
+                    onChanged: (d) {
+                      controller.reportDate.value = d;
+                    },
+                  )),
+            ),
+            const SizedBox(width: 16),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Row(
+                children: [
+                  AppButton(
+                    text: 'Search',
+                    onPressed: () => controller.getReportData(),
+                    backgroundColor: AppColors.blue,
+                  ),
+                  const SizedBox(width: 8),
+                  AppButton(
+                    text: 'Print',
+                    onPressed: () => controller.printReport(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildReportTable(BuildContext context) {
@@ -133,10 +198,12 @@ class LG30ReportTabContent extends StatelessWidget {
                 entries: controller.reportEntries,
                 isDark: isDark,
               );
+              
+              final gridWidthMode = compact ? ColumnWidthMode.auto : ColumnWidthMode.fill;
 
               return SfDataGridPaginationWithAllData<LG30PilgerController>(
                 controller: controller,
-                dynamicColumns: _buildGridColumns(),
+                dynamicColumns: _buildGridColumns(gridWidthMode),
                 totalItems: controller.reportEntries.length,
                 hidePaging: true,
                 isScrollbarAlwaysShown: false,
@@ -145,7 +212,7 @@ class LG30ReportTabContent extends StatelessWidget {
                 onPageNavigationEnd: (pageIndex) {},
                 onRowsPerPageChanged: (value) {},
                 source: dataSource,
-                columnWidthMode: ColumnWidthMode.auto,
+                columnWidthMode: gridWidthMode,
               );
             }),
           ),
@@ -154,12 +221,12 @@ class LG30ReportTabContent extends StatelessWidget {
     );
   }
 
-  List<GridColumn> _buildGridColumns() {
+  List<GridColumn> _buildGridColumns(ColumnWidthMode mode) {
     GridColumn textColumn(String name, String label, {Alignment align = Alignment.centerLeft}) {
       return GridColumn(
         columnName: name,
-        columnWidthMode: ColumnWidthMode.fitByColumnName,
-        minimumWidth: 120,
+        columnWidthMode: mode,
+        minimumWidth: 100,
         label: appGridLabel(
           label,
           align: align,
@@ -188,7 +255,7 @@ class LG30ReportTabContent extends StatelessWidget {
           final isDark = Theme.of(ctx).brightness == Brightness.dark;
 
           final dummy = DropDownResponse(value: '', text: 'Select Department');
-          DropDownResponse matchingDDLValue = controller.deptDropdownList.firstWhere(
+          final matchingDDLValue = controller.deptDropdownList.firstWhere(
             (t) => t.value == tempDept,
             orElse: () => controller.deptDropdownList.isNotEmpty ? controller.deptDropdownList.first : dummy,
           );

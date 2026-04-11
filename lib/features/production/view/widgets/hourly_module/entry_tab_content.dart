@@ -407,7 +407,6 @@ class _EntryFormCard extends StatelessWidget {
           text: 'Clear',
           onPressed: controller.clearForm,
           isCancelButton: true,
-          width: 90,
         ),
         10.widthGap,
         // Save button
@@ -419,7 +418,6 @@ class _EntryFormCard extends StatelessWidget {
                 if (!controller.formKey.currentState!.validate())
                   return;
                 controller.postHourlyProductionEntry();
-                // controller.submitEntry();
               }
             },
             isLoading: controller.isLoading.value,

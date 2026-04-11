@@ -19,12 +19,14 @@ class DaywiseReportTable extends StatelessWidget {
   final List<DaywiseEntry> entries;
   final bool isFullType;
   final DaywiseProductionController controller;
+  final bool compact;
 
   const DaywiseReportTable({
     super.key,
     required this.entries,
     required this.isFullType,
     required this.controller,
+    required this.compact,
   });
 
   @override
@@ -35,6 +37,8 @@ class DaywiseReportTable extends StatelessWidget {
       isFullType: isFullType,
       isDark: isDark,
     );
+
+    final gridWidthMode = compact ? ColumnWidthMode.auto : ColumnWidthMode.fill;
 
     return Card(
       elevation: 2,
@@ -76,7 +80,7 @@ class DaywiseReportTable extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.6,
             child: SfDataGridPaginationWithAllData<DaywiseProductionController>(
               controller: controller,
-              dynamicColumns: _buildGridColumns(isFullType),
+              dynamicColumns: _buildGridColumns(isFullType, gridWidthMode),
               totalItems: entries.length,
               hidePaging: true,
               isScrollbarAlwaysShown: false,
@@ -85,7 +89,7 @@ class DaywiseReportTable extends StatelessWidget {
               onPageNavigationEnd: (pageIndex) {},
               onRowsPerPageChanged: (value) {},
               source: dataSource,
-              columnWidthMode: ColumnWidthMode.auto,
+              columnWidthMode: gridWidthMode,
             ),
           ),
         ],
@@ -93,12 +97,12 @@ class DaywiseReportTable extends StatelessWidget {
     );
   }
 
-  List<GridColumn> _buildGridColumns(bool isFullType) {
+  List<GridColumn> _buildGridColumns(bool isFullType, ColumnWidthMode mode) {
     GridColumn textColumn(String name, String label, {bool isNumeric = false}) {
       return GridColumn(
         columnName: name,
-        minimumWidth: 150,
-        columnWidthMode: ColumnWidthMode.fitByColumnName,
+        minimumWidth: 100,
+        columnWidthMode: mode,
         label: appGridLabel(
           label,
           align: Alignment.center,

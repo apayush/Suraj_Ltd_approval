@@ -10,6 +10,8 @@ import 'package:suraj_approval/core/widgets/sfdatagrid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:suraj_approval/features/production/controller/ffd_controller.dart';
 import 'package:suraj_approval/features/production/model/ffd_report_data_source.dart';
+import 'package:suraj_approval/core/widgets/app_dialog.dart';
+import '../hourly_module/hourly_report_widgets.dart';
 
 class FFDReportTabContent extends StatelessWidget {
   final FFDController controller;
@@ -53,37 +55,60 @@ class FFDReportTabContent extends StatelessWidget {
 
   // ── Filter bar ────────────────────────────────────────────────────────────
   Widget _buildFilterBar(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-      ),
-      child: Row(
-        children: [
-          // Filter button shows current date range
-          Flexible(
-            child: Obx(() {
+    if (compact) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          children: [
+            Obx(() {
               final fmt = DateFormat('dd/MM/yy');
               final start = fmt.format(controller.reportStartDate.value);
               final end = fmt.format(controller.reportEndDate.value);
               return AppButton(
-                text: '$start  →  $end',
+                text: 'Filter • $start  →  $end',
                 onPressed: () => _showFilterDialog(context),
                 backgroundColor: AppColors.blue,
               );
             }),
-          ),
-          8.widthGap,
-          // Refresh
-          AppButton(
-            text: 'Refresh',
-            onPressed: () => controller.getReportData(),
-            width: 90,
-          ),
-        ],
-      ),
-    );
+            const Spacer(),
+          ],
+        ),
+      );
+    } else {
+      // Desktop / Tablet Inline
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Obx(() => DatePickerField(
+                label: 'Start Date',
+                date: controller.reportStartDate.value,
+                onChanged: controller.onReportStartDateChanged,
+              )),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Obx(() => DatePickerField(
+                label: 'End Date',
+                date: controller.reportEndDate.value,
+                onChanged: controller.onReportEndDateChanged,
+              )),
+            ),
+            const SizedBox(width: 16),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: AppButton(
+                text: 'Search',
+                onPressed: controller.getReportData,
+                backgroundColor: AppColors.blue,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   // ── Report Card ───────────────────────────────────────────────────────────
@@ -140,9 +165,11 @@ class FFDReportTabContent extends StatelessWidget {
                 isDark: isDark,
               );
 
+              final gridWidthMode = compact ? ColumnWidthMode.auto : ColumnWidthMode.fill;
+
               return SfDataGridPaginationWithAllData<FFDController>(
                 controller: controller,
-                dynamicColumns: _buildGridColumns(),
+                dynamicColumns: _buildGridColumns(gridWidthMode),
                 totalItems: controller.reportEntries.length,
                 hidePaging: true,
                 isScrollbarAlwaysShown: false,
@@ -151,7 +178,7 @@ class FFDReportTabContent extends StatelessWidget {
                 onPageNavigationEnd: (pageIndex) {},
                 onRowsPerPageChanged: (value) {},
                 source: dataSource,
-                columnWidthMode: ColumnWidthMode.auto,
+                columnWidthMode: gridWidthMode,
               );
             }),
           ),
@@ -161,135 +188,126 @@ class FFDReportTabContent extends StatelessWidget {
   }
 
   // ── Grid columns ──────────────────────────────────────────────────────────
-  List<GridColumn> _buildGridColumns() {
+  List<GridColumn> _buildGridColumns(ColumnWidthMode mode) {
     GridColumn col(String name, String label,
         {Alignment align = Alignment.center, double minWidth = 90}) {
       return GridColumn(
         columnName: name,
         minimumWidth: minWidth,
-        columnWidthMode: ColumnWidthMode.fitByColumnName,
+        columnWidthMode: mode,
         label: appGridLabel(label, align: align),
       );
     }
 
     return [
       col('date', 'DATE', align: Alignment.centerLeft, minWidth: 110),
-      col('elbow', 'ELBOW\nNOS'),
-      col('elbowTotal', 'ELBOW\nTOTAL'),
-      col('tee', 'TEE\nNOS'),
-      col('teeTotal', 'TEE\nTOTAL'),
-      col('reducer', 'REDUCER\nNOS'),
-      col('reducerTotal', 'REDUCER\nTOTAL'),
-      col('cap', 'CAP\nNOS'),
-      col('capTotal', 'CAP\nTOTAL'),
+      col('elbow', 'ELBOW NOS'),
+      col('elbowTotal', 'ELBOW TOTAL'),
+      col('tee', 'TEE NOS'),
+      col('teeTotal', 'TEE TOTAL'),
+      col('reducer', 'REDUCER NOS'),
+      col('reducerTotal', 'REDUCER TOTAL'),
+      col('cap', 'CAP NOS'),
+      col('capTotal', 'CAP TOTAL'),
     ];
   }
 
   // ── Filter Dialog ─────────────────────────────────────────────────────────
   void _showFilterDialog(BuildContext context) {
-    DateTime tempStart = controller.reportStartDate.value;
-    DateTime tempEnd = controller.reportEndDate.value;
+    DateTime? tempStart = controller.reportStartDate.value;
+    DateTime? tempEnd = controller.reportEndDate.value;
 
     Get.dialog(
       StatefulBuilder(
         builder: (ctx, setState) {
           final isDark = Theme.of(ctx).brightness == Brightness.dark;
 
-          Future<void> pickDate({required bool isStart}) async {
-            final picked = await showDatePicker(
-              context: ctx,
-              initialDate: isStart ? tempStart : tempEnd,
-              firstDate: DateTime(2020),
-              lastDate: DateTime(2030),
-            );
-            if (picked != null) {
-              setState(() {
-                if (isStart) {
-                  tempStart = picked;
-                } else {
-                  tempEnd = picked;
-                }
-              });
-            }
-          }
-
-          Widget dateTile(String label, DateTime date, {required bool isStart}) {
-            return InkWell(
-              onTap: () => pickDate(isStart: isStart),
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade400),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.calendar_today_outlined,
-                        size: 16, color: AppColors.blue),
-                    const SizedBox(width: 8),
-                    Text(
-                      DateFormat('dd MMM yyyy').format(date),
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-            title: const Text('Filter Report'),
+          return GenericDialogBox(
+            headerText: 'Filters',
+            primaryButtonText: 'Apply',
+            secondaryButtonText: 'Cancel',
+            onPrimaryButtonPressed: () {
+              if (tempStart != null) controller.onReportStartDateChanged(tempStart!);
+              if (tempEnd != null) controller.onReportEndDateChanged(tempEnd!);
+              controller.getReportData();
+              Get.back();
+            },
+            onSecondaryButtonPressed: () {
+              Get.back();
+            },
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Start Date',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: isDark
-                            ? Colors.white70
-                            : Colors.grey.shade700)),
-                const SizedBox(height: 6),
-                dateTile('Start Date', tempStart, isStart: true),
+                _buildDialogDate(
+                  ctx,
+                  label: 'Start Date',
+                  date: tempStart,
+                  isDark: isDark,
+                  onChanged: (d) => setState(() => tempStart = d),
+                ),
                 const SizedBox(height: 16),
-                Text('End Date',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: isDark
-                            ? Colors.white70
-                            : Colors.grey.shade700)),
-                const SizedBox(height: 6),
-                dateTile('End Date', tempEnd, isStart: false),
+                _buildDialogDate(
+                  ctx,
+                  label: 'End Date',
+                  date: tempEnd,
+                  isDark: isDark,
+                  onChanged: (d) => setState(() => tempEnd = d),
+                ),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.blue,
-                    foregroundColor: Colors.white),
-                onPressed: () {
-                  controller.onReportStartDateChanged(tempStart);
-                  controller.onReportEndDateChanged(tempEnd);
-                  controller.getReportData();
-                  Get.back();
-                },
-                child: const Text('Apply'),
-              ),
-            ],
           );
         },
       ),
+    );
+  }
+
+  Widget _buildDialogDate(BuildContext ctx, {required String label, required DateTime? date, required bool isDark, required Function(DateTime) onChanged}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: isDark ? Colors.white70 : Colors.grey.shade700,
+          ),
+        ),
+        const SizedBox(height: 6),
+        InkWell(
+          onTap: () async {
+            final picked = await showDatePicker(
+              context: ctx,
+              initialDate: date ?? DateTime.now(),
+              firstDate: DateTime(2020),
+              lastDate: DateTime(2030),
+            );
+            if (picked != null) {
+              onChanged(picked);
+            }
+          },
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade400),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.blue),
+                const SizedBox(width: 8),
+                Text(
+                  date != null ? DateFormat('dd MMM yyyy').format(date) : 'Select Date',
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

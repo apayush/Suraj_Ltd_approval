@@ -299,7 +299,6 @@ class _EntryFormCard extends StatelessWidget {
           text: 'Clear',
           onPressed: controller.clearForm,
           isCancelButton: true,
-          width: 90,
         ),
         10.widthGap,
         Obx(() => AppButton(

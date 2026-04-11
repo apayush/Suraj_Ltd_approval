@@ -209,11 +209,16 @@ class ReportTable extends StatelessWidget {
                     isDark: isDark,
                   );
 
+                  final gridWidthMode = controller.tabController.index == 1 &&
+                          MediaQuery.of(context).size.width < 600
+                      ? ColumnWidthMode.auto
+                      : ColumnWidthMode.fill;
+
                   return SfDataGridPaginationWithAllData<
                     HourlyReportController
                   >(
                     controller: controller,
-                    dynamicColumns: _buildGridColumns(type, isDark),
+                    dynamicColumns: _buildGridColumns(type, isDark, gridWidthMode),
                     totalItems: kShiftHours.length,
                     hidePaging: true,
                     isScrollbarAlwaysShown: false,
@@ -222,7 +227,7 @@ class ReportTable extends StatelessWidget {
                     onPageNavigationEnd: (pageIndex) {},
                     onRowsPerPageChanged: (value) {},
                     source: dataSource,
-                    columnWidthMode: ColumnWidthMode.auto,
+                    columnWidthMode: gridWidthMode,
                     tableSummaryRows: [
                       GridTableSummaryRow(
                         showSummaryInRow: false,
@@ -279,14 +284,14 @@ class ReportTable extends StatelessWidget {
     });
   }
 
-  List<GridColumn> _buildGridColumns(String type, bool isDark) {
+  List<GridColumn> _buildGridColumns(String type, bool isDark, ColumnWidthMode mode) {
     GridColumn textColumn(String name, String label,
         {bool isNumeric = false, double? width}) {
       return GridColumn(
         columnName: name,
         width: width ?? double.nan,
-        minimumWidth: 150,
-        columnWidthMode: ColumnWidthMode.fitByColumnName,
+        minimumWidth: 100,
+        columnWidthMode: mode,
         label: appGridLabel(
           label,
           align: Alignment.center,
@@ -377,7 +382,71 @@ class ReportFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _MobileFilterButton(controller: controller);
+    if (compact) {
+      return _MobileFilterButton(controller: controller);
+    } else {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Department', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Obx(() {
+                  final dummy = DropDownResponse(value: '', text: 'Select Department');
+                  final matchingItem = controller.reportTypeDropdownList.firstWhere(
+                    (item) => item.value == controller.reportTypeFilter.value,
+                    orElse: () => controller.reportTypeDropdownList.isNotEmpty ? controller.reportTypeDropdownList.first : dummy,
+                  );
+                  return CustomDropdownSingle(
+                    width: double.infinity,
+                    hintText: 'Select Department',
+                    selectedItem: matchingItem.value == '' ? null : matchingItem,
+                    items: controller.reportTypeDropdownList,
+                    onChanged: (v) {
+                      if (v?.value != null) {
+                        controller.reportTypeFilter.value = v!.value!;
+                      }
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Obx(() => DatePickerField(
+                  label: 'Date',
+                  date: controller.reportDate.value,
+                  onChanged: (d) {
+                    controller.reportDate.value = d;
+                  },
+                )),
+          ),
+          const SizedBox(width: 16),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: Row(
+              children: [
+                AppButton(
+                  text: 'Search',
+                  onPressed: () => controller.getHourlyReportData(),
+                  backgroundColor: AppColors.blue,
+                ),
+                const SizedBox(width: 8),
+                AppButton(
+                  text: 'Print',
+                  onPressed: () => controller.printReport(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
 }
 
@@ -388,28 +457,25 @@ class _MobileFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Row(
-        children: [
-          // ── Filter button (opens dialog) ──
-          Obx(() {
-            final dept = controller.reportTypeFilter.value;
-            final date = DateFormat('dd/MM/yy').format(controller.reportDate.value);
-            return AppButton(
-              text: '$dept • $date',
-              onPressed: () => _showFilterDialog(context),
-              backgroundColor: AppColors.blue,
-            );
-          }),
-          const Spacer(),
-          // ── Print button ──
-          AppButton(
-            text: 'Print',
-            onPressed: () => controller.printReport(),
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        // ── Filter button (opens dialog) ──
+        Obx(() {
+          final dept = controller.reportTypeFilter.value;
+          final date = DateFormat('dd/MM/yy').format(controller.reportDate.value);
+          return AppButton(
+            text: '$dept • $date',
+            onPressed: () => _showFilterDialog(context),
+            backgroundColor: AppColors.blue,
+          );
+        }),
+        const Spacer(),
+        // ── Print button ──
+        AppButton(
+          text: 'Print',
+          onPressed: () => controller.printReport(),
+        ),
+      ],
     );
   }
 

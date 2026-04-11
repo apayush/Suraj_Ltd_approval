@@ -18,6 +18,7 @@ class FFDController extends GetxController
 
   // ─── Entry Form ────────────────────────────────────────────────────────────
   Rx<DateTime> entryDate = DateTime.now().obs;
+  final formKey = GlobalKey<FormState>();
 
   final elbowController = TextEditingController(text: '0');
   final teeController = TextEditingController(text: '0');
