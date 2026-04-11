@@ -43,7 +43,8 @@ enum SubMenuType {
   // yieldSheet('Yield Sheet'),
   hourlyProductionEntry('Hourly Production Entry'),
   MPDSPDDaywiseEntry('MPD/SPD Daywise Entry'),
-  lg30PilgerEntry('LG30/70/Pilger SPD Production Entry');
+  lg30PilgerEntry('LG30/70/Pilger SPD Production Entry'),
+  dailyProduction('Daily Production (Cutting/Forming/Bevelling)');
 
   final String key;
 

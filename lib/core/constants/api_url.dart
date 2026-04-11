@@ -42,4 +42,12 @@ class ApiUrl {
   static const String submitLG35PilgerEntry = '/SubmitLG35PilgerProductionEntry';
   static const String getReportLG35Pilger = '/GetReportLG35Pilger';
 
+  // !
+  static const String getCapacityReport = '/GetCapacityReport';
+  static const String submitCapacityEntry = '/SubmitCapacityEntry';
+
+  // !
+  static const String getFFDReport = '/GetFFDReport';
+  static const String submitFFDEntry = '/SubmitFFDEntry';
+
 }
