@@ -8,6 +8,7 @@ import '../../daywise_module/daywise_tab_view.dart';
 import '../../hourly_module/hourly_tab_view.dart';
 import '../../lg30_module/lg30_pilger_tab_view.dart';
 import '../../daily_module/daily_production_tab_view.dart';
+import '../../ffd_module/ffd_tab_view.dart';
 
 class ProductionWebView extends StatelessWidget {
   const ProductionWebView({super.key, required this.subMenuType});
@@ -24,6 +25,8 @@ class ProductionWebView extends StatelessWidget {
         return const LG30PilgerTabView(columns: 3);
       case SubMenuType.dailyProduction:
         return const DailyProductionTabView(columns: 3);
+      case SubMenuType.ffdFormingProduction:
+        return const FFDTabView(columns: 3);
       default:
         return Center(
           child: AppText(

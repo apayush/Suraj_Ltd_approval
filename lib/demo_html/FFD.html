@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFD Forming Production System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 1200px; margin-top: 30px; }
+        .main-header { background-color: #0d6efd; color: white; padding: 20px; border-radius: 8px 8px 0 0; margin-bottom: 20px; text-align: center; }
+        .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .table-custom thead th { background-color: #ddebf7; text-align: center; vertical-align: middle; border: 1px solid #999; }
+        .table-custom td { text-align: center; border: 1px solid #ddd; vertical-align: middle; }
+        .total-col { background-color: #f8f9fa; font-weight: bold; color: #0d6efd; }
+        .nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd; }
+        .filter-box { background-color: #e2e6ea; padding: 15px; border-radius: 5px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="main-header">
+        <h2>FFD FORMING PRODUCTION LOG</h2>
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <li class="nav-item"><button class="nav-link active" id="entry-tab" data-bs-toggle="tab" data-bs-target="#entry" type="button">📝 Entry Module</button></li>
+        <li class="nav-item"><button class="nav-link" id="report-tab" data-bs-toggle="tab" data-bs-target="#report" type="button">📊 Report Module</button></li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        
+        <div class="tab-pane fade show active" id="entry" role="tabpanel">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Add New Daily Production</div>
+                        <div class="card-body">
+                            <form id="productionForm">
+                                <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label">Date:</label>
+                                    <div class="col-sm-9"><input type="date" class="form-control" id="entryDate" required></div>
+                                </div>
+                                <hr>
+                                <div class="row text-center mb-2">
+                                    <div class="col-3"><b>ELBOW</b></div>
+                                    <div class="col-3"><b>TEE</b></div>
+                                    <div class="col-3"><b>REDUCER</b></div>
+                                    <div class="col-3"><b>CAP</b></div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col-3"><input type="number" class="form-control" id="elbowQty" placeholder="0" min="0" value="0"></div>
+                                    <div class="col-3"><input type="number" class="form-control" id="teeQty" placeholder="0" min="0" value="0"></div>
+                                    <div class="col-3"><input type="number" class="form-control" id="reducerQty" placeholder="0" min="0" value="0"></div>
+                                    <div class="col-3"><input type="number" class="form-control" id="capQty" placeholder="0" min="0" value="0"></div>
+                                </div>
+                                <div class="d-grid gap-2"><button type="submit" class="btn btn-primary btn-lg">💾 Save Entry</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="report" role="tabpanel">
+            <div class="card">
+                <div class="card-header">Production Report</div>
+                <div class="card-body">
+                    
+                    <div class="filter-box">
+                        <div class="row align-items-end">
+                            <div class="col-md-4">
+                                <label class="form-label">Start Date:</label>
+                                <input type="date" class="form-control" id="filterStart">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">End Date:</label>
+                                <input type="date" class="form-control" id="filterEnd">
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary w-100" onclick="renderReport()">🔍 Search / Refresh</button>
+                                <button class="btn btn-outline-secondary w-100 mt-2" onclick="resetFilters()">Show All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">DATE</th>
+                                    <th colspan="2">ELBOW</th>
+                                    <th colspan="2">TEE</th>
+                                    <th colspan="2">REDUCER</th>
+                                    <th colspan="2">CAP</th>
+                                </tr>
+                                <tr>
+                                    <th>NOS</th><th>TOTAL</th>
+                                    <th>NOS</th><th>TOTAL</th>
+                                    <th>NOS</th><th>TOTAL</th>
+                                    <th>NOS</th><th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 1. Initial Data - NOW BLANK
+    let productionData = []; 
+
+    document.getElementById('entryDate').valueAsDate = new Date();
+
+    // Reset Filters
+    function resetFilters() {
+        document.getElementById('filterStart').value = '';
+        document.getElementById('filterEnd').value = '';
+        renderReport();
+    }
+
+    // 2. LOGIC: Calculate ALL totals first, THEN filter visibility
+    function renderReport() {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = ''; 
+
+        // Get filter values
+        const startDateVal = document.getElementById('filterStart').value;
+        const endDateVal = document.getElementById('filterEnd').value;
+        
+        const startDate = startDateVal ? new Date(startDateVal) : null;
+        const endDate = endDateVal ? new Date(endDateVal) : null;
+
+        // Sort data chronologically (Must do this for cumulative math to work)
+        productionData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Running Totals
+        let runningElbow = 0;
+        let runningTee = 0;
+        let runningReducer = 0;
+        let runningCap = 0;
+
+        productionData.forEach(entry => {
+            // STEP A: Always Calculate Math (Every row counts towards the total)
+            runningElbow += parseInt(entry.elbow);
+            runningTee += parseInt(entry.tee);
+            runningReducer += parseInt(entry.reducer);
+            runningCap += parseInt(entry.cap);
+
+            // STEP B: Check if we should DISPLAY this row
+            let showRow = true;
+            const entryDateObj = new Date(entry.date);
+
+            if (startDate && entryDateObj < startDate) showRow = false;
+            if (endDate && entryDateObj > endDate) showRow = false;
+
+            // STEP C: Render if visible
+            if (showRow) {
+                const row = `
+                    <tr>
+                        <td>${entry.date}</td>
+                        <td>${entry.elbow}</td>
+                        <td class="total-col">${runningElbow}</td>
+                        <td>${entry.tee}</td>
+                        <td class="total-col">${runningTee}</td>
+                        <td>${entry.reducer}</td>
+                        <td class="total-col">${runningReducer}</td>
+                        <td>${entry.cap}</td>
+                        <td class="total-col">${runningCap}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            }
+        });
+
+        // Show "No Data" message if array is empty
+        if (productionData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" class="text-muted p-4">No data entries yet. Go to "Entry Module" to add data.</td></tr>';
+        }
+    }
+
+    // 3. Handle Data Entry
+    document.getElementById('productionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newEntry = {
+            date: document.getElementById('entryDate').value,
+            elbow: parseInt(document.getElementById('elbowQty').value) || 0,
+            tee: parseInt(document.getElementById('teeQty').value) || 0,
+            reducer: parseInt(document.getElementById('reducerQty').value) || 0,
+            cap: parseInt(document.getElementById('capQty').value) || 0
+        };
+        
+        // Check if date already exists
+        const existingIndex = productionData.findIndex(item => item.date === newEntry.date);
+        if(existingIndex > -1) {
+            if(confirm("Date already exists! Overwrite?")) {
+                productionData[existingIndex] = newEntry;
+            } else {
+                return;
+            }
+        } else {
+            productionData.push(newEntry);
+        }
+
+        renderReport();
+        
+        // Switch to Report Tab
+        const reportTabBtn = document.getElementById('report-tab');
+        const reportTabInstance = new bootstrap.Tab(reportTabBtn);
+        reportTabInstance.show();
+
+        this.reset();
+        document.getElementById('entryDate').valueAsDate = new Date();
+    });
+
+    // Initial Load
+    renderReport();
+</script>
+
+</body>
+</html>

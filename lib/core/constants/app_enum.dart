@@ -44,7 +44,8 @@ enum SubMenuType {
   hourlyProductionEntry('Hourly Production Entry'),
   MPDSPDDaywiseEntry('MPD/SPD Daywise Entry'),
   lg30PilgerEntry('LG30/70/Pilger SPD Production Entry'),
-  dailyProduction('Daily Production (Cutting/Forming/Bevelling)');
+  dailyProduction('Daily Production (Cutting/Forming/Bevelling)'),
+  ffdFormingProduction('FFD FORMING PRODUCTION');
 
   final String key;
 

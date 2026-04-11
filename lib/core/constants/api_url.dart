@@ -32,14 +32,17 @@ class ApiUrl {
 
   // ! Production Module
   static const String getProductionRights = '/GetProductionRights';
-  static const String submitHourlyProductionEntry = '/SubmitHourlyProductionEntry';
+  static const String submitHourlyProductionEntry =
+      '/SubmitHourlyProductionEntry';
   static const String getHourlyReportData = '/GetHourlyReportData';
-  static const String submitDaywiseProductionEntry = '/SubmitDaywiseProductionEntry';
+  static const String submitDaywiseProductionEntry =
+      '/SubmitDaywiseProductionEntry';
   static const String getDaywiseReport = '/GetDaywiseReport';
 
   // ! LG30 Pilger Module
   static const String getMachinesByDepartment = '/GetMachinesByDepartment';
-  static const String submitLG35PilgerEntry = '/SubmitLG35PilgerProductionEntry';
+  static const String submitLG35PilgerEntry =
+      '/SubmitLG35PilgerProductionEntry';
   static const String getReportLG35Pilger = '/GetReportLG35Pilger';
 
   // !
