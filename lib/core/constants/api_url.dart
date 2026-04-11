@@ -45,11 +45,11 @@ class ApiUrl {
       '/SubmitLG35PilgerProductionEntry';
   static const String getReportLG35Pilger = '/GetReportLG35Pilger';
 
-  // !
+  // ! Daily Production
   static const String getCapacityReport = '/GetCapacityReport';
   static const String submitCapacityEntry = '/SubmitCapacityEntry';
 
-  // !
+  // ! FFD Forming Production
   static const String getFFDReport = '/GetFFDReport';
   static const String submitFFDEntry = '/SubmitFFDEntry';
 
