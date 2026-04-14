@@ -60,6 +60,7 @@ class AppTextField extends StatelessWidget {
   final bool isEmail;
   final EdgeInsets? padding;
   final double? height;
+  final bool readOnly;
 
   AppTextField({
     super.key,
@@ -115,6 +116,7 @@ class AppTextField extends StatelessWidget {
     this.isSearchTextField = false,
     this.isValidator = false,
     this.isEmail = false,
+    this.readOnly = false,
   });
 
   @override
@@ -168,6 +170,7 @@ class AppTextField extends StatelessWidget {
                       maxLines: maxLines,
                       minLines: minLines,
                       enabled: enabled ?? true,
+                      readOnly: readOnly,
                       validator: validator,
                       onTapOutside: (focusNode) {
                         FocusManager.instance.primaryFocus?.unfocus();

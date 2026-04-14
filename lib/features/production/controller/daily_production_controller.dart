@@ -7,6 +7,7 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../model/daily_production_model.dart';
 import '../model/daily_production_data_source.dart';
+import '../utills/daily_report_pdf_helper.dart';
 
 class DailyProductionController extends GetxController with GetSingleTickerProviderStateMixin {
   static DailyProductionController get instance => Get.find();
@@ -183,6 +184,31 @@ class DailyProductionController extends GetxController with GetSingleTickerProvi
     } catch (e) {
       debugPrint('Error submitting entries: $e');
       AppUtils.showSnackBar('Error saving data', background: Colors.red);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! =================== Print Daily Report =================================
+  Future<void> printReport() async {
+    if (filteredEntries.isEmpty) {
+      AppUtils.showSnackBar('No data available to print', background: Colors.orange);
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final base64Pdf = await DailyReportPdfHelper.generateDailyReportPdf(
+        startDate: filterStartDate.value,
+        endDate: filterEndDate.value,
+        entries: filteredEntries,
+      );
+
+      final fileName = 'Daily_Production_Report_${DateFormat('dd_MMM_yyyy').format(DateTime.now())}.pdf';
+      await AppUtils.openPdf(base64Pdf, fileName: fileName);
+    } catch (e) {
+      debugPrint('Error generating PDF: $e');
+      AppUtils.showSnackBar('Failed to generate PDF', background: Colors.red);
     } finally {
       isLoading.value = false;
     }

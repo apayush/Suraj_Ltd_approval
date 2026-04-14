@@ -34,7 +34,8 @@ class DatePickerField extends StatelessWidget {
         const SizedBox(height: 6),
         AppTextField(
           width: double.infinity,
-          hint: DateFormat('dd MMM yyyy').format(date),
+          controller: TextEditingController(text: DateFormat('dd MMM yyyy').format(date)),
+          readOnly: true,
           prefixIcon: const Icon(
             Icons.calendar_today_outlined,
             size: 16,

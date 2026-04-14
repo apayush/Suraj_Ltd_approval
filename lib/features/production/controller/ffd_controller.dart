@@ -7,6 +7,7 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_utills.dart';
 import '../model/ffd_model.dart';
+import '../utills/ffd_report_pdf_helper.dart';
 
 class FFDController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -160,6 +161,31 @@ class FFDController extends GetxController
       }
     } catch (e) {
       debugPrint('FFD getReportData error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ! ========================= Print FFD Report ==============================
+  Future<void> printReport() async {
+    if (reportEntries.isEmpty) {
+      AppUtils.showSnackBar('No data available to print', background: Colors.orange);
+      return;
+    }
+
+    isLoading.value = true;
+    try {
+      final base64Pdf = await FfdReportPdfHelper.generateFfdReportPdf(
+        startDate: reportStartDate.value,
+        endDate: reportEndDate.value,
+        entries: reportEntries,
+      );
+
+      final fileName = 'FFD_Forming_Report_${DateFormat('dd_MMM_yyyy').format(DateTime.now())}.pdf';
+      await AppUtils.openPdf(base64Pdf, fileName: fileName);
+    } catch (e) {
+      debugPrint('Error generating PDF: $e');
+      AppUtils.showSnackBar('Failed to generate PDF', background: Colors.red);
     } finally {
       isLoading.value = false;
     }

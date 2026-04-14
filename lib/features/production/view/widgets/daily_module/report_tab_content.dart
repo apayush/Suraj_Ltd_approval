@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/widgets/app_dialog.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
@@ -88,6 +89,11 @@ class _DailyReportFilterBar extends StatelessWidget {
                 ),
               );
             }),
+            10.widthGap,
+            AppButton(
+              text: 'Print',
+              onPressed: () => controller.printReport(),
+            ),
           ],
         ),
       );
@@ -114,10 +120,19 @@ class _DailyReportFilterBar extends StatelessWidget {
           const SizedBox(width: 16),
           Padding(
             padding: const EdgeInsets.only(bottom: 4.0),
-            child: AppButton(
-              text: 'Search',
-              onPressed: controller.getReportData,
-              backgroundColor: AppColors.blue,
+            child: Row(
+              children: [
+                AppButton(
+                  text: 'Search',
+                  onPressed: controller.getReportData,
+                  backgroundColor: AppColors.blue,
+                ),
+                const SizedBox(width: 8),
+                AppButton(
+                  text: 'Print',
+                  onPressed: () => controller.printReport(),
+                ),
+              ],
             ),
           ),
         ],

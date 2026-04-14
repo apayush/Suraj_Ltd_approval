@@ -71,6 +71,10 @@ class FFDReportTabContent extends StatelessWidget {
               );
             }),
             const Spacer(),
+            AppButton(
+              text: 'Print',
+              onPressed: () => controller.printReport(),
+            ),
           ],
         ),
       );
@@ -99,10 +103,19 @@ class FFDReportTabContent extends StatelessWidget {
             const SizedBox(width: 16),
             Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
-              child: AppButton(
-                text: 'Search',
-                onPressed: controller.getReportData,
-                backgroundColor: AppColors.blue,
+              child: Row(
+                children: [
+                  AppButton(
+                    text: 'Search',
+                    onPressed: controller.getReportData,
+                    backgroundColor: AppColors.blue,
+                  ),
+                  const SizedBox(width: 8),
+                  AppButton(
+                    text: 'Print',
+                    onPressed: () => controller.printReport(),
+                  ),
+                ],
               ),
             ),
           ],
