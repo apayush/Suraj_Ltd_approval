@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'message_type.dart';
 
 class ToastWidget extends StatefulWidget {
   const ToastWidget({
     required this.message,
     required this.removeNotification,
-    this.isPositive = true,
+    this.messageType = MessageType.success,
     this.iconData,
     super.key,
     required this.duration,
@@ -15,8 +15,10 @@ class ToastWidget extends StatefulWidget {
   });
 
   final String message;
-  final bool isPositive;
+  final MessageType messageType;
   final Duration duration;
+
+  /// Override the automatic icon from [messageType] if needed.
   final IconData? iconData;
   final bool isPersistent;
   final bool showLoader;
@@ -26,27 +28,22 @@ class ToastWidget extends StatefulWidget {
   State<ToastWidget> createState() => _ToastWidgetState();
 }
 
-class _ToastWidgetState extends State<ToastWidget> with SingleTickerProviderStateMixin {
+class _ToastWidgetState extends State<ToastWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
-    startAnimation();
+    _startAnimation();
     super.initState();
     if (!widget.isPersistent) {
-      Future.delayed(
-        widget.duration,
-        () {
-          if (mounted) {
-            _controller.reverse().then((value) {
-              widget.removeNotification();
-            });
-          }
-        },
-      );
+      Future.delayed(widget.duration, () {
+        if (mounted) {
+          _controller.reverse().then((_) => widget.removeNotification());
+        }
+      });
     }
   }
 
@@ -56,35 +53,28 @@ class _ToastWidgetState extends State<ToastWidget> with SingleTickerProviderStat
     super.dispose();
   }
 
-  void startAnimation() {
+  void _startAnimation() {
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       reverseDuration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
-    _scaleAnimation =
-        Tween<double>(
-          begin: 0.85,
-          end: 1,
-        ).animate(
-          CurvedAnimation(parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
-        );
-
-    _fadeAnimation =
-        Tween<double>(
-          begin: 0,
-          end: 1,
-        ).animate(
-          CurvedAnimation(parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
-        );
-
+    _scaleAnimation = Tween<double>(begin: 0.85, end: 1).animate(
+      CurvedAnimation(
+          parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
+    );
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+          parent: _controller, curve: Curves.fastLinearToSlowEaseIn),
+    );
     _controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.isPositive ? Colors.green.shade600 : Colors.red.shade600;
+    final bgColor = widget.messageType.backgroundColor;
+    final icon = widget.iconData ?? widget.messageType.icon;
+
     return Material(
       type: MaterialType.transparency,
       child: FadeTransition(
@@ -95,40 +85,41 @@ class _ToastWidgetState extends State<ToastWidget> with SingleTickerProviderStat
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: color,
+                  borderRadius: BorderRadius.circular(12),
+                  color: bgColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: bgColor.withValues(alpha: 0.35),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (widget.iconData != null) ...[
-                      Icon(
-                        widget.iconData,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                    ] else if (widget.showLoader) ...[
-                      SizedBox(
-                        height: 20,
-                        child: FittedBox(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 4,
-                            strokeCap: StrokeCap.round,
-                            color: Colors.white,
-                          ),
+                    // ── Icon ─────────────────────────────────────────────────
+                    if (widget.showLoader)
+                      const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          strokeCap: StrokeCap.round,
+                          color: Colors.white,
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                    ],
+                      )
+                    else
+                      Icon(icon, color: Colors.white, size: 22),
+                    const SizedBox(width: 12),
+                    // ── Message ───────────────────────────────────────────────
                     Flexible(
                       child: Text(
                         widget.message,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.start,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

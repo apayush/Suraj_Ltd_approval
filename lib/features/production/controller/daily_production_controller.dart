@@ -9,11 +9,11 @@ import '../model/daily_production_model.dart';
 import '../model/daily_production_data_source.dart';
 import '../utills/daily_report_pdf_helper.dart';
 
-class DailyProductionController extends GetxController with GetSingleTickerProviderStateMixin {
+class DailyProductionController extends GetxController {
   static DailyProductionController get instance => Get.find();
 
-  // --- Tab Controller ---
-  late TabController tabController;
+  // --- Inner Tab Index (0 = Data Entry, 1 = View Report) ---
+  RxInt selectedInnerTab = 0.obs;
 
   // --- Loading State ---
   RxBool isLoading = false.obs;
@@ -62,11 +62,9 @@ class DailyProductionController extends GetxController with GetSingleTickerProvi
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
-    
-    // Fetch report data only when viewing the report tab for the first time
-    tabController.addListener(() {
-      if (tabController.index == 1 && !_isReportLoaded) {
+    // Fetch report data when switching to the report tab for the first time
+    ever(selectedInnerTab, (index) {
+      if (index == 1 && !_isReportLoaded) {
         getReportData();
       }
     });
@@ -166,7 +164,7 @@ class DailyProductionController extends GetxController with GetSingleTickerProvi
           );
           clearForm();
           getReportData();
-          tabController.animateTo(1);
+          selectedInnerTab.value = 1;
         } else {
           AppUtils.showSnackBar(
             response.data['message'] ??

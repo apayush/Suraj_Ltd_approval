@@ -23,8 +23,7 @@ import '../../../core/widgets/common_widgets.dart';
 import '../../finance/model/bank_payment_model.dart';
 import '../view/widgets/tabs/widgets/purchase_view.dart';
 
-class PurchaseController extends GetxController
-    with GetTickerProviderStateMixin {
+class PurchaseController extends GetxController {
   RxBool isLoading = false.obs;
 
   RxBool isApproveLoading = false.obs;
@@ -52,8 +51,8 @@ class PurchaseController extends GetxController
   MenuType currentMenu = MenuType.purchase;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.purchaseInvoice.obs;
 
-  late TabController tabController;
-  List<Tab> myTabs = [];
+  RxInt selectedTabIndex = 0.obs;
+  List<String> myTabs = [];
   List<Widget> tabViews = [];
 
   final GlobalKey<FormState> approveFormKey = GlobalKey<FormState>();
@@ -633,18 +632,17 @@ class PurchaseController extends GetxController
     final userModel = LocalDB.getUserModel();
     super.onInit();
     final subMenus = userModel?.getSubMenusFor(MenuType.purchase) ?? [];
-    final tabs = <Tab>[];
+    final tabs = <String>[];
     final views = <Widget>[];
 
     subMenus.forEach((subMenu) {
-      tabs.add(Tab(text: subMenu.key));
+      tabs.add(subMenu.key);
       views.add(PurchaseView(subMenuType: subMenu));
     });
     currentSubMenu.value = subMenus.first;
 
     myTabs = tabs;
     tabViews = views;
-    tabController = TabController(length: myTabs.length, vsync: this);
 
     purchaseInvoiceDataSource = PurchaseInvoiceDataSource(
       purchaseInvoiceList,
@@ -691,35 +689,9 @@ class PurchaseController extends GetxController
         LocalDB.getUserModel()?.getSubMenusFor(MenuType.purchase) ?? [];
     final index = subMenuTypeList.indexOf(menuType);
 
-    if (menuType == SubMenuType.purchaseInvoice) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseInvoice;
-    } else if (menuType == SubMenuType.purchaseIndent) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseIndent;
-    } else if (menuType == SubMenuType.purchaseOrder) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseOrder;
-    }
-    // else if (menuType == SubMenuType.gateInward) {
-    //   tabController.animateTo(index);
-    //   currentSubMenu.value = SubMenuType.gateInward;
-    // }
-    else if (menuType == SubMenuType.goodsReceiptNote) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.goodsReceiptNote;
-      // } else if (menuType == SubMenuType.purchaseCreditNote) {
-      //   tabController.animateTo(index);
-      //   currentSubMenu.value = SubMenuType.purchaseCreditNote;
-    } else if (menuType == SubMenuType.purchaseDebitNote) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseDebitNote;
-    } else if (menuType == SubMenuType.purchaseOrder) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseOrder;
-    } else if (menuType == SubMenuType.purchaseQuotation) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.purchaseQuotation;
+    if (index >= 0) {
+      selectedTabIndex.value = index;
+      currentSubMenu.value = menuType;
     }
 
     await getAllData(mainType: currentSubMenu.value);
@@ -730,7 +702,6 @@ class PurchaseController extends GetxController
 
   @override
   void onClose() {
-    tabController.dispose();
     super.onClose();
   }
 }

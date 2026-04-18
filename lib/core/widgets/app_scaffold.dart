@@ -13,80 +13,100 @@ import '../router/app_router.dart';
 import 'app_footer.dart';
 import 'app_header.dart';
 import 'common_widgets.dart';
+import 'custom_tab_bar.dart';
 
 class AppScaffold extends StatelessWidget {
   final Widget body;
-  final PreferredSizeWidget? bottom;
   final Widget? title;
 
-  AppScaffold({super.key, required this.body, this.bottom, this.title});
+  // ── Custom Tab Bar params (optional) ──────────────────────────────────────
+  final List<String>? tabs;
+  final RxInt? selectedTabIndex;
+  final void Function(int)? onTabChanged;
+
+  AppScaffold({
+    super.key,
+    required this.body,
+    this.title,
+    this.tabs,
+    this.selectedTabIndex,
+    this.onTabChanged,
+  });
 
   final drawerController = Get.find<AppDrawerController>();
-
   final userModel = LocalDB.getUserModel();
 
   @override
   Widget build(BuildContext context) {
-    final screenType = getDeviceType(MediaQuery.of(context).size);
+    final screenType = getDeviceType(MediaQuery.of(context).size);;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      drawer:
-          screenType == DeviceScreenType.mobile
-              ? SidebarXDrawer(
-                controller: drawerController.sideBarXController,
-                items:
-                    userModel == null
-                        ? []
-                        : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
-                          return _buildListTile(
-                            context: context,
-                            icon: _getMenuIcon(mainMenu.key),
-                            title: mainMenu.key,
-                            route: _getRoute(mainMenu.key),
-                            index: i,
-                          );
-                        }).toList(),
-              )
-              : null,
+      // Drawer stays on Scaffold so Scaffold.of(context).openDrawer() works
+      drawer: screenType == DeviceScreenType.mobile
+          ? SidebarXDrawer(
+              controller: drawerController.sideBarXController,
+              items: userModel == null
+                  ? []
+                  : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
+                      return _buildListTile(
+                        context: context,
+                        icon: _getMenuIcon(mainMenu.key),
+                        title: mainMenu.key,
+                        route: _getRoute(mainMenu.key),
+                        index: i,
+                      );
+                    }).toList(),
+            )
+          : null,
       body: Row(
         children: [
+          // Persistent sidebar on tablet/web
           if (screenType != DeviceScreenType.mobile)
             SidebarXDrawer(
               controller: drawerController.sideBarXController,
-              items:
-                  userModel == null
-                      ? []
-                      : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
-                        return _buildListTile(
-                          context: context,
-                          icon: _getMenuIcon(mainMenu.key),
-                          title: mainMenu.key,
-                          route: _getRoute(mainMenu.key),
-                          index: i,
-                        );
-                      }).toList(),
+              items: userModel == null
+                  ? []
+                  : userModel!.allowedMenus.mapIndexed((i, mainMenu) {
+                      return _buildListTile(
+                        context: context,
+                        icon: _getMenuIcon(mainMenu.key),
+                        title: mainMenu.key,
+                        route: _getRoute(mainMenu.key),
+                        index: i,
+                      );
+                    }).toList(),
             ),
           Expanded(
-            child: Column(
-              children: [
-                SizedBox(
-                  height:
-                      bottom != null
-                          ? kToolbarHeight +
-                              ((DeviceType.isMobile(context)) ? 100 : 40)
-                          : null,
-                  child: CustomHeader(title: title, bottom: bottom),
-                ),
-                Expanded(child: body),
-              ],
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // ── Custom header (no AppBar) ──────────────────────────
+                  CustomHeader(title: title),
+
+                  // ── Thin divider below header ──────────────────────────
+                  const Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+
+                  // ── Custom tab bar (only if tabs are provided) ─────────
+                  if (tabs != null &&
+                      selectedTabIndex != null &&
+                      onTabChanged != null)
+                    CustomTabBar(
+                      tabs: tabs!,
+                      selectedIndex: selectedTabIndex!,
+                      onTap: onTabChanged!,
+                    ),
+
+                  // ── Body fills remaining height ────────────────────────
+                  Expanded(child: body),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar:
-          MediaQuery.of(context).size.width > 950
-              ? AppFooter()
-              : const SizedBox.shrink(),
+      bottomNavigationBar: MediaQuery.of(context).size.width > 950
+          ? AppFooter()
+          : const SizedBox.shrink(),
     );
   }
 
@@ -108,7 +128,6 @@ class AppScaffold extends StatelessWidget {
   }
 
   IconData _getMenuIcon(String title) {
-    print('title : $title');
     switch (title) {
       case 'Finance':
         return FontAwesomeIcons.moneyBillTrendUp;

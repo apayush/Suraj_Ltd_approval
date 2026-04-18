@@ -21,7 +21,7 @@ import '../../../core/widgets/common_widgets.dart';
 import '../../finance/model/bank_payment_model.dart';
 import '../view/widgets/tabs/widgets/sales_view.dart';
 
-class SalesController extends GetxController with GetTickerProviderStateMixin {
+class SalesController extends GetxController {
   RxBool isLoading = false.obs;
 
   RxBool isApproveLoading = false.obs;
@@ -49,8 +49,8 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
   MenuType currentMenu = MenuType.sales;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.salesOrder.obs;
 
-  late TabController tabController;
-  List<Tab> myTabs = [];
+  RxInt selectedTabIndex = 0.obs;
+  List<String> myTabs = [];
   List<Widget> tabViews = [];
 
   final GlobalKey<FormState> approveFormKey = GlobalKey<FormState>();
@@ -555,18 +555,17 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
     final userModel = LocalDB.getUserModel();
     super.onInit();
     final subMenus = userModel?.getSubMenusFor(MenuType.sales) ?? [];
-    final tabs = <Tab>[];
+    final tabs = <String>[];
     final views = <Widget>[];
 
     subMenus.forEach((subMenu) {
-      tabs.add(Tab(text: subMenu.key));
+      tabs.add(subMenu.key);
       views.add(SalesView(subMenuType: subMenu));
     });
     currentSubMenu.value = subMenus.first;
 
     myTabs = tabs;
     tabViews = views;
-    tabController = TabController(length: myTabs.length, vsync: this);
 
     salesOrderDataSource = SalesOrderDataSource(
       salesOrderList,
@@ -605,18 +604,9 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
         LocalDB.getUserModel()?.getSubMenusFor(MenuType.sales) ?? [];
     final index = subMenuTypeList.indexOf(menuType);
 
-    if (menuType == SubMenuType.salesOrder) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.salesOrder;
-    } else if (menuType == SubMenuType.salesQuotation) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.salesQuotation;
-    } else if (menuType == SubMenuType.salesEnquiry) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.salesEnquiry;
-    } else if (menuType == SubMenuType.salesCreditNote) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.salesCreditNote;
+    if (index >= 0) {
+      selectedTabIndex.value = index;
+      currentSubMenu.value = menuType;
     }
 
     await getAllData(mainType: currentSubMenu.value);
@@ -627,7 +617,6 @@ class SalesController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void onClose() {
-    tabController.dispose();
     super.onClose();
   }
 }

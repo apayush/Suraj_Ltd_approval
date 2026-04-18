@@ -5,25 +5,39 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:suraj_approval/core/widgets/app_pdf_viewer.dart';
+import 'package:suraj_approval/core/widgets/toast/message_type.dart';
 import 'package:suraj_approval/core/widgets/toast/toast.dart';
 import 'package:universal_html/html.dart' as html;
 import '../theme/app_colors.dart';
 import 'app_module_container.dart';
 
 class AppUtils {
-  /// Shows an animated overlay toast (radon-style).
-  /// [background] is mapped to isPositive: red/orange → negative, else positive.
+  /// Shows an animated overlay toast.
+  ///
+  /// Prefer passing [type] explicitly:
+  ///   - [MessageType.success] → green + check icon
+  ///   - [MessageType.warning] → orange + info icon
+  ///   - [MessageType.error]   → red + error icon
+  ///
+  /// The legacy [background] colour param is still accepted and mapped
+  /// to the nearest [MessageType] so all existing call sites compile unchanged.
   static void showSnackBar(
     String message, {
+    MessageType? type,
     Color? background,
     String? title,
     SnackPosition? position,
   }) {
-    final isNegative = background == Colors.red || background == Colors.orange;
-    Toast.show(
-      message,
-      isPositive: !isNegative,
-    );
+    // Resolve the type from either the explicit param or the legacy colour.
+    final resolved = type ?? _typeFromColor(background);
+    Toast.show(message, messageType: resolved);
+  }
+
+  static MessageType _typeFromColor(Color? color) {
+    if (color == Colors.orange) return MessageType.warning;
+    if (color == Colors.red) return MessageType.error;
+    // default / green / anything else → success
+    return MessageType.success;
   }
 
   // Convert a DateTime to a formatted string

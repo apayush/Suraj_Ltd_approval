@@ -210,7 +210,7 @@ class ReportTable extends StatelessWidget {
                     isDark: isDark,
                   );
 
-                  final gridWidthMode = controller.tabController.index == 1 &&
+                  final gridWidthMode = controller.selectedInnerTab.value == 1 &&
                           MediaQuery.of(context).size.width < 600
                       ? ColumnWidthMode.auto
                       : ColumnWidthMode.fill;

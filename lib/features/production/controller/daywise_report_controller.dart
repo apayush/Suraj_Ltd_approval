@@ -10,12 +10,11 @@ import '../model/daywise_report_model.dart';
 
 import 'package:suraj_approval/features/production/utills/daywise_report_pdf_helper.dart';
 
-class DaywiseProductionController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class DaywiseProductionController extends GetxController {
   static DaywiseProductionController get instance => Get.find();
 
-  // --- Tab Controller ---
-  late TabController tabController;
+  // --- Inner Tab Index (0 = Data Entry, 1 = View Report) ---
+  RxInt selectedInnerTab = 0.obs;
 
   // --- Loading State ---
   RxBool isLoading = false.obs;
@@ -45,8 +44,6 @@ class DaywiseProductionController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
-    
     // Set default dates for report
     final now = DateTime.now();
     startDate.value = DateTime(now.year, now.month, 1);

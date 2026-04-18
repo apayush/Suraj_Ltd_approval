@@ -1,22 +1,10 @@
+// This file is kept for compatibility but is no longer used.
+// Tab switching is now handled inline in each layout file via Obx + selectedTabIndex.
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:suraj_approval/core/widgets/loading_widget.dart';
 
-import '../../../controller/finance_controller.dart';
-
-class FinanceTabView extends GetView<FinanceController> {
+class FinanceTabView extends StatelessWidget {
   FinanceTabView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    if (controller.myTabs.isEmpty || controller.tabController.length == 0) {
-      return const Center(child: LoadingIndicator());
-    }
-
-    return TabBarView(
-      controller: controller.tabController,
-      physics: const NeverScrollableScrollPhysics(),
-      children: controller.tabViews,
-    );
-  }
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }

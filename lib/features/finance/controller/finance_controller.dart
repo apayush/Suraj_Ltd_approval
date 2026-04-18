@@ -13,6 +13,7 @@ import '../../../core/service/api_service.dart';
 import '../../../core/service/local_db.dart';
 import '../../../core/utills/app_module_container.dart';
 import '../../../core/utills/app_utills.dart';
+import '../../../core/widgets/toast/message_type.dart';
 import '../../../core/utills/table_data_sources/finance_module/bank_payment_data_source.dart';
 import '../../../core/utills/table_data_sources/finance_module/bank_receipt_data_source.dart';
 import '../../../core/utills/table_data_sources/finance_module/cash_payment_data_source.dart';
@@ -23,8 +24,7 @@ import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../model/bank_payment_model.dart';
 
-class FinanceController extends GetxController
-    with GetTickerProviderStateMixin {
+class FinanceController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isApproveLoading = false.obs;
   RxBool isRejectLoading = false.obs;
@@ -51,8 +51,8 @@ class FinanceController extends GetxController
   MenuType currentMenu = MenuType.finance;
   final Rx<SubMenuType> currentSubMenu = SubMenuType.bankPayment.obs;
 
-  late TabController tabController;
-  List<Tab> myTabs = [];
+  RxInt selectedTabIndex = 0.obs;
+  List<String> myTabs = [];
   List<Widget> tabViews = [];
   final GlobalKey<FormState> approveFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> rejectFormKey = GlobalKey<FormState>();
@@ -283,13 +283,22 @@ class FinanceController extends GetxController
         // Dialog closing is now managed by the caller's finally block to avoid race conditions.
         if (response.data['Success'] == 'Approve') {
           AppUtils.showSnackBar('Voucher Approved Successfully');
+          remarkController.clear();
+          getAllData(mainType: currentSubMenu.value);
         } else if (response.data['Success'] == 'Reject') {
           AppUtils.showSnackBar('Voucher Rejected Successfully');
+          remarkController.clear();
+          getAllData(mainType: currentSubMenu.value);
         } else if (response.data['Success'] == 'Hold') {
           AppUtils.showSnackBar('Voucher Hold Successfully');
+        } else {
+          // e.g. "Success": "Failed" — business rule warning, not a system error
+          final msg =
+              response.data['Message'] ??
+              response.data['message'] ??
+              'Action could not be completed.';
+          AppUtils.showSnackBar(msg, type: MessageType.warning);
         }
-        remarkController.clear();
-        getAllData(mainType: currentSubMenu.value);
       } else {
         AppUtils.showSnackBar(
           'Something went wrong! Status Code : ${response.statusCode}',
@@ -444,129 +453,141 @@ class FinanceController extends GetxController
     } else if (value == 'Approve') {
       await showDialog(
         context: Get.context!,
-        builder: (context) => GenericDialogBox(
-          headerText: 'Approve',
-          content: Form(
-            key: approveFormKey,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                children: [
-                  AppText(
-                    'Are you sure you want to Approve?',
-                    softWrap: true,
-                    style: TextStyles.medium(context),
+        builder:
+            (context) => GenericDialogBox(
+              headerText: 'Approve',
+              content: Form(
+                key: approveFormKey,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      AppText(
+                        'Are you sure you want to Approve?',
+                        softWrap: true,
+                        style: TextStyles.medium(context),
+                      ),
+                      20.heightGap,
+                      buildRemarkField(),
+                    ],
                   ),
-                  20.heightGap,
-                  buildRemarkField(),
-                ],
+                ),
               ),
+              primaryButtonText: 'Approve',
+              secondaryButtonText: 'Cancel',
+              onPrimaryButtonPressed: () async {
+                try {
+                  isApproveLoading.value = true;
+                  await postFinanceVoucher(
+                    bankPayment,
+                    paymentStatus: 'Approve',
+                  );
+                } catch (e) {
+                  print('Error approving voucher: $e');
+                } finally {
+                  isApproveLoading.value = false;
+                  Navigator.of(context).pop();
+                }
+              },
+              onSecondaryButtonPressed: () {
+                Navigator.of(context).pop();
+              },
+              isLoading: isApproveLoading,
             ),
-          ),
-          primaryButtonText: 'Approve',
-          secondaryButtonText: 'Cancel',
-          onPrimaryButtonPressed: () async {
-            try {
-              isApproveLoading.value = true;
-              await postFinanceVoucher(bankPayment, paymentStatus: 'Approve');
-            } catch (e) {
-              print('Error approving voucher: $e');
-            } finally {
-              isApproveLoading.value = false;
-              Navigator.of(context).pop();
-            }
-          },
-          onSecondaryButtonPressed: () {
-            Navigator.of(context).pop();
-          },
-          isLoading: isApproveLoading,
-        ),
       );
     } else if (value == 'Hold') {
       await showDialog(
         context: Get.context!,
-        builder: (context) => GenericDialogBox(
-          headerText: 'Hold',
-          content: Form(
-            key: approveFormKey,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                children: [
-                  AppText(
-                    'Are you sure you want to Hold?',
-                    softWrap: true,
-                    style: TextStyles.medium(context),
+        builder:
+            (context) => GenericDialogBox(
+              headerText: 'Hold',
+              content: Form(
+                key: approveFormKey,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      AppText(
+                        'Are you sure you want to Hold?',
+                        softWrap: true,
+                        style: TextStyles.medium(context),
+                      ),
+                      20.heightGap,
+                      buildRemarkField(),
+                    ],
                   ),
-                  20.heightGap,
-                  buildRemarkField(),
-                ],
+                ),
               ),
-            ),
-          ),
-          primaryButtonText: 'Hold',
-          secondaryButtonText: 'Cancel',
-          onPrimaryButtonPressed: () async {
-            if (approveFormKey.currentState!.validate()) {
-              try {
-                isApproveLoading.value = true;
-                await postFinanceVoucher(bankPayment, paymentStatus: 'Hold');
-              } catch (e) {
-                print('Error holding voucher: $e');
-              } finally {
-                isApproveLoading.value = false;
+              primaryButtonText: 'Hold',
+              secondaryButtonText: 'Cancel',
+              onPrimaryButtonPressed: () async {
+                if (approveFormKey.currentState!.validate()) {
+                  try {
+                    isApproveLoading.value = true;
+                    await postFinanceVoucher(
+                      bankPayment,
+                      paymentStatus: 'Hold',
+                    );
+                  } catch (e) {
+                    print('Error holding voucher: $e');
+                  } finally {
+                    isApproveLoading.value = false;
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
+              onSecondaryButtonPressed: () {
                 Navigator.of(context).pop();
-              }
-            }
-          },
-          onSecondaryButtonPressed: () {
-            Navigator.of(context).pop();
-          },
-          isLoading: isApproveLoading,
-        ),
+              },
+              isLoading: isApproveLoading,
+            ),
       );
     } else if (value == 'Reject') {
       await showDialog(
         context: Get.context!,
-        builder: (context) => GenericDialogBox(
-          headerText: 'Reject',
-          content: Form(
-            key: rejectFormKey,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                children: [
-                  AppText(
-                    'Are you sure you want to Reject?',
-                    softWrap: true,
-                    style: TextStyles.medium(context),
+        builder:
+            (context) => GenericDialogBox(
+              headerText: 'Reject',
+              content: Form(
+                key: rejectFormKey,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      AppText(
+                        'Are you sure you want to Reject?',
+                        softWrap: true,
+                        style: TextStyles.medium(context),
+                      ),
+                      20.heightGap,
+                      buildRemarkField(),
+                    ],
                   ),
-                  20.heightGap,
-                  buildRemarkField(),
-                ],
+                ),
               ),
-            ),
-          ),
-          primaryButtonText: 'Reject',
-          secondaryButtonText: 'Cancel',
-          onPrimaryButtonPressed: () async {
-            if (rejectFormKey.currentState!.validate()) {
-              try {
-                isRejectLoading.value = true;
-                await postFinanceVoucher(bankPayment, paymentStatus: 'Reject');
-              } catch (e) {
-                print('Error rejecting voucher: $e');
-              } finally {
-                isRejectLoading.value = false;
+              primaryButtonText: 'Reject',
+              secondaryButtonText: 'Cancel',
+              onPrimaryButtonPressed: () async {
+                if (rejectFormKey.currentState!.validate()) {
+                  try {
+                    isRejectLoading.value = true;
+                    await postFinanceVoucher(
+                      bankPayment,
+                      paymentStatus: 'Reject',
+                    );
+                  } catch (e) {
+                    print('Error rejecting voucher: $e');
+                  } finally {
+                    isRejectLoading.value = false;
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
+              onSecondaryButtonPressed: () {
                 Navigator.of(context).pop();
-              }
-            }
-          },
-          onSecondaryButtonPressed: () {
-            Navigator.of(context).pop();
-          },
-          isLoading: isRejectLoading,
-        ),
+              },
+              isLoading: isRejectLoading,
+            ),
       );
     }
     remarkController.clear();
@@ -589,18 +610,17 @@ class FinanceController extends GetxController
     final userModel = LocalDB.getUserModel();
     super.onInit();
     final subMenus = userModel?.getSubMenusFor(MenuType.finance) ?? [];
-    final tabs = <Tab>[];
+    final tabs = <String>[];
     final views = <Widget>[];
 
     subMenus.forEach((subMenu) {
-      tabs.add(Tab(text: subMenu.key));
+      tabs.add(subMenu.key);
       views.add(FinanceView(subMenuType: subMenu));
     });
     currentSubMenu.value = subMenus.first;
 
     myTabs = tabs;
     tabViews = views;
-    tabController = TabController(length: myTabs.length, vsync: this);
 
     bankPaymentDataSource = BankPaymentDataSource(
       bankPaymentList,
@@ -643,21 +663,9 @@ class FinanceController extends GetxController
         LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
     final index = subMenuTypeList.indexOf(menuType);
 
-    if (menuType == SubMenuType.bankPayment) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.bankPayment;
-    } else if (menuType == SubMenuType.bankReceipt) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.bankReceipt;
-    } else if (menuType == SubMenuType.cashPayment) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.cashPayment;
-    } else if (menuType == SubMenuType.cashReceipt) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.cashReceipt;
-    } else if (menuType == SubMenuType.journalVoucher) {
-      tabController.animateTo(index);
-      currentSubMenu.value = SubMenuType.journalVoucher;
+    if (index >= 0) {
+      selectedTabIndex.value = index;
+      currentSubMenu.value = menuType;
     }
 
     await getAllData(mainType: currentSubMenu.value);
@@ -667,7 +675,6 @@ class FinanceController extends GetxController
 
   @override
   void onClose() {
-    tabController.dispose();
     super.onClose();
   }
 }

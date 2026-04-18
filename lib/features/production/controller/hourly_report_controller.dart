@@ -10,12 +10,11 @@ import '../../../core/utills/app_utills.dart';
 import '../model/hourly_report_model.dart';
 import '../utills/hourly_report_pdf_helper.dart';
 
-class HourlyReportController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class HourlyReportController extends GetxController {
   static HourlyReportController get instance => Get.find();
 
-  // --- Tab Controller ---
-  late TabController tabController;
+  // --- Inner Tab Index (0 = Data Entry, 1 = View Report) ---
+  RxInt selectedInnerTab = 0.obs;
 
   // --- Loading State ---
   RxBool isLoading = false.obs;
@@ -83,7 +82,6 @@ class HourlyReportController extends GetxController
   void onInit() {
     super.onInit();
     getDepartmentList();
-    tabController = TabController(length: 2, vsync: this);
     _preselectCurrentTimeSlot();
 
     // Sync filter default dropdown

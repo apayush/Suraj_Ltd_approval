@@ -9,12 +9,11 @@ import '../../../core/utills/app_utills.dart';
 import '../model/lg30_pilger_model.dart';
 import '../utills/lg30_report_pdf_helper.dart';
 
-class LG30PilgerController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class LG30PilgerController extends GetxController {
   static LG30PilgerController get instance => Get.find();
 
-  // --- Tab Controller ---
-  late TabController tabController;
+  // --- Inner Tab Index (0 = Data Entry, 1 = View Report) ---
+  RxInt selectedInnerTab = 0.obs;
 
   // --- Loading State ---
   RxBool isLoading = false.obs;
@@ -44,7 +43,6 @@ class LG30PilgerController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
     getDepartmentList();
   }
 
@@ -54,7 +52,6 @@ class LG30PilgerController extends GetxController
     for (var entry in machineEntries) {
       entry.dispose();
     }
-    tabController.dispose();
     super.onClose();
   }
 

@@ -9,10 +9,9 @@ import '../../../core/utills/app_utills.dart';
 import '../model/ffd_model.dart';
 import '../utills/ffd_report_pdf_helper.dart';
 
-class FFDController extends GetxController
-    with GetSingleTickerProviderStateMixin {
-  // ─── Tab Controller ────────────────────────────────────────────────────────
-  late TabController tabController;
+class FFDController extends GetxController {
+  // ─── Inner Tab Index (0 = Data Entry, 1 = View Report) ──────────────────
+  RxInt selectedInnerTab = 0.obs;
 
   // ─── Loading ───────────────────────────────────────────────────────────────
   RxBool isLoading = false.obs;
@@ -34,12 +33,10 @@ class FFDController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   void onClose() {
-    tabController.dispose();
     elbowController.dispose();
     teeController.dispose();
     reducerController.dispose();
@@ -102,7 +99,7 @@ class FFDController extends GetxController
           );
           clearForm();
           // Switch to report tab
-          tabController.animateTo(1);
+          selectedInnerTab.value = 1;
           getReportData();
         } else {
           AppUtils.showSnackBar(

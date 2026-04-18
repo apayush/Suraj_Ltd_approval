@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/menu_extension.dart';
 import 'package:suraj_approval/core/service/local_db.dart';
-import 'package:suraj_approval/features/finance/view/widgets/tabs/finance_tabbar_view.dart';
-
+import 'package:suraj_approval/core/utills/app_module_container.dart';
+import 'package:suraj_approval/core/widgets/app_scaffold.dart';
+import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import '../../../../core/constants/app_enum.dart';
-import '../../../../core/utills/app_module_container.dart';
-import '../../../../core/widgets/app_scaffold.dart';
-import '../../../../core/widgets/common_widgets.dart';
 import '../../controller/finance_controller.dart';
 
 class FinanceTablet extends GetView<FinanceController> {
@@ -17,25 +15,24 @@ class FinanceTablet extends GetView<FinanceController> {
   Widget build(BuildContext context) {
     return AppScaffold(
       title: AppText('Finance', style: TextStyles.extraLarge(context)),
-      bottom: TabBar(
-        controller: controller.tabController,
-        tabs: controller.myTabs,
-        onTap: (index) {
-          final subMenuTypeList =
-              LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
-
-          SubMenuType type = subMenuTypeList[index];
-          controller.isHoldVoucherModelEnabled.value = false;
+      tabs: controller.myTabs,
+      selectedTabIndex: controller.selectedTabIndex,
+      onTabChanged: (index) {
+        final subMenuTypeList =
+            LocalDB.getUserModel()?.getSubMenusFor(MenuType.finance) ?? [];
+        if (index < subMenuTypeList.length) {
           controller.searchController.clear();
-          controller.currentSubMenu.value = type;
-          controller.getAllData(mainType: type);
-        },
-        tabAlignment: TabAlignment.start,
-        isScrollable: true,
-      ),
+          controller.isHoldVoucherModelEnabled.value = false;
+          controller.currentSubMenu.value = subMenuTypeList[index];
+          controller.selectedTabIndex.value = index;
+          controller.getAllData(mainType: subMenuTypeList[index]);
+        }
+      },
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-        child: FinanceTabView(),
+        padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+        child: Obx(() => controller.tabViews.isEmpty
+            ? const SizedBox.shrink()
+            : controller.tabViews[controller.selectedTabIndex.value]),
       ),
     );
   }

@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:suraj_approval/core/theme/app_colors.dart';
-
+import 'package:suraj_approval/core/widgets/custom_tab_bar.dart';
 import '../../../controller/hourly_report_controller.dart';
 import 'entry_tab_content.dart';
 import 'report_tab_content.dart';
 
-/// Embeds the Hourly Report module (Entry + Report inner tabs) inside the
-/// Production screen — no separate route needed.
-///
-/// [columns] controls the entry form field layout:
-///   1 = mobile (one field per row)
-///   2 = tablet (two fields per row)
-///   3 = web   (three fields per row)
 class HourlyTabView extends StatefulWidget {
   final int columns;
-
   const HourlyTabView({super.key, this.columns = 1});
 
   @override
@@ -39,40 +30,32 @@ class _HourlyTabViewState extends State<HourlyTabView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Column(
       children: [
-        // ── Inner TabBar: Data Entry | View Report ───────────────────────────
-        Material(
-          color: isDark ? Colors.grey.shade900 : Colors.white,
-          elevation: 1,
-          child: TabBar(
-            controller: _controller.tabController,
-            indicatorColor: AppColors.blue,
-            indicatorWeight: 3,
-            onTap: (value) {
-              if(value == 1) {
-                _controller.getHourlyReportData();
-              }
-            },
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            padding: EdgeInsets.zero,
-            unselectedLabelColor: isDark ? Colors.white54 : Colors.grey,
-            tabs: const [Tab(text: "Data Entry"), Tab(text: "View Report")],
-          ),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+        // ── Inner CustomTabBar: Data Entry | View Report ─────────────────────
+        CustomTabBar(
+          tabs: const ['Data Entry', 'View Report'],
+          selectedIndex: _controller.selectedInnerTab,
+          onTap: (i) {
+            _controller.selectedInnerTab.value = i;
+            if (i == 1) _controller.getHourlyReportData();
+          },
         ),
+        const Divider(height: 1, thickness: 1, color: Color(0xFFE0E0E0)),
+        // ── Content ──────────────────────────────────────────────────────────
         Expanded(
-          child: TabBarView(
-            controller: _controller.tabController,
-            children: [
-              EntryTabContent(controller: _controller, columns: widget.columns),
-              ReportTabContent(
-                controller: _controller,
-                compact: widget.columns == 1, // mobile = compact (dialog)
-              ),
-            ],
+          child: Obx(
+            () =>
+                _controller.selectedInnerTab.value == 0
+                    ? EntryTabContent(
+                      controller: _controller,
+                      columns: widget.columns,
+                    )
+                    : ReportTabContent(
+                      controller: _controller,
+                      compact: widget.columns == 1,
+                    ),
           ),
         ),
       ],

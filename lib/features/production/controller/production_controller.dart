@@ -6,15 +6,14 @@ import 'package:suraj_approval/features/production/view/widgets/tabs/widgets/pro
 
 import '../../../core/constants/app_enum.dart';
 
-class ProductionController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class ProductionController extends GetxController {
   static ProductionController get instance => Get.find();
 
   RxBool isLoading = false.obs;
 
-  // ─── Outer Tab Controller (Production sub-menu tabs) ──────────────────────
-  late TabController tabController;
-  List<Tab> myTabs = [];
+  // ─── Outer Tab (no TabController needed) ──────────────────────────────────
+  RxInt selectedTabIndex = 0.obs;
+  List<String> myTabs = [];
   List<Widget> tabViews = [];
 
   /// The currently active production sub-menu (e.g. hourlyProductionEntry)
@@ -26,22 +25,24 @@ class ProductionController extends GetxController
     final userModel = LocalDB.getUserModel();
     final subMenus = userModel?.getSubMenusFor(MenuType.production) ?? [];
 
-    // Build one Tab per sub-menu the user has access to.
+    // Build one tab label + view per sub-menu the user has access to.
     for (var sm in subMenus) {
-      myTabs.add(Tab(text: sm.key));
+      myTabs.add(sm.key);
       tabViews.add(ProductionView(subMenuType: sm));
     }
-
-    tabController = TabController(length: myTabs.length, vsync: this);
 
     if (subMenus.isNotEmpty) {
       currentSubMenu.value = subMenus.first;
     }
   }
 
-  @override
-  void onClose() {
-    tabController.dispose();
-    super.onClose();
+  void onOuterTabTapped(int index) {
+    if (selectedTabIndex.value == index) return; // guard against same-tab tap
+    selectedTabIndex.value = index;
+    final userModel = LocalDB.getUserModel();
+    final subMenus = userModel?.getSubMenusFor(MenuType.production) ?? [];
+    if (index < subMenus.length) {
+      currentSubMenu.value = subMenus[index];
+    }
   }
 }

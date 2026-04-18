@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'message_type.dart';
 import 'toast_widget.dart';
 
 class Toast {
@@ -9,19 +9,20 @@ class Toast {
   static final List<OverlayEntry?> _overlayEntries = List.empty(growable: true);
 
   static bool get isActive => _overlayEntries.isNotEmpty;
-
   static String? get currentMessage => isActive ? _currMsg : null;
-
   static String? _currMsg;
 
+  /// Show a toast with an explicit [MessageType].
   static bool show(
     String? message, {
-    bool isPositive = true,
+    MessageType messageType = MessageType.success,
     bool closeAllPrevious = true,
     Duration duration = const Duration(seconds: 3),
     IconData? icon,
     bool isPersistent = false,
     bool showLoader = false,
+    // Legacy support — kept so old callers still compile.
+    @Deprecated('Use messageType instead') bool isPositive = true,
   }) {
     if (message == null) return false;
     if (Get.key.currentState != null) {
@@ -29,7 +30,7 @@ class Toast {
       final overlay = Get.key.currentState!.overlay;
       final entry = _createOverlayEntry(
         message,
-        isPositive: isPositive,
+        messageType: messageType,
         duration: duration,
         icon: icon,
         showLoader: showLoader,
@@ -45,29 +46,27 @@ class Toast {
 
   static OverlayEntry _createOverlayEntry(
     String message, {
-    required bool isPositive,
+    required MessageType messageType,
     required Duration duration,
     IconData? icon,
     bool isPersistent = false,
     bool showLoader = false,
   }) {
     return OverlayEntry(
-      builder: (context) {
-        return Align(
-          alignment: Alignment.topCenter,
-          child: IntrinsicWidth(
-            child: ToastWidget(
-              message: message,
-              iconData: icon,
-              removeNotification: removeNotification,
-              isPositive: isPositive,
-              duration: duration,
-              isPersistent: isPersistent,
-              showLoader: showLoader,
-            ),
+      builder: (context) => Align(
+        alignment: Alignment.topCenter,
+        child: IntrinsicWidth(
+          child: ToastWidget(
+            message: message,
+            messageType: messageType,
+            iconData: icon,
+            removeNotification: removeNotification,
+            duration: duration,
+            isPersistent: isPersistent,
+            showLoader: showLoader,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -79,11 +78,9 @@ class Toast {
   }
 
   static void _closeAll() {
-    if (_overlayEntries.isNotEmpty) {
-      for (final entry in _overlayEntries) {
-        entry?.remove();
-      }
-      _overlayEntries.clear();
+    for (final entry in _overlayEntries) {
+      entry?.remove();
     }
+    _overlayEntries.clear();
   }
 }
