@@ -6,6 +6,7 @@ import 'package:suraj_approval/core/widgets/app_text_field.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
 import 'package:suraj_approval/core/widgets/loading_widget.dart';
 import '../../../controller/lg30_pilger_controller.dart';
+import '../../../model/lg30_pilger_model.dart';
 import '../hourly_module/hourly_report_widgets.dart';
 
 /// Entry form for LG30 Pilger production.
@@ -199,6 +200,39 @@ class LG30EntryTabContent extends StatelessWidget {
     );
   }
 
+  Widget _shiftDropdown(LG30MachineEntry entry, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppText('Shift',
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600)),
+        8.heightGap,
+        Obx(() {
+          final dummy = DropDownResponse(value: '', text: 'Select Shift');
+          final matchingItem = controller.shiftDropdownList.firstWhere(
+            (item) => item.value == entry.selectedShift.value,
+            orElse: () => dummy,
+          );
+
+          return CustomDropdownSingle(
+            width: double.infinity,
+            hintText: 'Select Shift',
+            selectedItem: matchingItem.value == '' ? null : matchingItem,
+            items: controller.shiftDropdownList,
+            onChanged: (v) {
+              if (v?.value != null) {
+                entry.selectedShift.value = v!.value!;
+              }
+            },
+          );
+        }),
+      ],
+    );
+  }
+
   // ── Machine Grid ─────────────────────────────────────────────────────────
   Widget _buildMachineGrid(BuildContext context) {
     if (columns == 1) {
@@ -255,7 +289,7 @@ class LG30EntryTabContent extends StatelessWidget {
                       ),
                     ),
                     12.heightGap,
-                    // NOS + KGS in a row
+                    // NOS + KGS + MTR in a row
                     Row(
                       children: [
                         Expanded(
@@ -276,8 +310,20 @@ class LG30EntryTabContent extends StatelessWidget {
                             hint: '0',
                           ),
                         ),
+                        12.widthGap,
+                        Expanded(
+                          child: LabeledTextField(
+                            label: 'MTR',
+                            controller: entry.mtrController,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            hint: '0',
+                          ),
+                        ),
                       ],
                     ),
+                    10.heightGap,
+                    _shiftDropdown(entry, isDark),
                     10.heightGap,
                     LabeledTextField(
                       label: 'Maintenance',
@@ -370,65 +416,82 @@ class LG30EntryTabContent extends StatelessWidget {
                           BorderRadius.vertical(top: Radius.circular(10)),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Table(
-                      columnWidths: const {
-                        0: FlexColumnWidth(2.5),
-                        1: FlexColumnWidth(1),
-                        2: FlexColumnWidth(1),
-                        3: FlexColumnWidth(1.5),
-                        4: FlexColumnWidth(1.5),
-                        5: FlexColumnWidth(1.5),
-                        6: FlexColumnWidth(1.5),
-                      },
-                      border: TableBorder.all(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      children: [
-                        // Header row
-                        TableRow(
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.grey.shade800
-                                : const Color(0xFFE9ECEF),
-                            borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(6)),
-                          ),
-                          children: const [
-                            _TableHeader('MACHINE NAME'),
-                            _TableHeader('NOS'),
-                            _TableHeader('KGS'),
-                            _TableHeader('MAINTENANCE'),
-                            _TableHeader('RM ISSUE'),
-                            _TableHeader('MANPOWER'),
-                            _TableHeader('OTHER'),
-                          ],
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Table(
+                        columnWidths: const {
+                          0: FlexColumnWidth(2.5),
+                          1: FlexColumnWidth(1),
+                          2: FlexColumnWidth(1),
+                          3: FlexColumnWidth(1),
+                          4: FlexColumnWidth(1.2),
+                          5: FlexColumnWidth(1.5),
+                          6: FlexColumnWidth(1.5),
+                          7: FlexColumnWidth(1.5),
+                          8: FlexColumnWidth(1.5),
+                        },
+                        border: TableBorder.all(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(6),
+                          style: BorderStyle.solid,
                         ),
-                        // Data rows
-                        ...controller.machineEntries.map((entry) {
-                          return TableRow(
-                            children: [
-                              _MachineNameCell(entry.machineName),
-                              _InputCell(
-                                  controller: entry.nosController,
-                                  keyboardType: TextInputType.number),
-                              _InputCell(
-                                  controller: entry.kgsController,
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true)),
-                              _InputCell(controller: entry.maintController),
-                              _InputCell(controller: entry.rmController),
-                              _InputCell(controller: entry.manController),
-                              _InputCell(controller: entry.otherController),
+                        children: [
+                          // Header row
+                          TableRow(
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? Colors.grey.shade800
+                                  : const Color(0xFFE9ECEF),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(6)),
+                            ),
+                            children: const [
+                              _TableHeader('MACHINE NAME'),
+                              _TableHeader('NOS'),
+                              _TableHeader('KGS'),
+                              _TableHeader('MTR'),
+                              _TableHeader('SHIFT'),
+                              _TableHeader('MAINTENANCE'),
+                              _TableHeader('RM ISSUE'),
+                              _TableHeader('MANPOWER'),
+                              _TableHeader('OTHER'),
                             ],
-                          );
-                        }),
-                      ],
+                          ),
+                          // Data rows
+                          ...controller.machineEntries.map((entry) {
+                            return TableRow(
+                              children: [
+                                _MachineNameCell(entry.machineName),
+                                _InputCell(
+                                    controller: entry.nosController,
+                                    keyboardType: TextInputType.number),
+                                _InputCell(
+                                    controller: entry.kgsController,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true)),
+                                _InputCell(
+                                    controller: entry.mtrController,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true)),
+                                _DropdownCell(
+                                  selectedValue: entry.selectedShift,
+                                  items: controller.shiftDropdownList,
+                                  onChanged: (v) {
+                                    entry.selectedShift.value = v;
+                                  },
+                                ),
+                                _InputCell(controller: entry.maintController),
+                                _InputCell(controller: entry.rmController),
+                                _InputCell(controller: entry.manController),
+                                _InputCell(controller: entry.otherController),
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -497,6 +560,70 @@ class _MachineNameCell extends StatelessWidget {
         name,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
       ),
+    );
+  }
+}
+
+class _DropdownCell extends StatelessWidget {
+  final RxString selectedValue;
+  final List<DropDownResponse> items;
+  final ValueChanged<String> onChanged;
+
+  const _DropdownCell({
+    required this.selectedValue,
+    required this.items,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+      child: Obx(() {
+        final matchingItem = items.firstWhere(
+          (item) => item.value == selectedValue.value,
+          orElse: () => items.isNotEmpty ? items.first : DropDownResponse(value: '', text: ''),
+        );
+        return Container(
+          height: 33.0,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<DropDownResponse>(
+              value: matchingItem.value == '' ? null : matchingItem,
+              isExpanded: true,
+              isDense: true,
+              dropdownColor: isDark ? Colors.grey.shade900 : Colors.white,
+              hint: const Text('', style: TextStyle(fontSize: 13)),
+              style: TextStyle(
+                fontSize: 13,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+              items: items.map((DropDownResponse item) {
+                return DropdownMenuItem<DropDownResponse>(
+                  value: item,
+                  child: Text(
+                    item.text ?? '',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (DropDownResponse? newValue) {
+                if (newValue?.value != null) {
+                  onChanged(newValue!.value!);
+                }
+              },
+            ),
+          ),
+        );
+      }),
     );
   }
 }

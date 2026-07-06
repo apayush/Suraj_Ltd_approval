@@ -30,10 +30,17 @@ class LG30PilgerController extends GetxController {
   RxList<LG30ReportEntry> reportEntries = <LG30ReportEntry>[].obs;
   RxInt totalReportNos = 0.obs;
   RxDouble totalReportKgs = 0.0.obs;
+  RxDouble totalReportMtr = 0.0.obs;
 
   // ─── Dropdown Lists for UI ──────────────────────────────────────────────────
   RxList<DropDownResponse> deptDropdownList = <DropDownResponse>[].obs;
   Rxn<DropDownResponse> selectDeptDropDown = Rxn<DropDownResponse>();
+
+  final List<DropDownResponse> shiftDropdownList = [
+    DropDownResponse(value: '1st Shift', text: '1st Shift'),
+    DropDownResponse(value: '2nd Shift', text: '2nd Shift'),
+    DropDownResponse(value: '3rd Shift', text: '3rd Shift'),
+  ];
 
   // ─── Report Filter State ─────────────────────────────────────────────────────
   Rx<DateTime> reportDate = DateTime.now().obs;
@@ -77,6 +84,8 @@ class LG30PilgerController extends GetxController {
     for (var entry in machineEntries) {
       entry.nosController.clear();
       entry.kgsController.clear();
+      entry.mtrController.clear();
+      entry.selectedShift.value = '1st Shift';
       entry.maintController.clear();
       entry.rmController.clear();
       entry.manController.clear();
@@ -241,6 +250,7 @@ class LG30PilgerController extends GetxController {
     reportEntries.clear();
     totalReportNos.value = 0;
     totalReportKgs.value = 0.0;
+    totalReportMtr.value = 0.0;
 
     try {
       final response = await ApiService.getData(
@@ -267,12 +277,15 @@ class LG30PilgerController extends GetxController {
           // Calculate totals
           int sumNos = 0;
           double sumKgs = 0.0;
+          double sumMtr = 0.0;
           for (var entry in reportEntries) {
             sumNos += entry.nos;
             sumKgs += entry.kgs;
+            sumMtr += entry.mtr;
           }
           totalReportNos.value = sumNos;
           totalReportKgs.value = sumKgs;
+          totalReportMtr.value = sumMtr;
         } else {
           AppUtils.showSnackBar(
             response.data['message'] ??
@@ -310,6 +323,7 @@ class LG30PilgerController extends GetxController {
         entries: reportEntries,
         totalNos: totalReportNos.value,
         totalKgs: totalReportKgs.value,
+        totalMtr: totalReportMtr.value,
       );
 
       final fileName =

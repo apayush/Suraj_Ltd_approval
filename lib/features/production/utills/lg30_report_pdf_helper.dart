@@ -12,6 +12,7 @@ class LG30ReportPdfHelper {
     required List<LG30ReportEntry> entries,
     required int totalNos,
     required double totalKgs,
+    required double totalMtr,
   }) async {
     final pdf = pw.Document();
 
@@ -32,7 +33,7 @@ class LG30ReportPdfHelper {
         footer: (context) => _buildFooter(context),
         build: (context) => [
           pw.SizedBox(height: 20),
-          _buildDataTable(entries, totalNos, totalKgs),
+          _buildDataTable(entries, totalNos, totalKgs, totalMtr),
           pw.SizedBox(height: 40),
           _buildSignatureSection(),
         ],
@@ -78,39 +79,63 @@ class LG30ReportPdfHelper {
   }
 
   static pw.Widget _buildDataTable(
-      List<LG30ReportEntry> entries, int totalNos, double totalKgs) {
+      List<LG30ReportEntry> entries, int totalNos, double totalKgs, double totalMtr) {
     final headers = [
+      'DEPARTMENT',
       'MACHINE NAME',
+      'DATE',
+      'SHIFT',
       'NOS',
       'KGS',
+      'MTR',
       'MAINTENANCE',
       'NO RM',
       'MANPOWER',
       'OTHER',
+      'CREATED BY',
     ];
 
     final data = entries.map((e) {
       return [
+        e.dept,
         e.machineName,
+        e.date,
+        e.shift,
         e.nos == 0 ? '-' : e.nos.toString(),
         e.kgs == 0 ? '-' : e.kgs.toStringAsFixed(1),
+        e.mtr == 0 ? '-' : e.mtr.toStringAsFixed(1),
         e.maint,
         e.rm,
         e.man,
         e.other,
+        e.createdBy,
       ];
     }).toList();
 
     // Add total row
     data.add([
       'TOTAL',
+      '',
+      '',
+      '',
       totalNos.toString(),
       totalKgs.toStringAsFixed(1),
+      totalMtr.toStringAsFixed(1),
+      '',
       '',
       '',
       '',
       '',
     ]);
+
+    final cellAlignments = <int, pw.Alignment>{
+      0: pw.Alignment.centerLeft,
+      1: pw.Alignment.centerLeft,
+      2: pw.Alignment.centerRight,
+      3: pw.Alignment.centerRight,
+      4: pw.Alignment.centerRight,
+      for (var i = 5; i < headers.length; i++) i: pw.Alignment.centerLeft,
+    };
 
     return pw.TableHelper.fromTextArray(
       headers: headers,
@@ -119,21 +144,13 @@ class LG30ReportPdfHelper {
       headerStyle: pw.TextStyle(
           fontWeight: pw.FontWeight.bold,
           color: PdfColors.white,
-          fontSize: 10),
+          fontSize: 7),
       headerDecoration: const pw.BoxDecoration(color: PdfColors.blue800),
       cellHeight: 25,
-      cellPadding: const pw.EdgeInsets.symmetric(horizontal: 6),
-      cellStyle: const pw.TextStyle(fontSize: 9),
+      cellPadding: const pw.EdgeInsets.symmetric(horizontal: 4),
+      cellStyle: const pw.TextStyle(fontSize: 7),
       oddRowDecoration: const pw.BoxDecoration(color: PdfColors.grey100),
-      cellAlignments: {
-        0: pw.Alignment.centerLeft,
-        1: pw.Alignment.centerRight,
-        2: pw.Alignment.centerRight,
-        3: pw.Alignment.centerLeft,
-        4: pw.Alignment.centerLeft,
-        5: pw.Alignment.centerLeft,
-        6: pw.Alignment.centerLeft,
-      },
+      cellAlignments: cellAlignments,
     );
   }
 

@@ -235,13 +235,18 @@ class LG30ReportTabContent extends StatelessWidget {
     }
 
     return [
+      textColumn('dept', 'DEPARTMENT'),
       textColumn('machine', 'MACHINE NAME'),
+      textColumn('date', 'DATE'),
+      textColumn('shift', 'SHIFT'),
       textColumn('nos', 'NOS', align: Alignment.centerRight),
       textColumn('kgs', 'KGS', align: Alignment.centerRight),
+      textColumn('mtr', 'MTR', align: Alignment.centerRight),
       textColumn('maint', 'MAINT.'),
       textColumn('rm', 'NO RM'),
       textColumn('man', 'MANPOWER'),
       textColumn('other', 'OTHER'),
+      textColumn('createdBy', 'CREATED BY'),
     ];
   }
 

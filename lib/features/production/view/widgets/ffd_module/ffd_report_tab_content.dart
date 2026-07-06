@@ -61,11 +61,12 @@ class FFDReportTabContent extends StatelessWidget {
         child: Row(
           children: [
             Obx(() {
+              final dept = controller.reportDepartmentFilter.value;
               final fmt = DateFormat('dd/MM/yy');
               final start = fmt.format(controller.reportStartDate.value);
               final end = fmt.format(controller.reportEndDate.value);
               return AppButton(
-                text: 'Filter • $start  →  $end',
+                text: 'Filter • $dept • $start  →  $end',
                 onPressed: () => _showFilterDialog(context),
                 backgroundColor: AppColors.blue,
               );
@@ -85,6 +86,50 @@ class FFDReportTabContent extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            // ─ Department dropdown ────────────────────────────────────────────────
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Department',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 6),
+                  Obx(() {
+                    return DropdownButtonFormField<String>(
+                      value: controller.reportDepartmentFilter.value,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                      ),
+                      items: FFDController.deptList
+                          .map((d) => DropdownMenuItem(
+                                value: d,
+                                child: Text(d, style: const TextStyle(fontSize: 13)),
+                              ))
+                          .toList(),
+                      onChanged: (v) {
+                        if (v != null) {
+                          controller.reportDepartmentFilter.value = v;
+                        }
+                      },
+                    );
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            // ─ Start Date ───────────────────────────────────────────────────────────
             Expanded(
               child: Obx(() => DatePickerField(
                 label: 'Start Date',
@@ -93,6 +138,7 @@ class FFDReportTabContent extends StatelessWidget {
               )),
             ),
             const SizedBox(width: 16),
+            // ─ End Date ─────────────────────────────────────────────────────────────
             Expanded(
               child: Obx(() => DatePickerField(
                 label: 'End Date',
@@ -145,14 +191,14 @@ class FFDReportTabContent extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const Text(
-                  'FFD FORMING PRODUCTION REPORT',
-                  style: TextStyle(
+                Obx(() => Text(
+                  'FFD ${controller.reportDepartmentFilter.value.toUpperCase()} PRODUCTION REPORT',
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
                   ),
-                ),
+                )),
                 const SizedBox(height: 4),
                 Obx(() {
                   final fmt = DateFormat('dd MMM yyyy');
@@ -214,6 +260,7 @@ class FFDReportTabContent extends StatelessWidget {
 
     return [
       col('date', 'DATE', align: Alignment.centerLeft, minWidth: 110),
+      col('department', 'DEPARTMENT', align: Alignment.centerLeft, minWidth: 120),
       col('elbow', 'ELBOW NOS'),
       col('elbowTotal', 'ELBOW TOTAL'),
       col('tee', 'TEE NOS'),
@@ -229,6 +276,7 @@ class FFDReportTabContent extends StatelessWidget {
   void _showFilterDialog(BuildContext context) {
     DateTime? tempStart = controller.reportStartDate.value;
     DateTime? tempEnd = controller.reportEndDate.value;
+    String tempDept = controller.reportDepartmentFilter.value;
 
     Get.dialog(
       StatefulBuilder(
@@ -240,6 +288,7 @@ class FFDReportTabContent extends StatelessWidget {
             primaryButtonText: 'Apply',
             secondaryButtonText: 'Cancel',
             onPrimaryButtonPressed: () {
+              controller.reportDepartmentFilter.value = tempDept;
               if (tempStart != null) controller.onReportStartDateChanged(tempStart!);
               if (tempEnd != null) controller.onReportEndDateChanged(tempEnd!);
               controller.getReportData();
@@ -252,6 +301,43 @@ class FFDReportTabContent extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ─ Department ────────────────────────────────────────
+                Text(
+                  'Department',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Colors.white70 : Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                DropdownButtonFormField<String>(
+                  value: tempDept,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.grey.shade400),
+                    ),
+                  ),
+                  items: FFDController.deptList
+                      .map((d) => DropdownMenuItem(
+                            value: d,
+                            child:
+                                Text(d, style: const TextStyle(fontSize: 13)),
+                          ))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) setState(() => tempDept = v);
+                  },
+                ),
+                const SizedBox(height: 16),
+                // ─ Dates ──────────────────────────────────────────────
                 _buildDialogDate(
                   ctx,
                   label: 'Start Date',

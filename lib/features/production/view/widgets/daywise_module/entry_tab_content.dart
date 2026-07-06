@@ -95,27 +95,26 @@ class _EntryFormCard extends StatelessWidget {
   // 3-col: web
   Widget _buildThreeColumnLayout(bool isDark) {
     return Obx(() {
-      final showKgs = controller.isFullType;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _row3([
             _deptDropdown(isDark),
+            _shiftDropdown(isDark),
             DatePickerField(
               label: 'Date',
               date: controller.entryDate.value,
               onChanged: controller.onEntryDateChanged,
             ),
+          ]),
+          14.heightGap,
+          _row3([
             LabeledTextField(
               label: 'TARGET',
               controller: controller.targetController,
               keyboardType: TextInputType.number,
-              required: true,
               hint: 'e.g. 360',
             ),
-          ]),
-          14.heightGap,
-          _row3([
             LabeledTextField(
               label: 'NOS',
               controller: controller.nosController,
@@ -123,17 +122,24 @@ class _EntryFormCard extends StatelessWidget {
               required: true,
               hint: 'Prod Qty',
             ),
-            if (showKgs)
-              LabeledTextField(
-                label: 'KGS',
-                controller: controller.kgsController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                required: true,
-                hint: 'Weight',
-              )
-            else
-              const SizedBox(),
-            const SizedBox(), // Spacer
+            LabeledTextField(
+              label: 'KGS',
+              controller: controller.kgsController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              required: true,
+              hint: 'Weight',
+            ),
+          ]),
+          14.heightGap,
+          _row3([
+            LabeledTextField(
+              label: 'MTR',
+              controller: controller.mtrController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              hint: 'Meter',
+            ),
+            const SizedBox(),
+            const SizedBox(),
           ]),
         ],
       );
@@ -143,11 +149,13 @@ class _EntryFormCard extends StatelessWidget {
   // 2-col: tablet
   Widget _buildTwoColumnLayout(bool isDark) {
     return Obx(() {
-      final showKgs = controller.isFullType;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _deptDropdown(isDark),
+          _row2([
+            _deptDropdown(isDark),
+            _shiftDropdown(isDark),
+          ]),
           14.heightGap,
           _row2([
             DatePickerField(
@@ -159,7 +167,6 @@ class _EntryFormCard extends StatelessWidget {
               label: 'TARGET',
               controller: controller.targetController,
               keyboardType: TextInputType.number,
-              required: true,
             ),
           ]),
           14.heightGap,
@@ -170,13 +177,22 @@ class _EntryFormCard extends StatelessWidget {
               keyboardType: TextInputType.number,
               required: true,
             ),
-            if (showKgs)
-              LabeledTextField(
-                label: 'KGS',
-                controller: controller.kgsController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                required: true,
-              ),
+            LabeledTextField(
+              label: 'KGS',
+              controller: controller.kgsController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              required: true,
+            ),
+          ]),
+          14.heightGap,
+          _row2([
+            LabeledTextField(
+              label: 'MTR',
+              controller: controller.mtrController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              // required: true,
+            ),
+            const SizedBox(),
           ]),
         ],
       );
@@ -185,11 +201,12 @@ class _EntryFormCard extends StatelessWidget {
 
   Widget _buildOneColumnLayout(bool isDark) {
     return Obx(() {
-      final showKgs = controller.isFullType;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _deptDropdown(isDark),
+          14.heightGap,
+          _shiftDropdown(isDark),
           14.heightGap,
           DatePickerField(
             label: 'Date',
@@ -201,7 +218,6 @@ class _EntryFormCard extends StatelessWidget {
             label: 'TARGET',
             controller: controller.targetController,
             keyboardType: TextInputType.number,
-            required: true,
             hint: 'e.g. 360',
             validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
@@ -214,17 +230,24 @@ class _EntryFormCard extends StatelessWidget {
             hint: 'Prod Qty',
             validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
-          if (showKgs) ...[
-            14.heightGap,
-            LabeledTextField(
-              label: 'KGS',
-              controller: controller.kgsController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              required: true,
-              hint: 'Weight',
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
-            ),
-          ],
+          14.heightGap,
+          LabeledTextField(
+            label: 'KGS',
+            controller: controller.kgsController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            required: true,
+            hint: 'Weight',
+            validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+          ),
+          14.heightGap,
+          LabeledTextField(
+            label: 'MTR',
+            controller: controller.mtrController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            // required: true,
+            hint: 'Meter',
+            // validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+          ),
         ],
       );
     });
@@ -284,6 +307,33 @@ class _EntryFormCard extends StatelessWidget {
             items: controller.deptDropdownList,
             onChanged: (v) {
               if (v?.value != null) controller.onDeptChanged(v!.value!);
+            },
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _shiftDropdown(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppText('Select Shift', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey.shade600)),
+        8.heightGap,
+        Obx(() {
+          final dummy = DropDownResponse(value: '', text: 'Select Shift');
+          final matchingItem = controller.shiftDropdownList.firstWhere(
+            (item) => item.value == controller.selectedShift.value,
+            orElse: () => dummy,
+          );
+
+          return CustomDropdownSingle(
+            width: double.infinity,
+            hintText: 'Select Shift',
+            selectedItem: matchingItem.value == '' ? null : matchingItem,
+            items: controller.shiftDropdownList,
+            onChanged: (v) {
+              if (v?.value != null) controller.selectedShift.value = v?.value ?? '';
             },
           );
         }),

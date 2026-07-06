@@ -26,7 +26,7 @@ class DaywiseReportPdfHelper {
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: PdfPageFormat.a4.landscape,
         margin: const pw.EdgeInsets.all(32),
         header: (context) => _buildHeader(logo, reportType, startDate, endDate),
         footer: (context) => _buildFooter(context),
@@ -74,47 +74,49 @@ class DaywiseReportPdfHelper {
   static pw.Widget _buildDataTable(List<DaywiseEntry> entries, bool isFullType) {
     final headers = [
       'Date',
+      'Shift',
       'Target (Day)',
       'Target (Total)',
+      if (isFullType) ...['Weight Kgs (Day)', 'Weight Kgs (Total)'],
       'Prod Nos (Day)',
       'Prod Nos (Total)',
-      if (isFullType) ...['Weight Kgs (Day)', 'Weight Kgs (Total)'],
+      'Mtr (Day)',
+      'Mtr (Total)',
     ];
 
     final data = entries.map((e) {
       return [
         DateFormat('dd/MM/yyyy').format(e.date),
+        e.shift,
         e.target.toString(),
         e.cumulativeTarget.toString(),
-        e.actualNos.toString(),
-        e.cumulativeNos.toString(),
         if (isFullType) ...[
           e.actualKgs.toString(),
           e.cumulativeKgs.toString(),
         ],
+        e.actualNos.toString(),
+        e.cumulativeNos.toString(),
+        e.actualMtr.toString(),
+        e.cumulativeMtr.toString(),
       ];
     }).toList();
+
+    final cellAlignments = <int, pw.Alignment>{
+      0: pw.Alignment.centerLeft,
+      1: pw.Alignment.centerLeft,
+      for (var i = 2; i < headers.length; i++) i: pw.Alignment.centerRight,
+    };
 
     return pw.TableHelper.fromTextArray(
       headers: headers,
       data: data,
       border: pw.TableBorder.all(color: PdfColors.grey400, width: 0.5),
-      headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: PdfColors.white, fontSize: 10),
+      headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: PdfColors.white, fontSize: 8),
       headerDecoration: const pw.BoxDecoration(color: PdfColors.blue800),
       cellHeight: 25,
       cellPadding: const pw.EdgeInsets.symmetric(horizontal: 4),
-      cellStyle: const pw.TextStyle(fontSize: 9),
-      cellAlignments: {
-        0: pw.Alignment.centerLeft,
-        1: pw.Alignment.centerRight,
-        2: pw.Alignment.centerRight,
-        3: pw.Alignment.centerRight,
-        4: pw.Alignment.centerRight,
-        if (isFullType) ...{
-          5: pw.Alignment.centerRight,
-          6: pw.Alignment.centerRight,
-        },
-      },
+      cellStyle: const pw.TextStyle(fontSize: 8),
+      cellAlignments: cellAlignments,
     );
   }
 

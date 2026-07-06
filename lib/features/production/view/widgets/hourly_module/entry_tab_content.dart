@@ -164,9 +164,8 @@ class _EntryFormCard extends StatelessWidget {
               label: 'Target (Per Hour)',
               controller: controller.targetController,
               keyboardType: TextInputType.number,
-              required: true,
-              validator:
-                  (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+              // validator:
+              //     (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
             LabeledTextField(
               label: 'Actual (Per Hour)',
@@ -234,7 +233,6 @@ class _EntryFormCard extends StatelessWidget {
               controller: controller.targetController,
               keyboardType: TextInputType.number,
               valueColor: AppColors.blue,
-              required: true,
               validator:
                   (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
             ),
@@ -299,9 +297,8 @@ class _EntryFormCard extends StatelessWidget {
             controller: controller.targetController,
             keyboardType: TextInputType.number,
             valueColor: AppColors.blue,
-            required: true,
-            validator:
-                (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+            // validator:
+            //     (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
           ),
           14.heightGap,
           LabeledTextField(

@@ -24,11 +24,19 @@ class DaywiseProductionController extends GetxController {
 
   // ─── Entry Form State ───────────────────────────────────────────────────────
   RxString selectedDept = ''.obs;
+  RxString selectedShift = '1st Shift'.obs;
   Rx<DateTime> entryDate = DateTime.now().obs;
   
   final TextEditingController targetController = TextEditingController();
   final TextEditingController nosController = TextEditingController();
   final TextEditingController kgsController = TextEditingController();
+  final TextEditingController mtrController = TextEditingController();
+
+  final List<DropDownResponse> shiftDropdownList = [
+    DropDownResponse(value: '1st Shift', text: '1st Shift'),
+    DropDownResponse(value: '2nd Shift', text: '2nd Shift'),
+    DropDownResponse(value: '3rd Shift', text: '3rd Shift'),
+  ];
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -57,28 +65,10 @@ class DaywiseProductionController extends GetxController {
   /// Determines if the selected department is "Full" (Target + Nos + Kgs)
   /// or "Simple" (Target + Nos only).
   bool get isFullType {
-    final dept = selectedDept.value.toLowerCase();
-    // Simplified logic based on provided HTML configuration:
-    // Expansion, Polishing, Peeling, Annealing, Straightening are SIMPLE.
-    if (dept.contains('expansion') ||
-        dept.contains('polishing') ||
-        dept.contains('peeling') ||
-        dept.contains('annealing') ||
-        dept.contains('straightening')) {
-      return false;
-    }
     return true;
   }
   
   bool get isFullTypeFilter {
-    final dept = reportDeptFilter.value.toLowerCase();
-    if (dept.contains('expansion') ||
-        dept.contains('polishing') ||
-        dept.contains('peeling') ||
-        dept.contains('annealing') ||
-        dept.contains('straightening')) {
-      return false;
-    }
     return true;
   }
 
@@ -107,6 +97,8 @@ class DaywiseProductionController extends GetxController {
     targetController.clear();
     nosController.clear();
     kgsController.clear();
+    mtrController.clear();
+    selectedShift.value = '1st Shift';
     entryDate.value = DateTime.now();
     if (deptDropdownList.isNotEmpty) {
       selectedDept.value = deptDropdownList.first.value ?? '';
@@ -170,6 +162,8 @@ class DaywiseProductionController extends GetxController {
           'Target' : int.tryParse(targetController.text) ?? 0,
           'Nos' : int.tryParse(nosController.text) ?? 0,
           'Kgs' : double.tryParse(kgsController.text) ?? 0,
+          'Mtr' : double.tryParse(mtrController.text) ?? 0,
+          'Shift': selectedShift.value,
           'UserID' : userModel?.mUser ?? '',
         },
       );

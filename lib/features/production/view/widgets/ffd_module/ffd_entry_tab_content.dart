@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:suraj_approval/core/extentions/num_extention.dart';
 import 'package:suraj_approval/core/theme/app_colors.dart';
 import 'package:suraj_approval/core/widgets/common_widgets.dart';
+import 'package:suraj_approval/features/production/controller/ffd_controller.dart';
 
-import '../../../controller/ffd_controller.dart';
 import '../hourly_module/hourly_report_widgets.dart'; // Re-use standard LabeledTextField & DatePickerField
 
 class FFDEntryTabContent extends StatelessWidget {
@@ -108,6 +108,7 @@ class _EntryFormCard extends StatelessWidget {
     return Column(
       children: [
         _row3([
+          _buildDeptDropdown(isDark),
           Obx(() => DatePickerField(
             label: 'Production Date',
             date: controller.entryDate.value,
@@ -119,15 +120,15 @@ class _EntryFormCard extends StatelessWidget {
             keyboardType: TextInputType.number,
             required: false,
           ),
+        ]),
+        14.heightGap,
+        _row3([
           LabeledTextField(
             label: 'Tee Quantity',
             controller: controller.teeController,
             keyboardType: TextInputType.number,
             required: false,
           ),
-        ]),
-        14.heightGap,
-        _row3([
           LabeledTextField(
             label: 'Reducer Quantity',
             controller: controller.reducerController,
@@ -140,7 +141,6 @@ class _EntryFormCard extends StatelessWidget {
             keyboardType: TextInputType.number,
             required: false,
           ),
-          const SizedBox(),
         ]),
       ],
     );
@@ -150,42 +150,42 @@ class _EntryFormCard extends StatelessWidget {
     return Column(
       children: [
         _row2([
+          _buildDeptDropdown(isDark),
           Obx(() => DatePickerField(
             label: 'Production Date',
             date: controller.entryDate.value,
             onChanged: controller.onEntryDateChanged,
           )),
+        ]),
+        14.heightGap,
+        _row2([
           LabeledTextField(
             label: 'Elbow Quantity',
             controller: controller.elbowController,
             keyboardType: TextInputType.number,
             required: false,
           ),
-        ]),
-        14.heightGap,
-        _row2([
           LabeledTextField(
             label: 'Tee Quantity',
             controller: controller.teeController,
             keyboardType: TextInputType.number,
             required: false,
           ),
+        ]),
+        14.heightGap,
+        _row2([
           LabeledTextField(
             label: 'Reducer Quantity',
             controller: controller.reducerController,
             keyboardType: TextInputType.number,
             required: false,
           ),
-        ]),
-        14.heightGap,
-        _row2([
           LabeledTextField(
             label: 'Cap Quantity',
             controller: controller.capController,
             keyboardType: TextInputType.number,
             required: false,
           ),
-          const SizedBox(),
         ])
       ],
     );
@@ -195,6 +195,8 @@ class _EntryFormCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildDeptDropdown(isDark),
+        14.heightGap,
         Obx(() => DatePickerField(
           label: 'Production Date',
           date: controller.entryDate.value,
@@ -228,6 +230,48 @@ class _EntryFormCard extends StatelessWidget {
           keyboardType: TextInputType.number,
           required: false,
         ),
+      ],
+    );
+  }
+
+  // ── Department Dropdown ─────────────────────────────────────────────────────────
+  Widget _buildDeptDropdown(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Department',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: isDark ? Colors.white70 : Colors.grey.shade700,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Obx(() => DropdownButtonFormField<String>(
+          value: controller.selectedDepartment.value,
+          decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade400),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade400),
+            ),
+          ),
+          items: FFDController.deptList
+              .map((d) => DropdownMenuItem(
+                    value: d,
+                    child: Text(d, style: const TextStyle(fontSize: 13)),
+                  ))
+              .toList(),
+          onChanged: (v) {
+            if (v != null) controller.selectedDepartment.value = v;
+          },
+        )),
       ],
     );
   }

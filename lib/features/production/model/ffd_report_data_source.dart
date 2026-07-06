@@ -17,6 +17,7 @@ class FFDReportDataSource extends DataGridSource {
     _dataGridRows = entries.map((e) {
       return DataGridRow(cells: [
         DataGridCell<String>(columnName: 'date', value: e.date),
+        DataGridCell<String>(columnName: 'department', value: e.department),
         DataGridCell<int>(columnName: 'elbow', value: e.elbowQty),
         DataGridCell<int>(columnName: 'elbowTotal', value: e.elbowTotal),
         DataGridCell<int>(columnName: 'tee', value: e.teeQty),
@@ -61,7 +62,7 @@ class FFDReportDataSource extends DataGridSource {
         final isTotal = _totalColumns.contains(cell.columnName);
 
         return Container(
-          alignment: cell.columnName == 'date'
+          alignment: cell.columnName == 'date' || cell.columnName == 'department'
               ? Alignment.centerLeft
               : Alignment.center,
           padding:

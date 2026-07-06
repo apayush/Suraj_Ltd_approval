@@ -112,14 +112,17 @@ class DaywiseReportTable extends StatelessWidget {
 
     return [
       textColumn('date', 'Date'),
+      textColumn('shift', 'Shift'),
       textColumn('target', 'Target (Day)', isNumeric: true),
       textColumn('cum_target', 'Target (Total)', isNumeric: true),
-      textColumn('nos', 'Prod Nos (Day)', isNumeric: true),
-      textColumn('cum_nos', 'Prod Nos (Total)', isNumeric: true),
       if (isFullType) ...[
         textColumn('kgs', 'Weight Kgs (Day)', isNumeric: true),
         textColumn('cum_kgs', 'Weight Kgs (Total)', isNumeric: true),
       ],
+      textColumn('nos', 'Prod Nos (Day)', isNumeric: true),
+      textColumn('cum_nos', 'Prod Nos (Total)', isNumeric: true),
+      textColumn('mtr', 'Mtr (Day)', isNumeric: true),
+      textColumn('cum_mtr', 'Mtr (Total)', isNumeric: true),
     ];
   }
 }

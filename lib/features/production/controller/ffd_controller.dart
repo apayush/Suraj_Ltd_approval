@@ -16,6 +16,16 @@ class FFDController extends GetxController {
   // ─── Loading ───────────────────────────────────────────────────────────────
   RxBool isLoading = false.obs;
 
+  // ─── Department ────────────────────────────────────────────────────────────
+  /// Fixed department options for FFD module.
+  static const List<String> deptList = ['Cutting', 'Forming', 'Bevelling'];
+
+  /// Selected department for the Data Entry form.
+  RxString selectedDepartment = 'Cutting'.obs;
+
+  /// Selected department for the Report filter.
+  RxString reportDepartmentFilter = 'Cutting'.obs;
+
   // ─── Entry Form ────────────────────────────────────────────────────────────
   Rx<DateTime> entryDate = DateTime.now().obs;
   final formKey = GlobalKey<FormState>();
@@ -59,6 +69,7 @@ class FFDController extends GetxController {
     reducerController.text = '0';
     capController.text = '0';
     entryDate.value = DateTime.now();
+    selectedDepartment.value = deptList.first;
   }
 
   // ! ========================= Submit FFD Entry ==============================
@@ -85,6 +96,7 @@ class FFDController extends GetxController {
               ? '0'
               : capController.text.trim(),
           'createdBy': userModel?.mUser ?? '',
+          'Department': selectedDepartment.value,
         }),
       );
 
@@ -136,6 +148,7 @@ class FFDController extends GetxController {
               DateFormat('yyyy-MM-dd').format(reportStartDate.value),
           'endDate':
               DateFormat('yyyy-MM-dd').format(reportEndDate.value),
+          'Department': reportDepartmentFilter.value,
         },
       );
 

@@ -3,6 +3,7 @@
 class FFDReportEntry {
   final int id;
   final String date;
+  final String department;
   final int elbowQty;
   final int elbowTotal; // cumulative running total
   final int teeQty;
@@ -15,6 +16,7 @@ class FFDReportEntry {
   FFDReportEntry({
     required this.id,
     required this.date,
+    required this.department,
     required this.elbowQty,
     required this.elbowTotal,
     required this.teeQty,
@@ -51,19 +53,22 @@ class FFDReportEntry {
       result.add(FFDReportEntry(
         id: i,
         date: json['EntryDate']?.toString() ?? '',
+        department: json['Department']?.toString() ?? '',
         elbowQty: elbow,
-        elbowTotal: runElbow,
+        elbowTotal: _parseInt(json['TotalElbow'], fallback: runElbow),
         teeQty: tee,
-        teeTotal: runTee,
+        teeTotal: _parseInt(json['TotalTee'], fallback: runTee),
         reducerQty: reducer,
-        reducerTotal: runReducer,
+        reducerTotal: _parseInt(json['TotalReducer'], fallback: runReducer),
         capQty: cap,
-        capTotal: runCap,
+        capTotal: _parseInt(json['TotalCap'], fallback: runCap),
       ));
     }
 
     return result;
   }
 
-  static int _parseInt(dynamic v) => int.tryParse(v?.toString() ?? '') ?? 0;
+  static int _parseInt(dynamic v, {int fallback = 0}) {
+    return int.tryParse(v?.toString() ?? '') ?? fallback;
+  }
 }

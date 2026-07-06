@@ -16,13 +16,18 @@ class LG30ReportDataSource extends DataGridSource {
   void _buildDataGridRows(List<LG30ReportEntry> entries) {
     _dataGridRows = entries.map((entry) {
       return DataGridRow(cells: [
+        DataGridCell<String>(columnName: 'dept', value: entry.dept),
         DataGridCell<String>(columnName: 'machine', value: entry.machineName),
+        DataGridCell<String>(columnName: 'date', value: entry.date),
+        DataGridCell<String>(columnName: 'shift', value: entry.shift),
         DataGridCell<int>(columnName: 'nos', value: entry.nos),
         DataGridCell<double>(columnName: 'kgs', value: entry.kgs),
+        DataGridCell<double>(columnName: 'mtr', value: entry.mtr),
         DataGridCell<String>(columnName: 'maint', value: entry.maint),
         DataGridCell<String>(columnName: 'rm', value: entry.rm),
         DataGridCell<String>(columnName: 'man', value: entry.man),
         DataGridCell<String>(columnName: 'other', value: entry.other),
+        DataGridCell<String>(columnName: 'createdBy', value: entry.createdBy),
       ]);
     }).toList();
   }
@@ -50,7 +55,9 @@ class LG30ReportDataSource extends DataGridSource {
         final isDash = text == '0' || text == '0.0' || text.isEmpty;
 
         return Container(
-          alignment: (e.columnName == 'nos' || e.columnName == 'kgs')
+          alignment: (e.columnName == 'nos' ||
+                  e.columnName == 'kgs' ||
+                  e.columnName == 'mtr')
               ? Alignment.centerRight
               : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -59,7 +66,8 @@ class LG30ReportDataSource extends DataGridSource {
             style: TextStyle(
               fontSize: 12,
               color: isDash ? dashStyle.color : null,
-              fontWeight: e.columnName == 'machine' ? FontWeight.bold : FontWeight.normal,
+              fontWeight:
+                  e.columnName == 'machine' ? FontWeight.bold : FontWeight.normal,
             ),
             overflow: TextOverflow.ellipsis,
           ),

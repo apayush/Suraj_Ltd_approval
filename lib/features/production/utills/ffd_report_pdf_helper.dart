@@ -24,7 +24,7 @@ class FfdReportPdfHelper {
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: PdfPageFormat.a4.portrait,
+        pageFormat: PdfPageFormat.a4.landscape,
         margin: const pw.EdgeInsets.all(32),
         header: (context) => _buildHeader(logo, startDate, endDate),
         footer: (context) => _buildFooter(context),
@@ -83,6 +83,7 @@ class FfdReportPdfHelper {
   static pw.Widget _buildDataTable(List<FFDReportEntry> entries) {
     final headers = [
       'DATE',
+      'DEPARTMENT',
       'ELBOW QTY',
       'ELBOW TOT.',
       'TEE QTY',
@@ -106,6 +107,7 @@ class FfdReportPdfHelper {
 
       return [
         e.date,
+        e.department,
         e.elbowQty.toString(),
         e.elbowTotal.toString(),
         e.teeQty.toString(),
@@ -120,6 +122,7 @@ class FfdReportPdfHelper {
     // Add total row
     data.add([
       'TOTAL',
+      '',
       totalElbow.toString(),
       '',
       totalTee.toString(),
@@ -145,7 +148,7 @@ class FfdReportPdfHelper {
       oddRowDecoration: const pw.BoxDecoration(color: PdfColors.grey100),
       cellAlignments: {
         0: pw.Alignment.centerLeft,
-        1: pw.Alignment.centerRight,
+        1: pw.Alignment.centerLeft,
         2: pw.Alignment.centerRight,
         3: pw.Alignment.centerRight,
         4: pw.Alignment.centerRight,
@@ -153,6 +156,7 @@ class FfdReportPdfHelper {
         6: pw.Alignment.centerRight,
         7: pw.Alignment.centerRight,
         8: pw.Alignment.centerRight,
+        9: pw.Alignment.centerRight,
       },
     );
   }

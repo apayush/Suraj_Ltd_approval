@@ -24,10 +24,9 @@ class DaywiseReportDataSource extends DataGridSource {
           columnName: 'date',
           value: DateFormat('dd/MM/yyyy').format(entry.date),
         ),
+        DataGridCell<String>(columnName: 'shift', value: entry.shift),
         DataGridCell<int>(columnName: 'target', value: entry.target),
         DataGridCell<int>(columnName: 'cum_target', value: entry.cumulativeTarget),
-        DataGridCell<int>(columnName: 'nos', value: entry.actualNos),
-        DataGridCell<int>(columnName: 'cum_nos', value: entry.cumulativeNos),
       ];
 
       if (isFullType) {
@@ -36,6 +35,13 @@ class DaywiseReportDataSource extends DataGridSource {
           DataGridCell<double>(columnName: 'cum_kgs', value: entry.cumulativeKgs),
         ]);
       }
+
+      cells.addAll([
+        DataGridCell<int>(columnName: 'nos', value: entry.actualNos),
+        DataGridCell<int>(columnName: 'cum_nos', value: entry.cumulativeNos),
+        DataGridCell<double>(columnName: 'mtr', value: entry.actualMtr),
+        DataGridCell<double>(columnName: 'cum_mtr', value: entry.cumulativeMtr),
+      ]);
 
       return DataGridRow(cells: cells);
     }).toList();
@@ -60,7 +66,9 @@ class DaywiseReportDataSource extends DataGridSource {
         bool isCumulative = e.columnName.startsWith('cum_');
         
         Alignment alignment = Alignment.center;
-        if (e.columnName == 'date') alignment = Alignment.centerLeft;
+        if (e.columnName == 'date' || e.columnName == 'shift') {
+          alignment = Alignment.centerLeft;
+        }
 
         return Container(
           alignment: alignment,
