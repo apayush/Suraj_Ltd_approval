@@ -26,7 +26,7 @@ class DaywiseProductionController extends GetxController {
   RxString selectedDept = ''.obs;
   RxString selectedShift = '1st Shift'.obs;
   Rx<DateTime> entryDate = DateTime.now().obs;
-  
+
   final TextEditingController targetController = TextEditingController();
   final TextEditingController nosController = TextEditingController();
   final TextEditingController kgsController = TextEditingController();
@@ -61,13 +61,13 @@ class DaywiseProductionController extends GetxController {
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
-  
+
   /// Determines if the selected department is "Full" (Target + Nos + Kgs)
   /// or "Simple" (Target + Nos only).
   bool get isFullType {
     return true;
   }
-  
+
   bool get isFullTypeFilter {
     return true;
   }
@@ -112,19 +112,20 @@ class DaywiseProductionController extends GetxController {
       final response = await ApiService.getData(
         ApiUrl.getProductionRights,
         queryParams: {
-          'mUser' : LocalDB.getUserModel()?.mUser ?? '',
-          'MainMenu' : 'Production',
-          'SubMenu' : 'MPD/SPD Daywise Entry',
+          'mUser': LocalDB.getUserModel()?.mUser ?? '',
+          'MainMenu': 'Production',
+          'SubMenu': 'MPD/SPD Daywise Entry',
         },
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'] ?? [];
         if (data.isNotEmpty) {
-          List<DropDownResponse> dynamicList = data.map((item) {
-            final optionMenu = item['OptionMenu'].toString();
-            return DropDownResponse(value: optionMenu, text: optionMenu);
-          }).toList();
-          
+          List<DropDownResponse> dynamicList =
+              data.map((item) {
+                final optionMenu = item['OptionMenu'].toString();
+                return DropDownResponse(value: optionMenu, text: optionMenu);
+              }).toList();
+
           if (dynamicList.isNotEmpty) {
             deptDropdownList.value = dynamicList;
 
@@ -150,21 +151,19 @@ class DaywiseProductionController extends GetxController {
     final userModel = LocalDB.getUserModel();
     try {
       // Logic for ReportType similar to Hourly: splitting name if necessary
-      final deptName = selectedDept.value.contains(' ')
-          ? selectedDept.value.split(' ').skip(1).join(' ')
-          : selectedDept.value;
-          
+      final deptName = selectedDept.value;
+
       final response = await ApiService.postData(
         ApiUrl.submitDaywiseProductionEntry,
         data: {
-          'EntryDate' : DateFormat('yyyy-MM-dd').format(entryDate.value),
+          'EntryDate': DateFormat('yyyy-MM-dd').format(entryDate.value),
           'DeptName': deptName ?? '',
-          'Target' : int.tryParse(targetController.text) ?? 0,
-          'Nos' : int.tryParse(nosController.text) ?? 0,
-          'Kgs' : double.tryParse(kgsController.text) ?? 0,
-          'Mtr' : double.tryParse(mtrController.text) ?? 0,
+          'Target': int.tryParse(targetController.text) ?? 0,
+          'Nos': int.tryParse(nosController.text) ?? 0,
+          'Kgs': double.tryParse(kgsController.text) ?? 0,
+          'Mtr': double.tryParse(mtrController.text) ?? 0,
           'Shift': selectedShift.value,
-          'UserID' : userModel?.mUser ?? '',
+          'UserID': userModel?.mUser ?? '',
         },
       );
       if (response.statusCode == 200) {
@@ -189,9 +188,7 @@ class DaywiseProductionController extends GetxController {
   Future<void> getDaywiseReportData() async {
     isLoading.value = true;
     try {
-      final deptName = reportDeptFilter.value.contains(' ')
-          ? reportDeptFilter.value.split(' ').skip(1).join(' ')
-          : reportDeptFilter.value;
+      final deptName = reportDeptFilter.value;
 
       final response = await ApiService.getData(
         ApiUrl.getDaywiseReport,
@@ -202,19 +199,28 @@ class DaywiseProductionController extends GetxController {
         },
       );
       if (response.statusCode == 200) {
-        final success = response.data['success'] ?? response.data['Success'] ?? false;
+        final success =
+            response.data['success'] ?? response.data['Success'] ?? false;
         if (success) {
-          final List<dynamic> entriesData = response.data['data'] ?? response.data['Data'] ?? [];
-          
-          final newList = entriesData.asMap().entries.map((e) {
-            return DaywiseEntry.fromJson(e.value, reportDeptFilter.value, e.key);
-          }).toList();
+          final List<dynamic> entriesData =
+              response.data['data'] ?? response.data['Data'] ?? [];
+
+          final newList =
+              entriesData.asMap().entries.map((e) {
+                return DaywiseEntry.fromJson(
+                  e.value,
+                  reportDeptFilter.value,
+                  e.key,
+                );
+              }).toList();
 
           entries.assignAll(newList);
         } else {
           entries.clear();
           AppUtils.showSnackBar(
-            response.data['message'] ?? response.data['Message'] ?? 'Failed to fetch data',
+            response.data['message'] ??
+                response.data['Message'] ??
+                'Failed to fetch data',
             background: Colors.red,
           );
         }
@@ -232,7 +238,10 @@ class DaywiseProductionController extends GetxController {
   // ! =================== Print Daywise Report ================================
   Future<void> printReport() async {
     if (entries.isEmpty) {
-      AppUtils.showSnackBar('No data available to print', background: Colors.orange);
+      AppUtils.showSnackBar(
+        'No data available to print',
+        background: Colors.orange,
+      );
       return;
     }
 
@@ -246,7 +255,8 @@ class DaywiseProductionController extends GetxController {
         isFullType: isFullTypeFilter,
       );
 
-      final dateStr = '${DateFormat('dd_MMM').format(startDate.value)}_to_${DateFormat('dd_MMM_yyyy').format(endDate.value)}';
+      final dateStr =
+          '${DateFormat('dd_MMM').format(startDate.value)}_to_${DateFormat('dd_MMM_yyyy').format(endDate.value)}';
       final fileName = 'Daywise_Report_${reportDeptFilter.value}_$dateStr.pdf';
       await AppUtils.openPdf(base64Pdf, fileName: fileName);
     } catch (e) {

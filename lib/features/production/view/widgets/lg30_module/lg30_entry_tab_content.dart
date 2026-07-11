@@ -26,7 +26,7 @@ class LG30EntryTabContent extends StatelessWidget {
     return Column(
       children: [
         // ── Filter Card: Department + Date + Reset ─────────────────────────
-        if (columns > 1) _buildFilterCard(context),
+        _buildFilterCard(context),
         // ── Machine Grid ──────────────────────────────────────────────────
         Expanded(
           child: Obx(() {
@@ -248,15 +248,9 @@ class LG30EntryTabContent extends StatelessWidget {
       children: [
         ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 80),
-          itemCount: controller.machineEntries.length + 1,
+          itemCount: controller.machineEntries.length,
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: _buildFilterCard(context),
-              );
-            }
-            final entry = controller.machineEntries[index - 1];
+            final entry = controller.machineEntries[index];
             return Card(
               color: isDark ? Colors.grey.shade900 : Colors.white,
               elevation: 1,
